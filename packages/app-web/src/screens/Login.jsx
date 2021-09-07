@@ -64,14 +64,12 @@ export default function Login() {
                     </Stack>
                     <Text align={'center'} py={3}>Or</Text>
 
-                    {/* Facebook */}
                     <Button w={'full'} colorScheme={'facebook'} leftIcon={<FaFacebook/>}>
                         <Center>
                             <Text>Continue with Facebook</Text>
                         </Center>
                     </Button>
 
-                    {/* Google */}
                     <Button w={'full'} variant={'outline'} leftIcon={<FcGoogle/>} mt={2}>
                         <Center>
                             <Text>Sign in with Google</Text>
