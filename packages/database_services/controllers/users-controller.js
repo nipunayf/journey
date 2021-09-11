@@ -20,6 +20,12 @@ const getUser = async (req, res) => {
         return errorMessage(res, 'User not found')
 }
 
+/**
+ * Add an user to the database
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
 const addUser = async (req, res) => {
     if (req.body.user_id !== req.user) //user attempting to access another user profile
         return errorMessage(res, 'You are not authorized to access other users\' details')
