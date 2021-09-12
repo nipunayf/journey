@@ -12,9 +12,7 @@ export default function Hero() {
         <Flex
             w={'full'}
             h={'100vh'}
-            backgroundImage={
-                'url(https://media.cntraveler.com/photos/57fea9ec8584f8cd20e65f15/16:9/w_2580,c_limit/Aerial-One&OnlyReethiRah-Maldives-CRHotel.jpg)'
-            }
+            backgroundImage={'home-bg.jpg'}
             backgroundSize={'cover'}
             backgroundPosition={'center center'}>
             <VStack
