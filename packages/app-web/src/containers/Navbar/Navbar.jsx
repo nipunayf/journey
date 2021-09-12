@@ -16,6 +16,7 @@ import {
     Stack, Image, Input, InputLeftElement, InputGroup, GridItem, Grid,
 } from '@chakra-ui/react';
 import {HamburgerIcon, CloseIcon, Search2Icon} from '@chakra-ui/icons';
+import { useHistory } from 'react-router-dom';
 
 const UserAvatar = () => {
     return (
@@ -46,6 +47,7 @@ const UserAvatar = () => {
 }
 
 export default function Navbar() {
+    const history = useHistory();
 
     return (
         <Grid templateColumns="repeat(12, 1fr)" bg="primary.main" w="100%" gap={2} align="center" py={2} px={1}
@@ -82,6 +84,7 @@ export default function Navbar() {
             </GridItem>
             <GridItem colStart={11} colEnd={13} color="white" alignItems={'center'}>
                 <Button
+                    onClick={() => {history.push('/login')}}
                     bg={'secondary.light'}
                     rounded={'full'}
                     color={'white'}

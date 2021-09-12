@@ -11,11 +11,9 @@ import firebaseConfig from './firebase_secret.json';
 
 export default function GAuthButton() {
     // Initialize Firebase
-    useEffect(() => {
-        const app = initializeApp(firebaseConfig);
-    });
 
     const GooglePopup = () => {
+        const app = initializeApp(firebaseConfig);
         const provider = new GoogleAuthProvider();
         const auth = getAuth();
         signInWithPopup(auth, provider)
@@ -37,6 +35,7 @@ export default function GAuthButton() {
                 <Text>Sign in with Google</Text>
             </Center>
         </Button>
+
     );
 }
 
