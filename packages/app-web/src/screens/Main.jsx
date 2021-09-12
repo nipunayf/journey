@@ -3,8 +3,9 @@ import { BrowserRouter, Switch, Route, useLocation, Redirect, withRouter } from 
 import { useTransition, animated } from "react-spring";
 import { connect } from 'react-redux';
 
-import Login from './Login';
 import Home from './Home';
+import Login from './Login';
+import Register from './Register';
 
 const Main = (props) => {
     return(
@@ -12,6 +13,7 @@ const Main = (props) => {
             <Switch>
                 <Route path={'/'} exact component={Home}/>
                 <Route path={'/login'} exact component={Login}/>
+                <Route path={'/register'} exact component={Register}/>
             </Switch>
         </BrowserRouter>
     );

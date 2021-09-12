@@ -6,8 +6,11 @@ import {
     VStack,
     useBreakpointValue, SimpleGrid,
 } from '@chakra-ui/react';
+import { useHistory } from 'react-router-dom';
 
 export default function Hero() {
+    const history = useHistory();
+
     return (
         <Flex
             w={'full'}
@@ -46,6 +49,7 @@ export default function Hero() {
                         bg={'secondary.main'}
                         rounded={'full'}
                         color={'white'}
+                        onClick={() => {history.push('/register')}}
                         _hover={{bg: 'blue.500'}}>
                         Register Now
                     </Button>
