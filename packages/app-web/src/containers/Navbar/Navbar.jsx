@@ -7,6 +7,7 @@ import {
     IconButton,
     Button,
     Menu,
+    Icon,
     MenuButton,
     MenuList,
     MenuItem,
@@ -15,7 +16,7 @@ import {
     useColorModeValue,
     Stack, Image, Input, InputLeftElement, InputGroup, GridItem, Grid,
 } from '@chakra-ui/react';
-import {HamburgerIcon, CloseIcon, Search2Icon} from '@chakra-ui/icons';
+import {HamburgerIcon, CloseIcon, Search2Icon, BellIcon} from '@chakra-ui/icons';
 import { useHistory } from 'react-router-dom';
 
 const UserAvatar = () => {
@@ -28,18 +29,12 @@ const UserAvatar = () => {
                     variant={'link'}
                     cursor={'pointer'}
                     minW={0}>
-                    <Avatar
-                        size={'sm'}
-                        src={
-                            'https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                        }
-                    />
+                    <Avatar size={'md'} name="Dan Abrahmov" />
                 </MenuButton>
                 <MenuList>
-                    <MenuItem>Link 1</MenuItem>
-                    <MenuItem>Link 2</MenuItem>
+                    <MenuItem color={'black'}>Settings</MenuItem>
                     <MenuDivider/>
-                    <MenuItem>Link 3</MenuItem>
+                    <MenuItem color={'black'}>Sign Out</MenuItem>
                 </MenuList>
             </Menu>
         </Flex>
@@ -82,15 +77,19 @@ export default function Navbar() {
                     <Link/>
                 </InputGroup>
             </GridItem>
-            <GridItem colStart={11} colEnd={13} color="white" alignItems={'center'}>
-                <Button
-                    onClick={() => {history.push('/login')}}
-                    bg={'secondary.light'}
-                    rounded={'full'}
-                    color={'white'}
-                    _hover={{bg: 'blue.500'}}>
-                    Sign In
-                </Button>
+            <GridItem colStart={11} colEnd={12} pt={1.5}>
+                <IconButton icon={<BellIcon boxSize={7}/>} color="secondary.light" bg={'primary.main'}/>
+            </GridItem>
+            <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'}>
+                <UserAvatar />
+                {/*<Button*/}
+                {/*    onClick={() => {history.push('/login')}}*/}
+                {/*    bg={'secondary.light'}*/}
+                {/*    rounded={'full'}*/}
+                {/*    color={'white'}*/}
+                {/*    _hover={{bg: 'blue.500'}}>*/}
+                {/*    Sign In*/}
+                {/*</Button>*/}
             </GridItem>
         </Grid>
     );

@@ -8,9 +8,11 @@ import {FcGoogle} from 'react-icons/fc';
 import {initializeApp} from "firebase/app";
 import {getAuth, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
+import { useHistory } from 'react-router-dom';
 
 export default function GAuthButton() {
     // Initialize Firebase
+    const history = useHistory();
 
     const GooglePopup = () => {
         const app = initializeApp(firebaseConfig);
@@ -21,6 +23,7 @@ export default function GAuthButton() {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 const user = result.user;
+                history.push('/');
             }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;

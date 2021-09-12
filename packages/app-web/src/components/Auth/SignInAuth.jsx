@@ -18,8 +18,11 @@ import * as Yup from 'yup';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
 import {initializeApp} from "firebase/app";
+import { useHistory } from 'react-router-dom';
 
 export default function SignInAuth() {
+    const history = useHistory();
+
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -35,7 +38,8 @@ export default function SignInAuth() {
                 .then((userCredential) => {
                     const user = userCredential.user;
                     console.log(user);
-                    formik.setSubmitting(false)
+                    formik.setSubmitting(false);
+                    history.push('/')
                 })
                 .catch((error) => {
                     const errorCode = error.code;
