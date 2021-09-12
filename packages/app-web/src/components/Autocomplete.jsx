@@ -1,9 +1,11 @@
 import {Autocomplete} from "@react-google-maps/api";
 import {useState} from "react";
-import {IconButton, Input, InputGroup, InputLeftElement, Link} from "@chakra-ui/react";
+import {IconButton, Input, InputGroup, InputLeftElement} from "@chakra-ui/react";
 import {Search2Icon} from "@chakra-ui/icons";
+import {useHistory} from 'react-router-dom';
 
 export default function AutoComplete() {
+    const history = useHistory();
     const [autocomplete, setAutocomplete] = useState(null);
 
     const onLoad = (autocomplete) => setAutocomplete(autocomplete);
@@ -32,11 +34,9 @@ export default function AutoComplete() {
 
                 <IconButton
                     icon={<Search2Icon/>}
-                    // onClick={() => { if (keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')} }}
                     bg="secondary.light"
-                    color="white"/>
-                <Link/>
-            </InputGroup>
-        </Autocomplete>
-    );
-}
+                    color="white" onClick={() => history.push('/Dashboard')}/>
+                    </InputGroup>
+                    </Autocomplete>
+                    );
+                }

@@ -60,27 +60,6 @@ export default function Navbar() {
             </GridItem>
             <GridItem colStart={5} colEnd={9}>
                 <AutoComplete/>
-                {/*<InputGroup pt={1}>*/}
-                {/*    <InputLeftElement*/}
-                {/*        pointerEvents="none"*/}
-                {/*        children={<Search2Icon color="white.100"/>}*/}
-                {/*        pt={2}*/}
-                {/*    />*/}
-                {/*    <Input*/}
-                {/*        type="search"*/}
-                {/*        placeholder="Search Destinations"*/}
-                {/*        isRequired*/}
-                {/*        // onChange={((e) => {setKeyword(e.target.value)}).bind(this)}*/}
-                {/*        // value={keyword}*/}
-                {/*        // onKeyPress={((e) => {if (e.key === 'Enter' && keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')}}).bind(this)}*/}
-                {/*    />*/}
-                {/*    <IconButton*/}
-                {/*        icon={<Search2Icon/>}*/}
-                {/*        // onClick={() => { if (keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')} }}*/}
-                {/*        bg="secondary.light"*/}
-                {/*        color="white"/>*/}
-                {/*    <Link/>*/}
-                {/*</InputGroup>*/}
             </GridItem>
             <GridItem colStart={11} colEnd={13} color="white" alignItems={'center'}>
                 <Button
