@@ -12,7 +12,6 @@ const init = () => {
             }
         }
     }
-
 }
 
 describe('Getting an existing user', function () {
@@ -23,7 +22,8 @@ describe('Getting an existing user', function () {
             last_name: 'Sangakkara',
             email: 'sanga@test.com',
             user_id: 'a',
-            preferences: [0, 0, 0, 0, 0]
+            preferences: [0, 0, 0, 0, 0],
+            is_deleted: 0
         })
     });
 
@@ -53,7 +53,7 @@ describe('Getting an existing user', function () {
 
     //User should receive an error if there exists no document
     it('should return an error if there is no document', async function () {
-        const user = await getUser({user: 'b', params: {userID: 'b'}}, res);
+        const user = await getUser({user: 'z', params: {userID: 'z'}}, res);
         expect(user.message).toMatch(/not found/);
     });
 
@@ -61,6 +61,24 @@ describe('Getting an existing user', function () {
     it('should return an error if user attempt to access another user\'s resources', async function () {
         const user = await getUser({...req, user: 'b'}, res);
         expect(user.message).toMatch(/not authorized/);
+    });
+
+    it('should not retrieve a deleted account', async function () {
+        await userStore.add({
+            first_name: 'Kumar',
+            last_name: 'Sangakkara',
+            email: 'sanga@test.com',
+            user_id: 'z',
+            preferences: [0, 0, 0, 0, 0],
+            is_deleted: 1
+        });
+        const user = await getUser({user: 'z', params: {userID: 'z'}}, res);
+        const doc = await userStore.where('user_id', '==', 'z').get()
+        doc.forEach(element => {
+            element.ref.delete();
+            console.log(`deleted: ${element.id}`);
+        });
+        expect(user.message).toMatch(/not found/);
     });
 });
 
@@ -102,7 +120,8 @@ describe('Adding a new user', function () {
             last_name: 'Sangakkara',
             email: 'sanga@test.com',
             user_id: 'b',
-            preferences: [0, 0, 0, 0, 0]
+            preferences: [0, 0, 0, 0, 0],
+            is_deleted: 0
         });
         const result = await addUser(req, res);
         expect(result.message).toMatch(/already exists/)
@@ -117,22 +136,111 @@ describe('Adding a new user', function () {
 ;
 
 describe('Updating an existing user', function () {
+    beforeEach(() => {
+        init()
+        req = {
+            user: 'c',
+            body: {
+                preferences: [0, 0, 1, 0, -1]
+            },
+            params: {
+                userID: 'c'
+            }
+        }
+    });
+
+    beforeAll(async () => {
+        await userStore.add({
+            first_name: 'Kumar',
+            last_name: 'Sangakkara',
+            email: 'sanga@test.com',
+            user_id: 'c',
+            preferences: [0, 0, 0, 0, 0],
+            is_deleted: 0
+        })
+    });
+
+    afterAll(async () => {
+        const doc = await userStore.where('user_id', '==', 'c').get()
+        doc.forEach(element => {
+            element.ref.delete();
+            console.log(`deleted: ${element.id}`);
+        });
+    });
+
+    //Updated user document must reflect in the firestore
+    it('should update firestore', async function () {
+        const result = await updateUser(req, res);
+        const dbResult = await userStore.where('user_id', '==', 'c').get();
+        expect(dbResult.docs[0].data(0).preferences).toStrictEqual([0, 0, 1, 0, -1]);
+    });
+
     //User should not be able to update another user's document
+    it('should return an error if user attempts to update another user`\s document', async function () {
+        const user = await updateUser({...req, user: 'a'}, res);
+        expect(user.message).toMatch(/not authorized/);
+
+    });
 
     //Should return an error if there is no user document
+    it('should return an error if there is no document', async function () {
+        const user = await updateUser({...req, user: 'z', params: {userID: 'z'}}, res);
+        expect(user.message).toMatch(/not found/);
+    });
+
+    //Should not allow to change the user id
+    it('should return an error if user attemps to update the user ID', async function () {
+        const user = await updateUser({...req, body: {user_id: 'x'}}, res);
+        expect(user.message).toMatch(/user ID/);
+    });
 });
 
 describe('Deleting an existing user', function () {
+    beforeEach(() => {
+        init()
+        req = {
+            user: 'd',
+            params: {
+                userID: 'd'
+            }
+        }
+    });
+
+    beforeAll(async () => {
+        await userStore.add({
+            first_name: 'Kumar',
+            last_name: 'Sangakkara',
+            email: 'sanga@test.com',
+            user_id: 'd',
+            preferences: [0, 0, 0, 0, 0],
+            is_deleted: 0
+        })
+    });
+
+    afterAll(async () => {
+        const doc = await userStore.where('user_id', '==', 'd').get()
+        doc.forEach(element => {
+            element.ref.delete();
+            console.log(`deleted: ${element.id}`);
+        });
+    });
+
     //'isDeleted' must be set to false when user requests to delete his account
+    it('should update the is_delete state of the firestore upon delete requrest', async function () {
+        const result = await deleteUser(req, res);
+        const dbResult = await userStore.where('user_id', '==', 'd').get();
+        expect(dbResult.docs[0].data(0).is_deleted).toBe(1);
+    });
+
+    //User should not be able to update another user's document
+    it('should return an error if user attempts to update another user\`s document', async function () {
+        const result = await deleteUser({...req, user: 'a'}, res);
+        expect(result.message).toMatch(/not authorized/);
+    });
 
     //Should return an error if there is no user document
+    it('should return an error if there is no document', async function () {
+        const result = await deleteUser({user: 'z', params: {userID: 'z'}}, res);
+        expect(result.message).toMatch(/not found/);
+    });
 });
-
-
-
-
-
-
-
-
-
