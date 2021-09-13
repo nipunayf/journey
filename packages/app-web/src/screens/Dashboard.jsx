@@ -1,20 +1,21 @@
 import DashboardCard from "../containers/Dashboard/DashboardCard";
 import Navbar from "../containers/Navbar/Navbar";
-import {SimpleGrid, Stack} from "@chakra-ui/react";
+import {Flex, SimpleGrid} from "@chakra-ui/react";
 
 export default function Dashboard() {
     return (
         <div>
             <Navbar/>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3}} spacing={10} p={8}>
-                <DashboardCard/>
-                <DashboardCard/>
-                <DashboardCard/>
-                <DashboardCard/>
-                <DashboardCard/>
+            <Flex>
+                <SimpleGrid columns={{base: 1, md: 2, lg: 4}} spacing={10} p={20}>
+                    <DashboardCard/>
+                    <DashboardCard/>
+                    <DashboardCard/>
+                    <DashboardCard/>
+                    <DashboardCard/>
 
-            </SimpleGrid>
-
+                </SimpleGrid>
+            </Flex>
         </div>
     )
 }

@@ -5,11 +5,12 @@ export default function DashboardCard() {
 
     return (
         <Box
-            w='400px'
+            w='300px'
             rounded='20px'
             overflow='hidden'
             boxShadow={"sm"}
-            bg={'grey.200'}>
+            bg={'grey.200'}
+            _hover={'lg'}>
             <Image src={'https://www.dailynews.lk/sites/default/files/news/2021/05/20/Port-City.jpg'} alt='Port city'/>
             <Box p={5}>
                 <Stack isInline align={"baseline"}>
@@ -23,7 +24,7 @@ export default function DashboardCard() {
                     The land reclamation work had been completed as of January 2018.
                 </Text>
                 <Box textAlign={"center"}>
-                    <Button variantColor={'teal'} size={'lg'} boxShadow={'sm'} _hover={{boxShadow: 'md'}}
+                    <Button variantColor={'teal'} size={'sm'} boxShadow={'sm'} _hover={{boxShadow: 'md'}}
                             _active={{boxShadow: 'lg'}}>Create Itinerary
                     </Button>
                 </Box>
