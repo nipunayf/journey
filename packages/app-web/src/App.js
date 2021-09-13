@@ -11,7 +11,6 @@ function App() {
     return (
         <ChakraProvider theme={theme}>
             <Router>
-                <Navbar/>
                 <Switch>
                     <Route path="/" exact component={Home}/>
                     <Route path="/Dashboard" component={Dashboard}/>

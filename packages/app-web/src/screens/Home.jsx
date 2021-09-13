@@ -6,6 +6,7 @@ import FeatureList from '../containers/Home/FeatureList'
 export default function Home() {
     return(
         <>
+            <Navbar/>
             <Hero />
             <FeatureList />
             <Footer />
