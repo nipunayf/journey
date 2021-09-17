@@ -77,19 +77,11 @@ export default function Navbar() {
                     <Link/>
                 </InputGroup>
             </GridItem>
-            {/*<GridItem colStart={11} colEnd={12} pt={1.5}>*/}
-            {/*    <IconButton icon={<BellIcon boxSize={7}/>} color="secondary.light" bg={'primary.main'}/>*/}
-            {/*</GridItem>*/}
+            <GridItem colStart={11} colEnd={12} pt={1.5}>
+                <IconButton icon={<BellIcon boxSize={7}/>} color="secondary.light" bg={'primary.main'}/>
+            </GridItem>
             <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'}>
-                {/*<UserAvatar />*/}
-                <Button
-                    onClick={() => {history.push('/login')}}
-                    bg={'secondary.light'}
-                    rounded={'full'}
-                    color={'white'}
-                    _hover={{bg: 'blue.500'}}>
-                    Sign In
-                </Button>
+                <UserAvatar />
             </GridItem>
         </Grid>
     );
