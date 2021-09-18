@@ -150,7 +150,10 @@ describe('Updating an existing user', function () {
             email: 'sanga@test.com',
             userID: 'c',
             preferences: [0, 0, 0, 0, 0],
-            isDeleted: 0
+            isDeleted: 0,
+            itineraries: {
+
+            }
         })
     });
 
@@ -183,34 +186,44 @@ describe('Updating an existing user', function () {
                     place_id: 'p'
                 }
             ],
-            members: ['m'],
+            members: ['c'],
             memberInfo: {
-                m: {
+                c: {
                     displayName: 'Kumar Sangakkara',
                     review: 0
                 }
             }
         }).then(result => result.path.split('/')[1]);
 
+        const userDoc = await userStore.where('userID', '==', 'c').get();
+        userStore.doc(userDoc.docs[0].id).update({
+            itineraries: {
+                [itKandyID]: {
+                    location: 'Kandy',
+                    state: 1
+                }
+            }
+        });
+
         const result = await updateUser({
-            ...req, user: 'm', body: {displayName: 'Mahela Jayarawardena'}
+            ...req, user: 'c', body: {displayName: 'Mahela Jayarawardena'}
         }, res);
 
         try {
+            expect(result.results).toBeTruthy();
+
             //Check if the output is correct in the user store
-            const dbUserResult = await userStore.where('userID', '==', 'm').get();
+            const dbUserResult = await userStore.where('userID', '==', 'c').get();
             expect(dbUserResult.docs[0].data().displayName).toBe('Mahela Jayarawardena');
 
             //Check if the output is correct in the firestore
-            const dbItResult = await itineraryStore.where('members', 'array-contains', 'm').get();
-            expect(dbItResult.docs[0].data().memberInfo.m.displayName).toBe('Mahela Jayarawardena');
-
-            expect(result.results).toBeTruthy();
+            const dbItResult = await itineraryStore.where('members', 'array-contains', 'c').get();
+            expect(dbItResult.docs[0].data().memberInfo.c.displayName).toBe('Mahela Jayarawardena');
         } finally {
-            //Clean the itienrary store
-            const doc = await itineraryStore.doc(id).get();
+            //Clean the itinerary store
+            const doc = await itineraryStore.doc(itKandyID).get();
             doc.ref.delete();
-            console.log(`deleted: ${id}`);
+            console.log(`deleted: ${itKandyID}`);
         }
     });
 

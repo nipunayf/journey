@@ -3,7 +3,6 @@ const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
 const {formatDatetime} = require('../utils/format');
 const {StateEnum} = require('../utils/constants');
-const {updateUser} = require('./users-controller');
 
 /**
  * Get multiple itineraries of a user.
