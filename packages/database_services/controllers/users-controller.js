@@ -66,6 +66,7 @@ const updateUser = async (req, res) => {
 
     //updating the firestore
     userStore.doc(result.docs[0].id).update(req.body);
+    return successMessage(res, true);
 }
 
 /**

@@ -1,4 +1,4 @@
-const {userStore, itineraryStore} = require('../../config/firebase')
+const {userStore, itineraryStore} = require('../../config/firebase');
 const {
     getItineraries,
     getItinerary,
@@ -6,9 +6,11 @@ const {
     updateItinerary,
     deleteItinerary
 } = require('../../controllers/itineraries-controller');
+const {formatDatetime} = require('../../utils/format');
+const {StateEnum} = require('../../utils/constants');
 
 const init = () => {
-     const res = {
+    res = {
         status: () => {
             return {
                 send: (output) => {
@@ -25,12 +27,19 @@ const init = () => {
  * @returns {{params: {itineraryID: string, userID: string}, user: string}}
  */
 const generateReqMock = params => {
-    params = Object.assign({user: 'a', itineraryID: 'z', userID: 'a', body: null}, params);
+    params = Object.assign({
+        user: 'a',
+        itineraryID: 'z',
+        userID: 'a',
+        body: null,
+        displayName: 'Kumar Sangakkara'
+    }, params);
     return {
         user: params.user,
         params: {userID: params.userID, itineraryID: params.itineraryID},
         query: params.query,
-        body: params.body
+        body: params.body,
+        displayName: params.displayName
     }
 }
 
@@ -40,7 +49,7 @@ const generateReqMock = params => {
  * @returns {{memberInfo: {userID: {displayName: string, review: number}}, destinations: [{arrivalDatetime: Date, departureDatetime: Date, place_id: string}], members: string[], location: string}}
  */
 const generateItineraryMock = params => {
-    params = Object.assign({members: ['a'], location: 'Kandy', state: 1}, params);
+    params = Object.assign({members: ['a'], location: 'Kandy', state: StateEnum.INACTIVE}, params);
     return {
         location: params.location,
         state: params.state,
@@ -53,7 +62,7 @@ const generateItineraryMock = params => {
         ],
         members: params.members,
         memberInfo: {
-            userID: {
+            [`${params.members[0]}`]: {
                 displayName: 'Kumar Sangakkara',
                 review: 0
             }
@@ -109,9 +118,12 @@ describe('Getting existing itineraries', function () {
     //Should accept a single state as a parameter
     it('should return itineraries for a given single state variable', async function () {
         const itKandyID = await itineraryStore.add(generateItineraryMock()).then(result => result.path.split('/')[1]);
-        const itNegomboID = await itineraryStore.add(generateItineraryMock({location: 'Negombo', state: 2})).then(result => result.path.split('/')[1]);
+        const itNegomboID = await itineraryStore.add(generateItineraryMock({
+            location: 'Negombo',
+            state: StateEnum.INCOMPATIBLE
+        })).then(result => result.path.split('/')[1]);
 
-        const results = await getItineraries(generateReqMock({query: {state: 1}}), res);
+        const results = await getItineraries(generateReqMock({query: {state: StateEnum.INACTIVE}}), res);
         try {
             expect(results.results).toHaveLength(1);
             expectPropertyInArray(results.results, {id: itKandyID});
@@ -124,10 +136,16 @@ describe('Getting existing itineraries', function () {
     //Should accept array of states as a parameter
     it('should return itineraries for a given array of state variables', async function () {
         const itKandyID = await itineraryStore.add(generateItineraryMock()).then(result => result.path.split('/')[1]);
-        const itNegomboID = await itineraryStore.add(generateItineraryMock({location: 'Negombo', state: 2})).then(result => result.path.split('/')[1]);
-        const itJaffnaID = await itineraryStore.add(generateItineraryMock({location: 'Jaffna', state: 3})).then(result => result.path.split('/')[1]);
+        const itNegomboID = await itineraryStore.add(generateItineraryMock({
+            location: 'Negombo',
+            state: StateEnum.INCOMPATIBLE
+        })).then(result => result.path.split('/')[1]);
+        const itJaffnaID = await itineraryStore.add(generateItineraryMock({
+            location: 'Jaffna',
+            state: StateEnum.ACTIVE
+        })).then(result => result.path.split('/')[1]);
 
-        const results = await getItineraries(generateReqMock({query: {state: [1, 2]}}), res);
+        const results = await getItineraries(generateReqMock({query: {state: [StateEnum.INACTIVE, StateEnum.INCOMPATIBLE]}}), res);
         try {
             expect(results.results).toHaveLength(2);
             expectPropertyInArray(results.results, {id: itKandyID});
@@ -182,7 +200,10 @@ describe('Getting an existing itinerary', function () {
         const itKandyID = await itineraryStore.add(generateItineraryMock()).then(result => result.path.split('/')[1]);
 
         const result1 = await getItinerary(generateReqMock({user: 'j', params: {itineraryID: itKandyID}}), res);
-        const result2 = await getItinerary(generateReqMock({user: 'j', params: {userID: 'j', itineraryID: itKandyID}}), res)
+        const result2 = await getItinerary(generateReqMock({
+            user: 'j',
+            params: {userID: 'j', itineraryID: itKandyID}
+        }), res)
 
         try {
             expect(result1.message).toMatch(/not authorized/);
@@ -194,55 +215,307 @@ describe('Getting an existing itinerary', function () {
 });
 
 describe('Create a new itinerary', function () {
+    beforeAll(async () => {
+        init();
+        body = {
+            location: 'Kandy',
+            destinations: [
+                {
+                    arrivalDatetime: new Date('2021-10-12T03:20'),
+                    departureDatetime: new Date('2021-10-12T05:20'),
+                    place_id: 'p'
+                }
+            ]
+        };
+        await userStore.add({
+            displayName: 'Kumar Sangakkara',
+            email: 'sanga@test.com',
+            userID: 'a',
+            preferences: [0, 0, 0, 0, 0],
+            isDeleted: 0
+        });
+    })
 
-    //Firestore database must be updated after creating a new itinerary
-    it('should update the firestore database', async function () {
-        const result = await createItinerary(generateReqMock({body: {
-
-            }}), res);
+    afterAll(async () => {
+        const doc = await userStore.where('userID', '==', 'a').get()
+        doc.forEach(element => {
+            element.ref.delete();
+            console.log(`deleted: ${element.id}`);
+        });
     });
 
-    //
+    //Firestore database must be updated after creating a new itinerary.
+    //The default values must be set for new itineraries (state - INACTIVE, memberInfo, members)
+    it('should update the firestore database', async function () {
+        const result = await createItinerary(generateReqMock({
+            body,
+            displayName: 'Kumar Sangakkara'
+        }), res);
 
-    //User should not be able to access a itinerary document of another user
+        //Obtains the created itinerary from the firestore
+        const dbResult = await itineraryStore.doc(result.results).get();
+
+        try {
+            //Checks if the output of the function is correct
+            expect(dbResult.id).toBe(result.results);
+            expectPropertyInArray([formatDatetime(result.results, dbResult.data())], {
+                location: 'Kandy',
+                state: StateEnum.INACTIVE,
+                destinations: [
+                    {
+                        arrivalDatetime: new Date('2021-10-12T03:20'),
+                        departureDatetime: new Date('2021-10-12T05:20'),
+                        place_id: 'p'
+                    }
+                ],
+                id: result.results,
+                members: ['a'],
+                memberInfo: {
+                    a: {
+                        displayName: 'Kumar Sangakkara',
+                        review: 0
+                    }
+                }
+            })
+        } finally {
+            await cleanStore(result.results)
+        }
+    });
+
+    //Userstore must be updated with the new itinerary
+    it('should update user store', async function () {
+        const result = await createItinerary(generateReqMock({
+            body,
+            displayName: 'Kumar Sangakkara'
+        }), res);
+
+        //Obtain the user document from the firestore
+        const userDoc = await userStore.where('userID', '==', 'a').get();
+        const expected = {};
+        expected[result.results] = {
+            location: 'Kandy',
+            state: StateEnum.INACTIVE
+        };
+        try {
+            expectPropertyInArray(userDoc.docs[0].data().itineraries, expected)
+        } finally {
+            await cleanStore(result.results);
+        }
+    });
+
+//User should not be able to access a resource of another user
     it('should return an error if user attempt to access another user\'s resources', async function () {
-        const result = await createItinerary(generateReqMock({user: 'j', params: {itineraryID: itKandyID}}));
+        const result = await createItinerary(generateReqMock({user: 'j'}), res);
         expect(result.message).toMatch(/not authorized/);
     });
-});
+})
+;
 
 describe('Update an itinerary', function () {
+    beforeAll(async () => {
+        init();
+        USER_ID = 'update-itinerary'
+        await userStore.add({
+            displayName: 'Kumar Sangakkara',
+            email: 'sanga@test.com',
+            userID: USER_ID,
+            preferences: [0, 0, 0, 0, 0],
+            isDeleted: 0
+        });
+    })
+
+    //Itinerary store must be updated with the new content
+    it('should update the itinerary store', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock()).then(result => result.path.split('/')[1]);
+
+        const result = await updateItinerary(generateReqMock({
+            itineraryID: itKandyID,
+            body: {
+                destinations: [
+                    {
+                        arrivalDatetime: new Date('2021-10-12T03:20'),
+                        departureDatetime: new Date('2021-10-12T05:20'),
+                        place_id: 'p'
+                    },
+                    {
+                        arrivalDatetime: new Date('2021-10-12T08:20'),
+                        departureDatetime: new Date('2021-10-12T09:20'),
+                        place_id: 'q'
+                    }
+                ]
+            }
+        }), res);
+
+        try {
+            expect(result.results).toBeTruthy();
+            const dbResult = await itineraryStore.doc(itKandyID).get();
+            expect(formatDatetime(itKandyID, dbResult.data()).destinations).toContainEqual({
+                arrivalDatetime: new Date('2021-10-12T03:20'),
+                departureDatetime: new Date('2021-10-12T05:20'),
+                place_id: 'p'
+            });
+            expect(formatDatetime(itKandyID, dbResult.data()).destinations).toContainEqual({
+                arrivalDatetime: new Date('2021-10-12T08:20'),
+                departureDatetime: new Date('2021-10-12T09:20'),
+                place_id: 'q'
+            });
+        } finally {
+            await cleanStore(itKandyID);
+        }
+    });
+
+
+    //The itinerary must be removed from the Userstore if the state is changed to REVIEWED
+    it('should update the user store if the state is changed to REVIEWED', async function () {
+        //Populate the database
+        const itKandyID = await itineraryStore.add(generateItineraryMock({
+            state: StateEnum.TO_BE_REVIEWED,
+            members: [USER_ID]
+        })).then(result => result.path.split('/')[1]);
+        const userDocID = await userStore.where('userID', '==', USER_ID).get().then(query => query.docs[0].id);
+        const itinerary = {};
+        itinerary[itKandyID] = {
+            location: 'Kandy',
+            state: StateEnum.TO_BE_REVIEWED
+        }
+        await userStore.doc(userDocID).update({
+            itineraries: itinerary
+        });
+
+        const result = await updateItinerary(generateReqMock({
+            itineraryID: itKandyID,
+            body: {state: StateEnum.REVIEWED},
+            user: USER_ID,
+            userID: USER_ID
+        }), res);
+
+        try {
+            expect(result.results).toBeTruthy();
+            const dbResult = await userStore.where('userID', '==', USER_ID).get();
+            if (dbResult.docs[0].data().itineraries)
+                expect(Object.keys(dbResult.docs[0].data().itineraries).includes(itKandyID)).toBeFalsy();
+        } finally {
+            await cleanStore(itKandyID);
+        }
+    });
+
+
+    //Must update Userstore when location and/or state is changed
+    it('should update the user store if the state and location are being changed', async function () {
+        //Populate the database
+        const itKandyID = await itineraryStore.add(generateItineraryMock({
+            state: StateEnum.TO_BE_REVIEWED,
+            members: [USER_ID]
+        })).then(result => result.path.split('/')[1]);
+        const userDocID = await userStore.where('userID', '==', USER_ID).get().then(query => query.docs[0].id);
+        const itinerary = {
+            [itKandyID]: {
+                location: 'Kandy',
+                state: StateEnum.INACTIVE
+            }
+        };
+        await userStore.doc(userDocID).update({
+            itineraries: itinerary
+        });
+
+        const result = await updateItinerary(generateReqMock({
+            itineraryID: itKandyID,
+            body: {state: StateEnum.ACTIVE, location: 'Ampara'},
+            user: USER_ID,
+            userID: USER_ID
+        }), res);
+
+        try {
+            expect(result.results).toBeTruthy();
+            const dbResult = await userStore.where('userID', '==', USER_ID).get();
+            expectPropertyInArray([dbResult.docs[0].data().itineraries], {
+                [`${itKandyID}`]:
+                    {
+                        location: 'Ampara',
+                        state: StateEnum.ACTIVE
+                    }
+            });
+        } finally {
+            await cleanStore(itKandyID);
+        }
+    });
+
+    //Must update Userstore when only location is changed
+    it('should update the user store if only the location is being changed', async function () {
+        //Populate the database
+        const itKandyID = await itineraryStore.add(generateItineraryMock({
+            state: StateEnum.TO_BE_REVIEWED,
+            members: [USER_ID]
+        })).then(result => result.path.split('/')[1]);
+        const userDocID = await userStore.where('userID', '==', USER_ID).get().then(query => query.docs[0].id);
+        const itinerary = {
+            [itKandyID]: {
+                location: 'Kandy',
+                state: StateEnum.INACTIVE
+            }
+        };
+        await userStore.doc(userDocID).update({
+            itineraries: itinerary
+        });
+
+        const result = await updateItinerary(generateReqMock({
+            itineraryID: itKandyID,
+            body: {location: 'Ampara'},
+            user: USER_ID,
+            userID: USER_ID
+        }), res);
+
+        try {
+            expect(result.results).toBeTruthy();
+            const dbResult = await userStore.where('userID', '==', USER_ID).get();
+            expectPropertyInArray([dbResult.docs[0].data().itineraries], {
+                [itKandyID]:
+                    {
+                        location: 'Ampara'
+                    }
+            });
+        } finally {
+            await cleanStore(itKandyID);
+        }
+    });
 
     //User should receive an error if there exists no document
     it('should return an error if there is no document', async function () {
-        const result = await updateItinerary({...req, params: {itineraryID: 'z'}}, res);
+        const result = await updateItinerary(generateReqMock(), res);
         expect(result.message).toMatch(/not found/);
     });
 
     //User should not be able to access a itinerary document of another user
     it('should return an error if user attempt to access another user\'s resources', async function () {
-        const itKandyID = await itineraryStore.add(itMock).then(result => result.path.split('/')[1]);
+        const itKandyID = await itineraryStore.add(generateItineraryMock()).then(result => result.path.split('/')[1]);
 
-        const result = await getItinerary({user: 'j', params: {...req.params, itineraryID: itKandyID}});
-        expect(result.message).toMatch(/not authorized/);
-
-        await cleanStore(itKandyID);
+        const result = await getItinerary(generateReqMock({user: 'j', itineraryID: itKandyID}), res);
+        try {
+            expect(result.message).toMatch(/not authorized/);
+        } finally {
+            await cleanStore(itKandyID);
+        }
     });
 });
 
 describe('Delete an existing itinerary', function () {
+    //TODO: Itinerary should be removed from the firestore
 
-    //User should receive an error if there exists no document
+
+    //TODO: Itinerary should be removed from all the user's documents
+
+
+    //TODO: User should receive an error if there exists no document
     it('should return an error if there is no document', async function () {
-        const result = await cleanStore({...req, params: {itineraryID: 'z'}}, res);
+        const result = await deleteItinerary({...req, params: {itineraryID: 'z'}}, res);
         expect(result.message).toMatch(/not found/);
     });
 
-    //User should not be able to access a itinerary document of another user
+    //TODO: User should not be able to access a itinerary document of another user
     it('should return an error if user attempt to access another user\'s resources', async function () {
         const itKandyID = await itineraryStore.add(itMock).then(result => result.path.split('/')[1]);
 
-        const result = await cleanStore({user: 'j', params: {itineraryID: itKandyID}});
+        const result = await deleteItinerary({user: 'j', params: {itineraryID: itKandyID}});
         expect(result.message).toMatch(/not authorized/);
 
         await cleanStore(itKandyID);

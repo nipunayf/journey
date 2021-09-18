@@ -167,6 +167,51 @@ describe('Updating an existing user', function () {
         const result = await updateUser(req, res);
         const dbResult = await userStore.where('userID', '==', 'c').get();
         expect(dbResult.docs[0].data(0).preferences).toStrictEqual([0, 0, 1, 0, -1]);
+        expect(result.results).toBeTruthy();
+    });
+
+    //TODO: Itinerary store must be updated if the display name is updated
+    it('should update the itinerary store if the display name is updated', async function () {
+        //Creating a new itinerary which has a member of the current user
+        const itKandyID = await itineraryStore.add({
+            location: 'Kandy',
+            state: 1,
+            destinations: [
+                {
+                    arrivalDatetime: new Date('2021-10-12T03:20'),
+                    departureDatetime: new Date('2021-10-12T05:20'),
+                    place_id: 'p'
+                }
+            ],
+            members: ['m'],
+            memberInfo: {
+                m: {
+                    displayName: 'Kumar Sangakkara',
+                    review: 0
+                }
+            }
+        }).then(result => result.path.split('/')[1]);
+
+        const result = await updateUser({
+            ...req, user: 'm', body: {displayName: 'Mahela Jayarawardena'}
+        }, res);
+
+        try {
+            //Check if the output is correct in the user store
+            const dbUserResult = await userStore.where('userID', '==', 'm').get();
+            expect(dbUserResult.docs[0].data().displayName).toBe('Mahela Jayarawardena');
+
+            //Check if the output is correct in the firestore
+            const dbItResult = await itineraryStore.where('members', 'array-contains', 'm').get();
+            expect(dbItResult.docs[0].data().memberInfo.m.displayName).toBe('Mahela Jayarawardena');
+
+            expect(result.results).toBeTruthy();
+        } finally {
+            //Clean the itienrary store
+            const doc = await itineraryStore.doc(id).get();
+            doc.ref.delete();
+            console.log(`deleted: ${id}`);
+        }
     });
 
     //User should not be able to update another user's document

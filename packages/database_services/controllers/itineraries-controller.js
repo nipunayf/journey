@@ -1,5 +1,9 @@
-const {userStore, itineraryStore} = require('../config/firebase');
+const {userStore, itineraryStore, transaction} = require('../config/firebase');
+const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
+const {formatDatetime} = require('../utils/format');
+const {StateEnum} = require('../utils/constants');
+const {updateUser} = require('./users-controller');
 
 /**
  * Get multiple itineraries of a user.
@@ -66,7 +70,36 @@ const getItinerary = async (req, res) => {
  * @returns {Promise<void>}
  */
 const createItinerary = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
+    //Creates the itinerary document
+    const userID = req.user
+    const data = {
+        location: req.body.location,
+        state: StateEnum.INACTIVE,
+        destinations: req.body.destinations,
+        members: [userID],
+        memberInfo: {}
+    }
+    data.memberInfo[userID] = {displayName: req.displayName, review: 0};
+    const batch = transaction();
+    const itDocRef = itineraryStore.doc();
+    batch.create(itDocRef, data);
+
+    //Updating the user document
+    const userDocRef = await userStore.where('userID', '==', req.user).get();
+    const itineraries = [{
+        itineraryID: itDocRef.id,
+        location: req.body.location,
+        state: StateEnum.INACTIVE
+    }];
+    batch.update(userDocRef.docs[0]._ref, {itineraries})
+
+    //Writing the commits to the firestore
+    await batch.commit();
+    return successMessage(res, itDocRef.id);
 }
 
 /**
@@ -76,6 +109,68 @@ const createItinerary = async (req, res) => {
  * @returns {Promise<void>}
  */
 const updateItinerary = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    //Fetching from firestore
+    let result = await itineraryStore.doc(req.params.itineraryID).get();
+
+    if (result._fieldsProto) { //Document found in fire store
+        result = result.data();
+
+        //Check if the user is a member of the itinerary
+        if (!result.members.includes(req.user))
+            return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+        await itineraryStore.doc(req.params.itineraryID).update(req.body);
+
+        //TODO: Implement a state transition validate algorithm
+
+        let body = {}
+        //Itinerary state is being changed
+        if (req.body.state) {
+            //Since the state is changed to REVIEWED, removing the itinerary from the user store
+            if (req.body.state === StateEnum.REVIEWED) {
+                const userUpdateOutput = await updateUser({
+                    ...req, body: {
+                        [`itineraries.${req.params.itineraryID}`]: FieldValue.delete()
+                    }
+                }, res)
+                if (userUpdateOutput.results !== true) return errorMessage(res, 'Something went wrong', 500);
+                return successMessage(res, true);
+            }
+
+            body = {
+                itineraries: {
+                    [`${req.params.itineraryID}`]: {state: req.body.state}
+                }
+            }
+
+            //If location of the itinerary being change
+            if (req.body.location) body.itineraries[req.params.itineraryID].location = req.body.location;
+        }
+        //If only the location of the itinerary being changed
+        else if (req.body.location) {
+            body = {
+                itineraries: {
+                    [`${req.params.itineraryID}`]: {location: req.body.location}
+                }
+            }
+        }
+
+        if (Object.keys(body).length !== 0) {
+            const userUpdateOutput = await updateUser({
+                ...req, body
+            }, res)
+            if (userUpdateOutput.results !== true) return errorMessage(res, 'Something went wrong', 500);
+        }
+
+        return successMessage(res, true);
+
+    } else
+        return errorMessage(res, 'Itinerary not found', 404);
+
 
 }
 
@@ -87,20 +182,6 @@ const updateItinerary = async (req, res) => {
  */
 const deleteItinerary = async (req, res) => {
 
-}
-
-const formatDatetime = (id, object) => {
-    const destinations = object.destinations;
-    destinations.forEach(item => {
-        item.departureDatetime = new Date(item.departureDatetime.seconds * 1000 + item.departureDatetime.nanoseconds / 1000000)
-        item.arrivalDatetime = new Date(item.arrivalDatetime.seconds * 1000 + item.arrivalDatetime.nanoseconds / 1000000)
-    });
-
-    return {
-        ...object,
-        id,
-        destinations
-    }
 }
 
 module.exports = {
