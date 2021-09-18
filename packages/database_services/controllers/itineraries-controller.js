@@ -131,7 +131,6 @@ const updateItinerary = async (req, res) => {
         //TODO: Implement a state transition validate algorithm
 
         let body = {}
-
         //TODO: Improve the code to support any amount of attributes
         //Itinerary state is being changed
         if (req.body.state) {
@@ -164,7 +163,7 @@ const updateItinerary = async (req, res) => {
         //Updates all the respective user documents
         if (Object.keys(body).length !== 0) {
             for (const member of result.members) {
-                const userDocRef = await userStore.where('userID', '==', req.user).get();
+                const userDocRef = await userStore.where('userID', '==', member).get();
                 batch.update(userDocRef.docs[0]._ref, body)
             }
         }
@@ -174,8 +173,6 @@ const updateItinerary = async (req, res) => {
 
     } else
         return errorMessage(res, 'Itinerary not found', 404);
-
-
 }
 
 /**
@@ -185,6 +182,37 @@ const updateItinerary = async (req, res) => {
  * @returns {Promise<void>}
  */
 const deleteItinerary = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    let result = await itineraryStore.doc(req.params.itineraryID).get();
+
+    if (result._fieldsProto) { //Document found in fire store
+        const itDocRef = result._ref;
+        result = result.data();
+
+        //Check if the user is a member of the itinerary
+        if (!result.members.includes(req.user))
+            return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+        //Delete the itinerary
+        const batch = transaction();
+        batch.delete(itDocRef);
+
+        //Update the usr documents
+        for (const member of result.members) {
+            const userDocRef = await userStore.where('userID', '==', member).get();
+            batch.update(userDocRef.docs[0]._ref, {
+                [`itineraries.${req.params.itineraryID}`]: FieldValue.delete()
+            })
+        }
+
+        await batch.commit();
+        return successMessage(res, true);
+    } else
+        return errorMessage(res, 'Itinerary not found', 404);
+
 
 }
 
@@ -195,5 +223,3 @@ module.exports = {
     updateItinerary,
     deleteItinerary
 }
-
-

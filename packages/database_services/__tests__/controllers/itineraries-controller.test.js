@@ -499,26 +499,86 @@ describe('Update an itinerary', function () {
     });
 });
 
-// describe('Delete an existing itinerary', function () {
-//     //TODO: Itinerary should be removed from the firestore
-//
-//
-//     //TODO: Itinerary should be removed from all the users' documents
-//
-//
-//     //TODO: User should receive an error if there exists no document
-//     it('should return an error if there is no document', async function () {
-//         const result = await deleteItinerary({...req, params: {itineraryID: 'z'}}, res);
-//         expect(result.message).toMatch(/not found/);
-//     });
-//
-//     //TODO: User should not be able to access a itinerary document of another user
-//     it('should return an error if user attempt to access another user\'s resources', async function () {
-//         const itKandyID = await itineraryStore.add(itMock).then(result => result.path.split('/')[1]);
-//
-//         const result = await deleteItinerary({user: 'j', params: {itineraryID: itKandyID}});
-//         expect(result.message).toMatch(/not authorized/);
-//
-//         await cleanStore(itKandyID);
-//     });
-// });
+describe('Delete an existing itinerary', function () {
+    beforeAll(async () => {
+        init();
+        USER_ID = 'delete-itinerary'
+        await userStore.add({
+            displayName: 'Kumar Sangakkara',
+            email: 'sanga@test.com',
+            userID: USER_ID,
+            preferences: [0, 0, 0, 0, 0],
+            isDeleted: 0
+        });
+    });
+
+    //TODO: Itinerary should be removed from the firestore
+    it('should remove the itinerary from firestore', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock({members: [USER_ID]})).then(result => result.path.split('/')[1]);
+
+        const result = await deleteItinerary(generateReqMock({
+            user: USER_ID,
+            userID: USER_ID,
+            itineraryID: itKandyID
+        }), res);
+
+        try {
+            expect(result).toBeTruthy();
+
+            //Checking the firestore database
+            const dbResult = await itineraryStore.doc(itKandyID).get();
+            expect(dbResult._fieldsProto).toBeUndefined();
+        } finally {
+            await cleanStore(itKandyID);
+        }
+    });
+
+    //Itinerary should be removed from all the users' documents
+    it('should remove the itinerary from all the members', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock({members: [USER_ID]})).then(result => result.path.split('/')[1]);
+
+        //Updating the user to be a member of this itinerary
+        const userDoc = await userStore.where('userID', '==', USER_ID).get();
+        userStore.doc(userDoc.docs[0].id).update({
+            itineraries: {
+                [itKandyID]: {
+                    location: 'Kandy',
+                    state: StateEnum.INACTIVE
+                }
+            }
+        });
+
+        const result = await deleteItinerary(generateReqMock({
+            user: USER_ID,
+            userID: USER_ID,
+            itineraryID: itKandyID
+        }), res);
+
+        try {
+            expect(result).toBeTruthy();
+
+            //Checking the firestore database
+            const dbResult = await userStore.doc(userDoc.docs[0].id).get();
+            if (dbResult.data().itineraries)
+                expect(Object.keys(dbResult.data().itineraries).includes(itKandyID)).toBeFalsy();
+        } finally {
+            await cleanStore(itKandyID);
+        }
+    });
+
+    //User should receive an error if there exists no document
+    it('should return an error if there is no document', async function () {
+        const result = await deleteItinerary(generateReqMock({params: {itineraryID: 'z'}}), res);
+        expect(result.message).toMatch(/not found/);
+    });
+
+    //User should not be able to access a itinerary document of another user
+    it('should return an error if user attempt to access another user\'s resources', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock()).then(result => result.path.split('/')[1]);
+
+        const result = await deleteItinerary(generateReqMock({user: 'j', params: {itineraryID: itKandyID}}), res);
+        expect(result.message).toMatch(/not authorized/);
+
+        await cleanStore(itKandyID);
+    });
+});

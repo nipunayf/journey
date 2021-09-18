@@ -173,7 +173,7 @@ describe('Updating an existing user', function () {
         expect(result.results).toBeTruthy();
     });
 
-    //TODO: Itinerary store must be updated if the display name is updated
+    //Itinerary store must be updated if the display name is updated
     it('should update the itinerary store if the display name is updated', async function () {
         //Creating a new itinerary which has a member of the current user
         const itKandyID = await itineraryStore.add({
