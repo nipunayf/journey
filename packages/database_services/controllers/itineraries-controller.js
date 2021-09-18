@@ -90,11 +90,12 @@ const createItinerary = async (req, res) => {
 
     //Updating the user document
     const userDocRef = await userStore.where('userID', '==', req.user).get();
-    const itineraries = [{
-        itineraryID: itDocRef.id,
-        location: req.body.location,
-        state: StateEnum.INACTIVE
-    }];
+    const itineraries = {
+        [itDocRef.id]: {
+            location: req.body.location,
+            state: StateEnum.INACTIVE
+        }
+    };
     batch.update(userDocRef.docs[0]._ref, {itineraries})
 
     //Writing the commits to the firestore
@@ -117,39 +118,41 @@ const updateItinerary = async (req, res) => {
     let result = await itineraryStore.doc(req.params.itineraryID).get();
 
     if (result._fieldsProto) { //Document found in fire store
+        const itDocRef = result._ref;
         result = result.data();
 
         //Check if the user is a member of the itinerary
         if (!result.members.includes(req.user))
             return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
-        await itineraryStore.doc(req.params.itineraryID).update(req.body);
+        //Updates the itinerary document
+        const batch = transaction();
+        batch.update(itDocRef, req.body);
 
         //TODO: Implement a state transition validate algorithm
 
         let body = {}
+
+        //TODO: Improve the code to support any amount of attributes
         //Itinerary state is being changed
         if (req.body.state) {
-            //Since the state is changed to REVIEWED, removing the itinerary from the user store
-            if (req.body.state === StateEnum.REVIEWED) {
-                const userUpdateOutput = await updateUser({
-                    ...req, body: {
-                        [`itineraries.${req.params.itineraryID}`]: FieldValue.delete()
-                    }
-                }, res)
-                if (userUpdateOutput.results !== true) return errorMessage(res, 'Something went wrong', 500);
-                return successMessage(res, true);
-            }
 
-            body = {
-                itineraries: {
-                    [`${req.params.itineraryID}`]: {state: req.body.state}
+            //Since the state is changed to REVIEWED, removing the itinerary from the user store
+            if (req.body.state === StateEnum.REVIEWED)
+                body = {
+                    [`itineraries.${req.params.itineraryID}`]: FieldValue.delete()
                 }
-            }
+            else
+                body = {
+                    itineraries: {
+                        [`${req.params.itineraryID}`]: {state: req.body.state}
+                    }
+                }
 
             //If location of the itinerary being change
             if (req.body.location) body.itineraries[req.params.itineraryID].location = req.body.location;
         }
+
         //If only the location of the itinerary being changed
         else if (req.body.location) {
             body = {
@@ -159,13 +162,15 @@ const updateItinerary = async (req, res) => {
             }
         }
 
+        //Updates all the respective user documents
         if (Object.keys(body).length !== 0) {
-            const userUpdateOutput = await updateUser({
-                ...req, body
-            }, res)
-            if (userUpdateOutput.results !== true) return errorMessage(res, 'Something went wrong', 500);
+            for (const member of result.members) {
+                const userDocRef = await userStore.where('userID', '==', req.user).get();
+                batch.update(userDocRef.docs[0]._ref, body)
+            }
         }
 
+        await batch.commit();
         return successMessage(res, true);
 
     } else
