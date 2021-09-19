@@ -8,6 +8,12 @@ const {
 } = require('../../controllers/itineraries-controller');
 const {formatDatetime} = require('../../utils/format');
 const {StateEnum} = require('../../utils/constants');
+const {
+    generateReqMock,
+    generateItineraryMock,
+    removeItinerary,
+    expectPropertyInArray
+} = require('../../utils/mock');
 
 const init = () => {
     res = {
@@ -19,79 +25,6 @@ const init = () => {
             }
         }
     };
-}
-
-/**
- * Generates a request mock object
- * @param params
- * @returns {{params: {itineraryID: string, userID: string}, user: string}}
- */
-const generateReqMock = params => {
-    params = Object.assign({
-        user: 'a',
-        itineraryID: 'z',
-        userID: 'a',
-        body: null,
-        displayName: 'Kumar Sangakkara'
-    }, params);
-    return {
-        user: params.user,
-        params: {userID: params.userID, itineraryID: params.itineraryID},
-        query: params.query,
-        body: params.body,
-        displayName: params.displayName
-    }
-}
-
-/**
- * Generates an itinerary mock object
- * @param params
- * @returns {{memberInfo: {userID: {displayName: string, review: number}}, destinations: [{arrivalDatetime: Date, departureDatetime: Date, place_id: string}], members: string[], location: string}}
- */
-const generateItineraryMock = params => {
-    params = Object.assign({members: ['a'], location: 'Kandy', state: StateEnum.INACTIVE}, params);
-    return {
-        location: params.location,
-        state: params.state,
-        destinations: [
-            {
-                arrivalDatetime: new Date('2021-10-12T03:20'),
-                departureDatetime: new Date('2021-10-12T05:20'),
-                place_id: 'p'
-            }
-        ],
-        members: params.members,
-        memberInfo: {
-            [`${params.members[0]}`]: {
-                displayName: 'Kumar Sangakkara',
-                review: 0
-            }
-        }
-    };
-}
-
-/**
- * Deletes the itinerary from the firestore.
- * @param id
- * @returns {Promise<void>}
- */
-const cleanStore = async (id) => {
-    const doc = await itineraryStore.doc(id).get();
-    doc.ref.delete();
-    console.log(`deleted: ${id}`);
-}
-
-/**
- * Checking if an array posses an object with the given key set
- * @param array - contains the relative objects
- * @param object - required key set
- */
-const expectPropertyInArray = (array, object) => {
-    expect(array).toEqual(
-        expect.arrayContaining([
-            expect.objectContaining(object)
-        ])
-    );
 }
 
 describe('Getting existing itineraries', function () {
@@ -110,8 +43,8 @@ describe('Getting existing itineraries', function () {
             expectPropertyInArray(results.results, {id: itKandyID});
             expectPropertyInArray(results.results, {id: itNegomboID});
         } finally {
-            await cleanStore(itKandyID);
-            await cleanStore(itNegomboID);
+            await removeItinerary(itKandyID);
+            await removeItinerary(itNegomboID);
         }
     });
 
@@ -128,8 +61,8 @@ describe('Getting existing itineraries', function () {
             expect(results.results).toHaveLength(1);
             expectPropertyInArray(results.results, {id: itKandyID});
         } finally {
-            await cleanStore(itKandyID);
-            await cleanStore(itNegomboID);
+            await removeItinerary(itKandyID);
+            await removeItinerary(itNegomboID);
         }
     });
 
@@ -151,9 +84,9 @@ describe('Getting existing itineraries', function () {
             expectPropertyInArray(results.results, {id: itKandyID});
             expectPropertyInArray(results.results, {id: itNegomboID});
         } finally {
-            await cleanStore(itKandyID);
-            await cleanStore(itNegomboID);
-            await cleanStore(itJaffnaID);
+            await removeItinerary(itKandyID);
+            await removeItinerary(itNegomboID);
+            await removeItinerary(itJaffnaID);
         }
     });
 
@@ -185,7 +118,7 @@ describe('Getting an existing itinerary', function () {
             expect(usr1Result).toStrictEqual(usr2Result);
             expect(usr1Result.results).toStrictEqual({...generateItineraryMock({members: ['a', 'b']}), id: itKandyID})
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -209,7 +142,7 @@ describe('Getting an existing itinerary', function () {
             expect(result1.message).toMatch(/not authorized/);
             expect(result2.message).toMatch(/not authorized/);
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 });
@@ -278,7 +211,7 @@ describe('Create a new itinerary', function () {
                 }
             })
         } finally {
-            await cleanStore(result.results)
+            await removeItinerary(result.results)
         }
     });
 
@@ -300,7 +233,7 @@ describe('Create a new itinerary', function () {
         try {
             expectPropertyInArray([userDoc.docs[0].data().itineraries], expected)
         } finally {
-            await cleanStore(result.results);
+            await removeItinerary(result.results);
         }
     });
 
@@ -323,7 +256,15 @@ describe('Update an itinerary', function () {
             preferences: [0, 0, 0, 0, 0],
             isDeleted: 0
         });
-    })
+    });
+
+    afterAll(async () => {
+        const doc = await userStore.where('userID', '==', USER_ID).get()
+        doc.forEach(element => {
+            element.ref.delete();
+            console.log(`deleted: ${element.id}`);
+        });
+    });
 
     //Itinerary store must be updated with the new content
     it('should update the itinerary store', async function () {
@@ -361,7 +302,7 @@ describe('Update an itinerary', function () {
                 place_id: 'q'
             });
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -396,7 +337,7 @@ describe('Update an itinerary', function () {
             if (dbResult.docs[0].data().itineraries)
                 expect(Object.keys(dbResult.docs[0].data().itineraries).includes(itKandyID)).toBeFalsy();
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -437,7 +378,7 @@ describe('Update an itinerary', function () {
                     }
             });
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -476,7 +417,7 @@ describe('Update an itinerary', function () {
                     }
             });
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -494,7 +435,7 @@ describe('Update an itinerary', function () {
         try {
             expect(result.message).toMatch(/not authorized/);
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 });
@@ -512,7 +453,15 @@ describe('Delete an existing itinerary', function () {
         });
     });
 
-    //TODO: Itinerary should be removed from the firestore
+    afterAll(async () => {
+        const doc = await userStore.where('userID', '==', USER_ID).get()
+        doc.forEach(element => {
+            element.ref.delete();
+            console.log(`deleted: ${element.id}`);
+        });
+    });
+
+    //Itinerary should be removed from the firestore
     it('should remove the itinerary from firestore', async function () {
         const itKandyID = await itineraryStore.add(generateItineraryMock({members: [USER_ID]})).then(result => result.path.split('/')[1]);
 
@@ -529,7 +478,7 @@ describe('Delete an existing itinerary', function () {
             const dbResult = await itineraryStore.doc(itKandyID).get();
             expect(dbResult._fieldsProto).toBeUndefined();
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -562,7 +511,7 @@ describe('Delete an existing itinerary', function () {
             if (dbResult.data().itineraries)
                 expect(Object.keys(dbResult.data().itineraries).includes(itKandyID)).toBeFalsy();
         } finally {
-            await cleanStore(itKandyID);
+            await removeItinerary(itKandyID);
         }
     });
 
@@ -579,6 +528,6 @@ describe('Delete an existing itinerary', function () {
         const result = await deleteItinerary(generateReqMock({user: 'j', params: {itineraryID: itKandyID}}), res);
         expect(result.message).toMatch(/not authorized/);
 
-        await cleanStore(itKandyID);
+        await removeItinerary(itKandyID);
     });
 });

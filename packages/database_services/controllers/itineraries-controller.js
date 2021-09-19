@@ -4,6 +4,7 @@ const {successMessage, errorMessage} = require("../utils/message-template");
 const {formatDatetime} = require('../utils/format');
 const {StateEnum} = require('../utils/constants');
 
+
 /**
  * Get multiple itineraries of a user.
  * @param req
@@ -212,8 +213,6 @@ const deleteItinerary = async (req, res) => {
         return successMessage(res, true);
     } else
         return errorMessage(res, 'Itinerary not found', 404);
-
-
 }
 
 module.exports = {
