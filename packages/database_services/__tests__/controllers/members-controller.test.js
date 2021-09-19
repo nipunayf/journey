@@ -1,7 +1,8 @@
 const {userStore, itineraryStore} = require('../../config/firebase');
 const {generateReqMock, generateItineraryMock, removeItinerary, expectPropertyInArray} = require('../../utils/mock');
-const {addMembers, deleteMember} = require('../../controllers/members-controller');
+const {addMembers, deleteMember, updateMember} = require('../../controllers/members-controller');
 const {StateEnum} = require("../../utils/constants");
+const {remove} = require("winston");
 
 const init = () => {
     res = {
@@ -299,6 +300,86 @@ describe('Removing a member', function () {
     //Document not found
     it('should return an error if there is no document', async function () {
         const result = await deleteMember(generateReqMock({params: {itineraryID: 'z'}}), res);
+        expect(result.message).toMatch(/not found/);
+    });
+});
+
+describe('Updating a member', function () {
+    beforeAll(() => {
+        init();
+    })
+
+    //Update request accept
+    it('should update the firestore upon request accept', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock({members: ['u']})).then(result => result.path.split('/')[1]);
+
+        const result = await updateMember(generateReqMock({
+            user: 'u',
+            userID: 'u',
+            itineraryID: itKandyID,
+            memberID: 'u',
+            body : {
+                accept: true
+            }
+        }), res);
+
+        try {
+            expect(result.results).toBeTruthy();
+
+            //Check firestore
+            const dbResult = await itineraryStore.doc(itKandyID).get();
+            const itinerary = dbResult.data();
+            expect(itinerary.memberInfo.u.accept).toBeTruthy();
+        } finally {
+            await removeItinerary(itKandyID);
+        }
+    });
+
+    //Update user review
+    it('should update the firestore upon new review', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock({members: ['v']})).then(result => result.path.split('/')[1]);
+
+        const result = await updateMember(generateReqMock({
+            user: 'v',
+            userID: 'v',
+            itineraryID: itKandyID,
+            memberID: 'v',
+            body : {
+                review: 3
+            }
+        }), res);
+
+        try {
+            expect(result.results).toBeTruthy();
+
+            //Check firestore
+            const dbResult = await itineraryStore.doc(itKandyID).get();
+            const itinerary = dbResult.data();
+            expect(itinerary.memberInfo.v.review).toBe(3);
+        } finally {
+            await removeItinerary(itKandyID);
+        }
+    });
+
+    //Can only edit user's own resource
+    it('should return an error upon attempting to change another user\`s resource', async function () {
+        const itKandyID = await itineraryStore.add(generateItineraryMock({members: ['u']})).then(result => result.path.split('/')[1]);
+
+        const result = await updateMember(generateReqMock({
+            itineraryID: itKandyID,
+            memberID: 'u'
+        }), res);
+
+        try {
+            expect(result.message).toMatch(/not authorized/);
+        } finally {
+            await removeItinerary(itKandyID);
+        }
+    });
+
+    //Document not found
+    it('should return an error if there is no document', async function () {
+        const result = await updateMember(generateReqMock({params: {itineraryID: 'z'}}), res);
         expect(result.message).toMatch(/not found/);
     });
 });

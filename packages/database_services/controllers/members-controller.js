@@ -132,7 +132,33 @@ const deleteMember = async (req, res) => {
     return successMessage(res, true);
 }
 
+const updateMember = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user && req.params.memberID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    //Fetching the itinerary document from firestore
+    const itDoc = await itineraryStore.doc(req.params.itineraryID).get();
+    const itinerary = itDoc.data();
+
+    //Itinerary document not found
+    if (!itDoc._fieldsProto)
+        return errorMessage(res, 'Itinerary not found', 404);
+
+    //Requesting user is not a member of the itinerary
+    if (!itinerary.members.includes(req.user))
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    //Updates the itinerary
+    const parameter = Object.keys(req.body)[0];
+    await itineraryStore.doc(req.params.itineraryID).update({
+        [`memberInfo.${req.user}.${parameter}`]: req.body[parameter]
+    })
+    return successMessage(res, true);
+}
+
 module.exports = {
     addMembers,
-    deleteMember
+    deleteMember,
+    updateMember
 }

@@ -44,6 +44,7 @@ const generateItineraryMock = params => {
         memberInfo: {
             [`${params.members[0]}`]: {
                 displayName: 'Kumar Sangakkara',
+                accept: false,
                 review: 0
             }
         }

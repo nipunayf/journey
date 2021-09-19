@@ -7,7 +7,7 @@
  * @param {Number} status - status code of the response. default = 200
  */
 const successMessage = (response, results, message = "", status = 200) => {
-    output = { results : results, message: message };
+    const output = { results : results, message: message };
     return response.status(status).send(output);
 }
 
@@ -19,7 +19,7 @@ const successMessage = (response, results, message = "", status = 200) => {
  * @param {Number} status - status code of the response. default = 400
  */
 const errorMessage = (response, message, status = 400) => {
-    output = { object : null, message: message }
+    const output = { object : null, message: message }
     return response.status(status).send(output);
 }
 
