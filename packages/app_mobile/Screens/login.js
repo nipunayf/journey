@@ -2,14 +2,13 @@ import React from 'react';
 import {View, StyleSheet, Text, TextInput, Image} from 'react-native';
 import { Formik} from 'formik';
 import { Button, SocialIcon } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Login = props=> {
+
+const Login = ({navigation}) => {
 
     return(
         <View style ={styles.screen}>
             <Text style ={styles.heading}>Welcome To Journey</Text>
-            {/*<Image source = {require('../../../assets/journey-logo.png')} />*/}
             <Formik initialValues={{ email: '', password: '' }} onSubmit={values => Alert.alert(JSON.stringify(values))}>
             {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
             <View style={styles.formContainer}>           
@@ -40,7 +39,8 @@ const Login = props=> {
               color="#0277bd"
               title='Submit'
               disabled={!isValid}
-              onPress={() => {alert('You tapped the button!');}}
+              onPress={() =>
+                navigation.navigate('Travel Itinerary')}
             />
             </View>
             )}

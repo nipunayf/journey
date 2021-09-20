@@ -3,7 +3,7 @@ import {View, StyleSheet, ScrollView, FlatList,Text} from 'react-native';
 import CardComponent from '../Components/card';
 import StepIndicator from 'react-native-step-indicator';
 import dummyData from './data';
-import Swiper from 'react-native-swiper';
+
 
 
 const ItineraryScreen = props => {
@@ -54,9 +54,6 @@ const ItineraryScreen = props => {
   
   return (
     <View style={{flex:1}}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Your Travel Itinerary</Text>
-      </View>
       <View style={styles.container}>
         <View style={styles.stepIndicator}>
           <StepIndicator
