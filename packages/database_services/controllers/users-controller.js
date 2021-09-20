@@ -1,4 +1,5 @@
-const {userStore, itineraryStore} = require('../config/firebase')
+const {userStore, itineraryStore, transaction} = require('../config/firebase');
+const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
 
 /**
@@ -13,7 +14,7 @@ const getUser = async (req, res) => {
         return errorMessage(res, 'You are not authorized to access other users\' details')
 
     //fetching from firestore
-    const result = await userStore.where('user_id', '==', req.user).where('is_deleted', '==', 0).get();
+    const result = await userStore.where('userID', '==', req.user).where('isDeleted', '==', 0).get();
 
     if (result.size > 0) //document found in firestore
         return successMessage(res, result.docs[0].data(0))
@@ -29,17 +30,17 @@ const getUser = async (req, res) => {
  */
 const addUser = async (req, res) => {
     //user attempting to access another user profile
-    if (req.body.user_id !== req.user)
+    if (req.body.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' details')
 
     //check if the user alrady exists in the database
-    const checkUserResult = await userStore.where('user_id', '==', req.body.user_id).get()
+    const checkUserResult = await userStore.where('userID', '==', req.body.userID).get()
     if (checkUserResult.size > 0)
         return errorMessage(res, 'User already exists')
 
     //adds user to the database
-    const result = await userStore.add({...req.body, is_deleted: 0});
-    return successMessage(res, result)
+    const result = await userStore.add({...req.body, isDeleted: 0});
+    return successMessage(res, result);
 }
 
 /**
@@ -49,23 +50,41 @@ const addUser = async (req, res) => {
  * @returns {Promise<*>}
  */
 const updateUser = async (req, res) => {
-    //user attempting to access another user profile
+    //User attempting to access another user profile
     if (req.params.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' details');
 
-    //if user attempts to change the user id
-    if (req.body.user_id)
+    //If user attempts to change the user id
+    if (req.body.userID)
         return errorMessage(res, 'You are not allowed to change the user ID', 406);
 
-    //fetching from firestore
-    const result = await userStore.where('user_id', '==', req.params.userID).where('is_deleted', '==', 0).get();
+    //Fetching from firestore
+    const result = await userStore.where('userID', '==', req.params.userID).where('isDeleted', '==', 0).get();
 
-    //document not found in firestore
+    //Document not found in firestore
     if (result.size == 0)
         return errorMessage(res, 'User not found', 404);
 
-    //updating the firestore
-    userStore.doc(result.docs[0].id).update(req.body);
+    //Updating the firestore
+    const batch = transaction();
+    batch.update(result.docs[0]._ref, req.body)
+
+    //Updating itinerary store if display name is changed
+    if (req.body.displayName) {
+        const itineraries = Object.keys(result.docs[0].data().itineraries);
+        itineraries.forEach(itinerary => {
+            batch.update(itineraryStore.doc(itinerary), {
+                memberInfo: {
+                    [req.user]: {
+                        displayName: req.body.displayName
+                    }
+                }
+            })
+        })
+    }
+
+    await batch.commit();
+    return successMessage(res, true);
 }
 
 /**
@@ -79,12 +98,12 @@ const deleteUser = async (req, res) => {
     if (req.params.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' details');
 
-    const result = await userStore.where('user_id', '==', req.params.userID).where('is_deleted', '==', 0).get();
+    const result = await userStore.where('userID', '==', req.params.userID).where('isDeleted', '==', 0).get();
     //document not found in firestore
     if (result.size == 0)
         return errorMessage(res, 'User not found', 404);
 
-    userStore.doc(result.docs[0].id).update({is_deleted: 1});
+    userStore.doc(result.docs[0].id).update({isDeleted: 1});
 }
 
 module.exports = {

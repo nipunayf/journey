@@ -23,7 +23,7 @@ export default function GAuthButton() {
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 const user = result.user;
-                history.push('/');
+                history.push('/home')
             }).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;

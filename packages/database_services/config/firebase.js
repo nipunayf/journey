@@ -1,6 +1,6 @@
-var admin = require("firebase-admin");
+const admin = require("firebase-admin");
 
-var serviceAccount = require("./firebase_secret.json");
+const serviceAccount = require("./firebase_secret.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -9,8 +9,9 @@ admin.initializeApp({
 module.exports = {
     userStore: admin.app().firestore().collection('users'),
     itineraryStore: admin.app().firestore().collection('itineraries'),
-    auth: admin.app().auth()
-};
+    auth: admin.app().auth(),
+    transaction: () => admin.app().firestore().batch()
+}
 
 
 

@@ -34,7 +34,7 @@ export default function SignUpAuth() {
             email: Yup.string().email('Invalid email address').required('Required'),
         }),
         onSubmit: values => {
-            history.push('/');
+            history.push('/home');
             const app = initializeApp(firebaseConfig);
             const auth = getAuth();
             createUserWithEmailAndPassword(auth, values.email, values.password)
