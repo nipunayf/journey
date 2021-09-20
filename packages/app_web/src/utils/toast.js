@@ -13,7 +13,7 @@ const DURATION = 7000;
 export const generateSuccessMessage = (toast, title, message) => {
     toast({
         position: "bottom-left",
-        title: `${title} successfully`,
+        title: title,
         description: message,
         status: "success",
         isClosable: true,
@@ -30,7 +30,7 @@ export const generateSuccessMessage = (toast, title, message) => {
 export const generateErrorMessage = (toast, title, message) => {
     toast({
         position: "bottom-left",
-        title: `${title} failed`,
+        title: title,
         description: message,
         status: "error",
         isClosable: true,

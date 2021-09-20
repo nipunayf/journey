@@ -1,21 +1,7 @@
-import {
-    Flex,
-    Box,
-    FormControl,
-    FormLabel,
-    Input,
-    Checkbox,
-    Stack,
-    Link,
-    Button,
-    Heading,
-    Text,
-    Center, Image,
-    FormErrorMessage, useToast
-} from '@chakra-ui/react';
+import {Button, Stack, useToast} from '@chakra-ui/react';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {createUserWithEmailAndPassword, getAuth, updateProfile} from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
 import {initializeApp} from "firebase/app";
 import {useHistory} from 'react-router-dom';
@@ -23,6 +9,7 @@ import InputBox from "../Form/InputBox";
 import {handleErrors} from "./firebase-utils";
 import * as actions from "../../store/actions";
 import {connect} from "react-redux";
+import {generateSuccessMessage} from "../../utils/toast";
 
 function SignUpAuth(props) {
     const history = useHistory();
@@ -58,6 +45,7 @@ function SignUpAuth(props) {
                     updateProfile(auth.currentUser, {
                         displayName: `${formik.values.firstName} ${formik.values.lastName}`
                     }).then(() => {
+                        generateSuccessMessage(toast, 'Account Created',`Hello ${formik.values.firstName}, We have successfully created an account for you.`)
                         history.push('/');
                     }).catch((error) => {
                         handleErrors(toast, error.code);
@@ -76,7 +64,7 @@ function SignUpAuth(props) {
         <Stack spacing={4}>
             <InputBox id="firstName" name={"First Name"} formik={formik}/>
             <InputBox id="lastName" name={"Last Name"} formik={formik}/>
-            <InputBox id="email" name={"Email"}formik={formik}/>
+            <InputBox id="email" name={"Email"} formik={formik}/>
             <InputBox id="password" name={"Password"} formik={formik} isPass/>
             <Button
                 bg={'secondary.main'}
