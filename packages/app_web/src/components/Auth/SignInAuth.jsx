@@ -11,17 +11,22 @@ import {
     Heading,
     Text,
     Center, Image,
-    FormErrorMessage
+    FormErrorMessage, useToast
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import {getAuth, GoogleAuthProvider, signInWithEmailAndPassword} from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
 import {initializeApp} from "firebase/app";
 import { useHistory } from 'react-router-dom';
+import InputBox from "../Form/InputBox";
+import {handleErrors} from "./firebase-utils";
+import * as actions from "../../store/actions";
+import {connect} from "react-redux";
 
-export default function SignInAuth() {
+function SignInAuth(props) {
     const history = useHistory();
+    const toast = useToast();
 
     const formik = useFormik({
         initialValues: {
@@ -37,14 +42,18 @@ export default function SignInAuth() {
             signInWithEmailAndPassword(auth, values.email, values.password)
                 .then((userCredential) => {
                     const user = userCredential.user;
+                    props.onAuth(
+                        user.accessToken,
+                        user.uid,
+                        user.displayName,
+                        user.photoURL,
+                        user.email
+                    );
                     console.log(user);
-                    formik.setSubmitting(false);
-                    history.push('/home')
+                    history.push('/')
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode,errorMessage);
+                    handleErrors(toast, error.code);
                     formik.setSubmitting(false)
                 });
         }
@@ -52,15 +61,8 @@ export default function SignInAuth() {
 
     return (
         <Stack spacing={4}>
-            <FormControl id="email" isInvalid={formik.errors.email}>
-                <FormLabel>Email address</FormLabel>
-                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-                <Input type="email" value={formik.values.email} onChange={formik.handleChange}/>
-            </FormControl>
-            <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input type="password" value={formik.values.password} onChange={formik.handleChange}/>
-            </FormControl>
+            <InputBox id="email" name={"Email"}formik={formik}/>
+            <InputBox id="password" name={"Password"} formik={formik} isPass/>
             <Stack spacing={10}>
                 <Stack
                     direction={{base: 'column', sm: 'row'}}
@@ -84,4 +86,12 @@ export default function SignInAuth() {
         </Stack>
     );
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (token, userID, displayName, profilePic, email) => dispatch(actions.authSuccess(token, userID, displayName, profilePic, email)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(SignInAuth);
 

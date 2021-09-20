@@ -11,17 +11,22 @@ import {
     Heading,
     Text,
     Center, Image,
-    FormErrorMessage
+    FormErrorMessage, useToast
 } from '@chakra-ui/react';
-import { useFormik } from 'formik';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
 import {initializeApp} from "firebase/app";
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
+import InputBox from "../Form/InputBox";
+import {handleErrors} from "./firebase-utils";
+import * as actions from "../../store/actions";
+import {connect} from "react-redux";
 
-export default function SignUpAuth() {
+function SignUpAuth(props) {
     const history = useHistory();
+    const toast = useToast();
 
     const formik = useFormik({
         initialValues: {
@@ -32,21 +37,36 @@ export default function SignUpAuth() {
         },
         validationSchema: Yup.object({
             email: Yup.string().email('Invalid email address').required('Required'),
+            firstName: Yup.string().required('Required'),
+            lastName: Yup.string().required('Required'),
+            password: Yup.string().required('Required').min(6, 'Need at least 6 characters')
         }),
         onSubmit: values => {
-            history.push('/home');
             const app = initializeApp(firebaseConfig);
-            const auth = getAuth();
+            let auth = getAuth();
             createUserWithEmailAndPassword(auth, values.email, values.password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    console.log(user);
+                    props.onAuth(
+                        user.accessToken,
+                        user.uid,
+                        `${formik.values.firstName} ${formik.values.lastName}`,
+                        null,
+                        user.email
+                    );
+                    auth = getAuth();
+                    updateProfile(auth.currentUser, {
+                        displayName: `${formik.values.firstName} ${formik.values.lastName}`
+                    }).then(() => {
+                        history.push('/');
+                    }).catch((error) => {
+                        handleErrors(toast, error.code);
+                    });
                     formik.setSubmitting(false)
+                    history.push('/');
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode,errorMessage);
+                    handleErrors(toast, error.code);
                     formik.setSubmitting(false)
                 });
         }
@@ -54,25 +74,10 @@ export default function SignUpAuth() {
 
     return (
         <Stack spacing={4}>
-            <FormControl id="firstName" isInvalid={formik.errors.firstName}>
-                <FormLabel>First Name</FormLabel>
-                <FormErrorMessage>{formik.errors.firstName}</FormErrorMessage>
-                <Input type="name" value={formik.values.firstName} onChange={formik.handleChange}/>
-            </FormControl>
-            <FormControl id="lastName" isInvalid={formik.errors.lastName}>
-                <FormLabel>Last Name</FormLabel>
-                <FormErrorMessage>{formik.errors.lastName}</FormErrorMessage>
-                <Input type="name" value={formik.values.lastName} onChange={formik.handleChange}/>
-            </FormControl>
-            <FormControl id="email" isInvalid={formik.errors.email}>
-                <FormLabel>Email</FormLabel>
-                <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-                <Input type="email" value={formik.values.email} onChange={formik.handleChange}/>
-            </FormControl>
-            <FormControl id="password">
-                <FormLabel>Password</FormLabel>
-                <Input type="password" value={formik.values.password} onChange={formik.handleChange}/>
-            </FormControl>
+            <InputBox id="firstName" name={"First Name"} formik={formik}/>
+            <InputBox id="lastName" name={"Last Name"} formik={formik}/>
+            <InputBox id="email" name={"Email"}formik={formik}/>
+            <InputBox id="password" name={"Password"} formik={formik} isPass/>
             <Button
                 bg={'secondary.main'}
                 color={'white'}
@@ -87,4 +92,12 @@ export default function SignUpAuth() {
         </Stack>
     );
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (token, userID, displayName, profilePic, email) => dispatch(actions.authSuccess(token, userID, displayName, profilePic, email)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(SignUpAuth);
 

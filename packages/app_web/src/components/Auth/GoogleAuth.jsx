@@ -3,16 +3,22 @@ import {
     Button,
     Center,
     Text,
+    useToast,
 } from '@chakra-ui/react';
 import {FcGoogle} from 'react-icons/fc';
 import {initializeApp} from "firebase/app";
 import {getAuth, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
 import { useHistory } from 'react-router-dom';
+import {generateErrorMessage } from '../../utils/toast'
 
-export default function GAuthButton() {
-    // Initialize Firebase
+import * as actions from '../../store/actions';
+import { connect } from 'react-redux';
+import {handleErrors} from "./firebase-utils";
+
+const GAuthButton = (props) => {
     const history = useHistory();
+    const toast = useToast();
 
     const GooglePopup = () => {
         const app = initializeApp(firebaseConfig);
@@ -20,15 +26,16 @@ export default function GAuthButton() {
         const auth = getAuth();
         signInWithPopup(auth, provider)
             .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                const user = result.user;
-                history.push('/home')
+                props.onAuth(
+                    GoogleAuthProvider.credentialFromResult(result).accessToken,
+                    result.user.uid,
+                    result.user.displayName,
+                    result.user.photoURL,
+                    result.user.email
+                );
+                history.push('/')
             }).catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            const email = error.email;
-            const credential = GoogleAuthProvider.credentialFromError(error);
+                handleErrors(toast, error.code);
         });
     }
 
@@ -41,4 +48,12 @@ export default function GAuthButton() {
 
     );
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (token, userID, displayName, profilePic, email) => dispatch(actions.authSuccess(token, userID, displayName, profilePic, email)),
+    };
+};
+
+export default connect(null, mapDispatchToProps)(GAuthButton);
 
