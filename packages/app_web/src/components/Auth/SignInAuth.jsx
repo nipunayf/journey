@@ -15,9 +15,9 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import firebaseConfig from './firebase_secret.json';
-import {initializeApp} from "firebase/app";
+import {initializeApp} from 'firebase/app';
 import { useHistory } from 'react-router-dom';
 
 export default function SignInAuth() {
