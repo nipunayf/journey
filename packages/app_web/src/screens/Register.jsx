@@ -52,7 +52,6 @@ export default function Register() {
                     </Box>
                 </Stack>
             </Flex>
-            <Footer/>
         </>
     );
 }

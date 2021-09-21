@@ -1,22 +1,48 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, useLocation, Redirect, withRouter } from "react-router-dom";
-import { useTransition, animated } from "react-spring";
-import { connect } from 'react-redux';
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import {connect} from 'react-redux';
 
 import Home from './Home';
 import Login from './Login';
-import Register from './Register';
+import Settings from './Settings';
+import Footer from "../containers/Footer/Footer";
+import Dashboard from "./Dashboard";
+import Register from "./Register";
 
 const Main = (props) => {
-    return(
+    return (
         <BrowserRouter>
-            <Switch>
-                <Route path={'/'} exact component={Home}/>
-                <Route path={'/login'} exact component={Login}/>
-                <Route path={'/register'} exact component={Register}/>
-            </Switch>
+            {/*<Navbar/>*/}
+            <Content isAuthenticated={props.isAuthenticated}/>
+            <Footer/>
         </BrowserRouter>
     );
 }
 
-export default Main;
+const Content = ({isAuthenticated}) => {
+    if (isAuthenticated)
+        return (
+            <Switch>
+                <Route path="/" exact component={Dashboard}/>
+                <Route path="/settings" exact component={Settings}/>
+                <Redirect to="/"/>
+            </Switch>
+        );
+    else
+        return (
+            <Switch>
+                <Route path="/" exact component={Home}/>
+                <Route path="/register" exact component={Register}/>
+                <Route path="/login" component={Login}/>
+                <Redirect to="/"/>
+            </Switch>
+        );
+};
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.token !== null,
+    };
+};
+
+export default connect(mapStateToProps, null)(Main);
