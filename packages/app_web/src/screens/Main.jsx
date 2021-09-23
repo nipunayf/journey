@@ -8,11 +8,11 @@ import Settings from './Settings';
 import Footer from "../containers/Footer/Footer";
 import Dashboard from "./Dashboard";
 import Register from "./Register";
+import Itinerary from './Itinerary'
 
 const Main = (props) => {
     return (
         <BrowserRouter>
-            {/*<Navbar/>*/}
             <Content isAuthenticated={props.isAuthenticated}/>
             <Footer/>
         </BrowserRouter>
@@ -25,6 +25,7 @@ const Content = ({isAuthenticated}) => {
             <Switch>
                 <Route path="/" exact component={Dashboard}/>
                 <Route path="/settings" exact component={Settings}/>
+                <Route path="/itinerary" component={Itinerary}/>
                 <Redirect to="/"/>
             </Switch>
         );

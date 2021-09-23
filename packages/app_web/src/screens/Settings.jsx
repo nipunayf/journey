@@ -38,11 +38,11 @@ function Preferences({formik}) {
     </>;
 }
 
-function ProfileInfo({formik, profilePic}) {
+function ProfileInfo({formik, profilePic, displayName}) {
     return <>
         <Heading size={"lg"} pb={5}>Profile Information</Heading>
         <HStack spacing={10} justifyContent={'center'} w={'100%'}>
-            <Avatar size={'2xl'} name={'Team DNA'} src={profilePic}/>
+            <Avatar size={'2xl'} name={displayName} src={profilePic}/>
             <VStack>
                 <InputBox id="firstName" name={"First Name"} formik={formik}/>
                 <InputBox id="lastName" name={"Last Name"} formik={formik}/>
@@ -91,7 +91,7 @@ function Settings({profilePic, displayName}) {
                     boxShadow={'lg'}
                     minW={'90vh'}
                     p={8}>
-                    <ProfileInfo formik={formik} profilePic={profilePic}/>
+                    <ProfileInfo formik={formik} profilePic={profilePic} displayName={displayName}/>
                     <Preferences formik={formik}/>
                 </Box>
             </Stack>

@@ -20,8 +20,8 @@ import {
 } from '@chakra-ui/react';
 import {ArrowForwardIcon, BellIcon, RepeatClockIcon, Search2Icon, SettingsIcon} from '@chakra-ui/icons';
 import {useHistory} from 'react-router-dom';
+import * as actions from '../../store/actions';
 import {connect} from "react-redux";
-import * as actions from "../../store/actions";
 
 const UserAvatar = ({name, logout, profilePic}) => {
     const history = useHistory();
@@ -43,7 +43,9 @@ const UserAvatar = ({name, logout, profilePic}) => {
                 <MenuList>
                     <Text color={'black'}>{name}</Text>
                     <MenuDivider/>
-                    <MenuItem color={'black'} icon={<SettingsIcon/>} onClick={() => {history.push('/settings')}}>Settings</MenuItem>
+                    <MenuItem color={'black'} icon={<SettingsIcon/>} onClick={() => {
+                        history.push('/settings')
+                    }}>Settings</MenuItem>
                     <MenuItem color={'black'} icon={<RepeatClockIcon/>}>My Itineraries</MenuItem>
                     <MenuDivider/>
                     <MenuItem color={'black'} icon={<ArrowForwardIcon/>} onClick={logout}>Sign Out</MenuItem>
@@ -59,11 +61,13 @@ function Navbar({isAuthenticated, onLogout, displayName, profilePic}) {
     return <Grid templateColumns="repeat(12, 1fr)" bg="primary.main" w="100%" gap={2} align="center" py={2} px={1}
                  borderBottomRadius="2rem" position="fixed" top={0} zIndex={1} opacity={0.9}>
         <GridItem colSpan={3}>
-            <Link href={'/'}><Image
+            <Image
                 src='./journey-logo.png'
                 w={120}
                 h={55}
-            /></Link>
+                onClick={() => {
+                    history.push('/')
+                }}/>
         </GridItem>
         <GridItem colStart={5} colEnd={9}>
             <InputGroup pt={1}>
