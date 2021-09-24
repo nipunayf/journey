@@ -10,7 +10,7 @@ import {FormControl, FormErrorMessage, FormLabel, Input} from "@chakra-ui/react"
  */
 export default function InputBox({id, name, formik, isPass=false}) {
     return <FormControl id={id} isInvalid={formik.errors[id]}>
-        <FormLabel>{name}</FormLabel>
+        <FormLabel fontSize={15}>{name}</FormLabel>
         <FormErrorMessage>{formik.errors[id] ? formik.errors[id] : 'hello' }</FormErrorMessage>
         <Input type={isPass?'password':'name'} value={formik.values[id]} onChange={formik.handleChange}/>
     </FormControl>;

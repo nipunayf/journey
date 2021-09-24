@@ -20,7 +20,7 @@ export default function Rating ({number}) {
                     if (roundedRating - i === 0.5) {
                         return <BsStarHalf color={'#0277bd'} key={i} style={{marginLeft: '1'}}/>;
                     }
-                    return <BsStar key={i} style={{marginLeft: '1'}}/>;
+                    return <BsStar key={i} style={{marginLeft: '1'}} color={'#0277bd'}  />;
                 })}
             <Text fontSize={15}>{number}</Text>
         </HStack>

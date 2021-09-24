@@ -4,6 +4,7 @@ import {Box, Button, Heading, ModalBody, ModalCloseButton, ModalFooter, ModalHea
 import InputBox from "../../components/Form/InputBox";
 import Member from "../../components/Member/Member";
 import {connect} from "react-redux";
+import {EmailIcon} from "@chakra-ui/icons";
 
 function AddMembersModal({parentFormik, setScreen, displayName, profilePic}) {
     const formik = useFormik({
@@ -26,12 +27,13 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic}) {
             <Button
                 bg={'secondary.light'}
                 color={'white'}
+                leftIcon={<EmailIcon />}
                 size={'sm'}
                 onClick={() => {
                 }}
                 my={4}
                 _hover={{bg: 'blue.500'}}>
-                Add
+                Invite
             </Button>
             <Heading size={'sm'} pb={2}>Members:</Heading>
             <VStack w={"80%"} spacing={4} align={'left'} overflowY={'scroll'} maxH={180}>
@@ -57,7 +59,7 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic}) {
                     setScreen(1)
                     formik.handleSubmit()
                 }}
-                _hover={{bg: 'blue.500'}}>
+                _hover={{bg: 'green.500'}}>
                 Next
             </Button>
         </ModalFooter>

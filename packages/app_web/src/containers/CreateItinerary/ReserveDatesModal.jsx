@@ -63,14 +63,14 @@ export default function ReserveTheDates ({destinationName, parentFormik, setScre
         </ModalBody>
         <ModalFooter>
             <Button
-                bg={'secondary.light'}
+                bg={'green.400'}
                 color={'white'}
                 onClick={() => {
                     formik.handleSubmit();
                     formik.values.isGroup ? setScreen(2) : setScreen(1)
                 }}
                 isDisabled={formik.values.endDate === null}
-                _hover={{bg: 'blue.500'}}>
+                _hover={{bg: 'green.500'}}>
                 Next
             </Button>
         </ModalFooter>

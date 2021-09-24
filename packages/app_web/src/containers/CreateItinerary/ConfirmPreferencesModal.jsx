@@ -44,7 +44,7 @@ export default function ({parentFormik, setScreen, onClose}) {
                     formik.handleSubmit();
                     parentFormik.handleSubmit();
                 }}
-                _hover={{bg: 'blue.500'}}>
+                _hover={{bg: 'green.500'}}>
                 Create
             </Button>
         </ModalFooter>

@@ -46,7 +46,9 @@ const UserAvatar = ({name, logout, profilePic}) => {
                     <MenuItem color={'black'} icon={<SettingsIcon/>} onClick={() => {
                         history.push('/settings')
                     }}>Settings</MenuItem>
-                    <MenuItem color={'black'} icon={<RepeatClockIcon/>}>My Itineraries</MenuItem>
+                    <MenuItem color={'black'} icon={<RepeatClockIcon/>} onClick={() => {
+                        history.push('/history')
+                    }}>My Itineraries</MenuItem>
                     <MenuDivider/>
                     <MenuItem color={'black'} icon={<ArrowForwardIcon/>} onClick={logout}>Sign Out</MenuItem>
                 </MenuList>

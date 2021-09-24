@@ -1,10 +1,11 @@
-import {Avatar, Box, Flex, Heading, HStack, Stack, useColorModeValue, VStack} from "@chakra-ui/react";
+import {Avatar, Box, Button, Flex, Heading, HStack, Stack, useColorModeValue, VStack} from "@chakra-ui/react";
 import Navbar from "../containers/Navbar/Navbar";
 import Preferences from '../containers/InputCollection/Preferences';
 import InputBox from "../components/Form/InputBox";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {connect} from "react-redux";
+import {EmailIcon} from "@chakra-ui/icons";
 
 function ProfileInfo({formik, profilePic, displayName}) {
     return <>
@@ -62,6 +63,18 @@ function Settings({profilePic, displayName}) {
                     <ProfileInfo formik={formik} profilePic={profilePic} displayName={displayName}/>
                     <Heading size={"lg"} py={5}>Preferences</Heading>
                     <Preferences formik={formik}/>
+                    <Box py={3}/>
+                    <Button
+                        bg={'secondary.light'}
+                        color={'white'}
+                        w={350}
+                        mx={'15%'}
+                        onClick={() => {
+                        }}
+                        my={4}
+                        _hover={{bg: 'blue.500'}}>
+                        Save
+                    </Button>
                 </Box>
             </Stack>
         </Flex>

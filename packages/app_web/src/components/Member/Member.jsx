@@ -1,4 +1,5 @@
-import {Avatar, Button, HStack, Spacer, Text, VStack} from "@chakra-ui/react";
+import {Avatar, Box, Button, HStack, Spacer, Text, VStack} from "@chakra-ui/react";
+import {EmailIcon} from "@chakra-ui/icons";
 
 
 export default function Member({email, name, profilePic, isOwner = false}) {
@@ -13,8 +14,10 @@ export default function Member({email, name, profilePic, isOwner = false}) {
                 <Text fontSize={14}>{name}</Text>
                 <Text fontSize={14} as={'em'} color={'gray.600'}>{email}</Text>
             </HStack>
-            {!isOwner? <Button colorScheme={'red'} size={'xs'}>X</Button>
-            : <Text as={'em'} fontSize={14} mr={4} color={'gray.500'}>owner</Text>}
+            <Spacer />
+            {!isOwner? <Button bg={'red.400'} color={'white'} size={'xs'}>X</Button>
+            : <Text as={'em'} fontSize={14} color={'gray.500'}>owner</Text>}
+            <Box px={2} />
         </HStack>
     );
 }

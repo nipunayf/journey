@@ -9,6 +9,7 @@ import Footer from "../containers/Footer/Footer";
 import Dashboard from "./Dashboard";
 import Register from "./Register";
 import Itinerary from './Itinerary'
+import MyItineraries from "./MyItineraries";
 
 const Main = (props) => {
     return (
@@ -26,6 +27,7 @@ const Content = ({isAuthenticated}) => {
                 <Route path="/" exact component={Dashboard}/>
                 <Route path="/settings" exact component={Settings}/>
                 <Route path="/itinerary" component={Itinerary}/>
+                <Route path="/history" component={MyItineraries}/>
                 <Redirect to="/"/>
             </Switch>
         );

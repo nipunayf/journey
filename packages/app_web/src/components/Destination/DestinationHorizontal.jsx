@@ -13,7 +13,7 @@ export default function DestinationHorizontal() {
         arrival: '8:00am',
         departure: '10:00am',
         description: 'Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka. In 2016, the garden was visited by 1.2 million locals and 400,000 foreign visitors. It is near the Mahaweli River. It is renowned for its collection of orchids',
-        ratings: 4.6,
+        ratings: 3.5,
     }
 
     return (
