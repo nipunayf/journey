@@ -16,8 +16,6 @@ export default function DestinationHorizontal() {
         ratings: 4.6,
     }
 
-
-
     return (
         <HStack borderWidth="1px" borderRadius="lg" minW={width} maxW={520} h={height} boxShadow="xl" minW={width}
                 justifyItems={'left'} overflow={'hidden'} pr={4}>

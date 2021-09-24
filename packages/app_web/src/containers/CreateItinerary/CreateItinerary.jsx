@@ -1,24 +1,32 @@
 import {
-    Button, Heading, HStack, Image,
+    Button,
+    FormControl, FormErrorMessage, FormLabel,
+    HStack, Input,
     Modal,
     ModalBody,
     ModalCloseButton,
     ModalContent,
     ModalFooter,
     ModalHeader,
-    ModalOverlay, Spacer, Switch, Text,
-    useDisclosure, VStack
+    ModalOverlay,
+    Switch,
+    Text,
+    useDisclosure
 } from "@chakra-ui/react";
-import Rating from "../../components/Destination/Rating";
-import DestinationDrawer from "../../components/Destination/DestinationDrawer";
 import {useState} from "react";
 import DatePicker from "react-datepicker";
 
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../components/Destination/datepicker.css';
+import Preferences from "../InputCollection/Preferences";
+import {useFormik} from "formik";
+import ReserveDatesModal from './ReserveDatesModal'
+import AddMembersModal from './AddMembersModal'
+import ConfirmPreferencesModal from './ConfirmPreferencesModal'
 
 export default function CreateItinerary() {
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const [screen, setScreen] = useState(0);
 
     const property = {
         imageUrl: "https://bit.ly/2Z4KKcF",
@@ -30,58 +38,23 @@ export default function CreateItinerary() {
         ratings: 4.6,
     }
 
-    const ItineraryModal = () => {
-        const [startDate, setStartDate] = useState(null);
-        const [endDate, setEndDate] = useState(null);
-        const onChange = (dates) => {
-            const [start, end] = dates;
-            setStartDate(start);
-            setEndDate(end);
-        };
+    const formik = useFormik({
+        initialValues: {
+            startDate: null,
+            endDate: null,
+            isGroup: false,
+            budget: 'Average',
+            popularity: 'Moderate',
+            energy: 'Medium-Paced',
+            knowledge: 'Average',
+            email: ''
+        },
+        onSubmit: values => {
+            console.log(values)
+        }
+    });
 
-        return (
-            <Modal onClose={onClose} size={'md'} isOpen={isOpen}>
-                <ModalOverlay/>
-                <ModalContent minW={600} minH={500}>
-                    <ModalHeader>Plan Your Itinerary</ModalHeader>
-                    <ModalCloseButton/>
-                    <ModalBody align={'center'}>
-                        <HStack justify={'center'} pb={3}>
-                            <Text as={'strong'}>Destination: </Text>
-                            <Text>{property.name}</Text>
-                        </HStack>
-                        <Text as={'strong'}>Pick a Date Range:</Text>
-                        <DatePicker
-                            selected={startDate}
-                            onChange={onChange}
-                            startDate={startDate}
-                            endDate={endDate}
-                            filterDate={date => date >= new Date()}
-                            selectsRange
-                            inline
-                        />
-                        <HStack justify={'center'} pt={3}>
-                            <Text>Individual</Text>
-                            <Switch color={'secondary.main'} size="lg"/>
-                            <Text>Group</Text>
-                        </HStack>
-                    </ModalBody>
-                    <ModalFooter>
-                        <Button
-                            bg={'secondary.light'}
-                            color={'white'}
-                            onClick={onClose}
-                            isDisabled={endDate===null}
-                            _hover={{bg: 'blue.500'}}>
-                            Next
-                    </Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        );
-    }
-
-    return (<>
+    return <>
         <Button
             bg={'secondary.light'}
             size={'sm'}
@@ -90,6 +63,13 @@ export default function CreateItinerary() {
             _hover={{bg: 'blue.500'}}>
             Create Itinerary
         </Button>
-        <ItineraryModal/>
-    </>);
+        <Modal onClose={onClose} size={'md'} isOpen={isOpen}>
+            <ModalOverlay/>
+            <ModalContent minW={600} minH={500}>
+                {screen === 0 ? <ReserveDatesModal destinationName={property.name} setScreen={setScreen} parentFormik={formik}/> :
+                    screen === 1 ? <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen} onClose={onClose}/> :
+                        <AddMembersModal setScreen={setScreen} parentFormik={formik}/>}
+            </ModalContent>
+        </Modal>
+    </>;
 }

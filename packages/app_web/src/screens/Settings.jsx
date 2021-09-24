@@ -1,42 +1,10 @@
-import {Avatar, Box, Button, Flex, Heading, HStack, Stack, useColorModeValue, VStack} from "@chakra-ui/react";
+import {Avatar, Box, Flex, Heading, HStack, Stack, useColorModeValue, VStack} from "@chakra-ui/react";
 import Navbar from "../containers/Navbar/Navbar";
-import InputPreference from "../components/Form/InputPreference";
+import Preferences from '../containers/InputCollection/Preferences';
 import InputBox from "../components/Form/InputBox";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {connect} from "react-redux";
-
-function Preferences({formik}) {
-    return <>
-        <Heading size={"lg"} py={5}>Preferences</Heading>
-        <VStack>
-            <InputPreference
-                defaultValue={"Average"}
-                title={"Budget"}
-                options={["Cheap", "Average", "Expensive"]}
-                id={'budget'}
-                formik={formik}/>
-            <InputPreference
-                defaultValue={"Moderate"}
-                title={"Popularity"}
-                options={["Hidden-Gem", "Moderate", "Popular"]}
-                id={'popularity'}
-                formik={formik}/>
-            <InputPreference
-                defaultValue={"Medium-Paced"}
-                title={"Energy"}
-                options={["Relaxing", "Medium-Paced", "Adventurous"]}
-                id={'energy'}
-                formik={formik}/>
-            <InputPreference
-                defaultValue={"Average"}
-                title={"Knowledge"}
-                options={["Entertaining", "Average", "Informational"]}
-                id={'knowledge'}
-                formik={formik}/>
-        </VStack>
-    </>;
-}
 
 function ProfileInfo({formik, profilePic, displayName}) {
     return <>
@@ -92,6 +60,7 @@ function Settings({profilePic, displayName}) {
                     minW={'90vh'}
                     p={8}>
                     <ProfileInfo formik={formik} profilePic={profilePic} displayName={displayName}/>
+                    <Heading size={"lg"} py={5}>Preferences</Heading>
                     <Preferences formik={formik}/>
                 </Box>
             </Stack>
