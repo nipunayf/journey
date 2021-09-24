@@ -2,7 +2,7 @@ import './App.css';
 import {ChakraProvider} from "@chakra-ui/react";
 import theme from './styles/theme';
 import Home from './screens/Home'
-import Dashboard from "./screens/Dashboard";
+import Search from "./screens/Search";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import Navbar from "./containers/Navbar/Navbar";
 
@@ -13,7 +13,7 @@ function App() {
             <Router>
                 <Switch>
                     <Route path="/" exact component={Home}/>
-                    <Route path="/Dashboard" component={Dashboard}/>
+                    <Route path="/Search" component={Search}/>
                 </Switch>
             </Router>
         </ChakraProvider>
