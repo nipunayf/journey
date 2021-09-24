@@ -132,7 +132,7 @@ function Navbar({isAuthenticated, onLogout, displayName, profilePic}) {
         </GridItem>
         {
             isAuthenticated ?
-                <><GridItem colStart={11} colEnd={12} pt={1.5}>
+                <><GridItem colStart={11} colEnd={12} pt={1.5} justifySelf={'center'}>
                     <NotificationPopover />
                 </GridItem>
                     <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'} pt={1.5}>

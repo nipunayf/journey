@@ -1,4 +1,5 @@
 import DestinationList from '../containers/Itinerary/DestinationList'
+import Members from '../containers/Itinerary/Members'
 import Navbar from "../containers/Navbar/Navbar";
 import {
     Accordion,
@@ -14,6 +15,7 @@ import CreateItinerary from "../containers/CreateItinerary/CreateItinerary";
 import {AddIcon} from "@chakra-ui/icons";
 import {MdGroup} from "react-icons/all";
 
+
 export default function Itinerary() {
     return(
         <>
@@ -28,14 +30,7 @@ export default function Itinerary() {
                     _hover={{bg: 'green.500'}}>
                     Destination
                 </Button>
-                <Button
-                    leftIcon={<MdGroup />}
-                    bg={'secondary.light'}
-                    color={'white'}
-                    onClick={() => {}}
-                    _hover={{bg: 'blue.500'}}>
-                    Members
-                </Button>
+                <Members/>
             </HStack>
             <Accordion defaultIndex={[0]} allowMultiple w={'45%'} pt={5} pl={4}>
                 <AccordionItem>
@@ -65,7 +60,6 @@ export default function Itinerary() {
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>
-
             <CreateItinerary/>
         </>
     );
