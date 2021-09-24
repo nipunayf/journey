@@ -5,7 +5,7 @@ import {
 
 const NoResults = ({message}) => {
     return (
-        <Alert status="info" borderRadius="1rem" h="20%" w="100%" minWidth="350px">
+        <Alert status="info" borderRadius="1rem" minH={20} w="100%" minWidth="350px">
             <AlertIcon />
             {message}
         </Alert>

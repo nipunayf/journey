@@ -1,5 +1,6 @@
 import {
     Avatar,
+    Badge,
     Button,
     Flex,
     Grid,
@@ -16,12 +17,47 @@ import {
     MenuDivider,
     MenuItem,
     MenuList,
+    Popover,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseButton,
+    PopoverContent,
+    PopoverHeader,
+    PopoverTrigger,
+    Portal,
     Text,
+    VStack,
 } from '@chakra-ui/react';
 import {ArrowForwardIcon, BellIcon, RepeatClockIcon, Search2Icon, SettingsIcon} from '@chakra-ui/icons';
 import {useHistory} from 'react-router-dom';
 import * as actions from '../../store/actions';
 import {connect} from "react-redux";
+import NoResults from "../../components/Alert/NoResults";
+
+const NotificationPopover = () => {
+    return (
+        <HStack spacing={-3}>
+            <Popover>
+                <PopoverTrigger>
+                    <IconButton icon={<BellIcon boxSize={6}/>} color="secondary.light" bg={'primary.main'}/>
+                </PopoverTrigger>
+                <Portal>
+                    <PopoverContent w={'100%'}>
+                        <PopoverArrow/>
+                        <PopoverHeader fontWeight={600}>Notifications</PopoverHeader>
+                        <PopoverCloseButton/>
+                        <PopoverBody align="center">
+                            <VStack w="100%" spacing={3} h="270px" overflowY={'auto'}>
+                                <NoResults message={'There are no any notifications'}/>
+                            </VStack>
+                        </PopoverBody>
+                    </PopoverContent>
+                </Portal>
+            </Popover>
+            {/*<Badge borderRadius="lg" variant="solid" colorScheme="red" zIndex={1}> 2 </Badge>*/}
+        </HStack>
+    );
+}
 
 const UserAvatar = ({name, logout, profilePic}) => {
     const history = useHistory();
@@ -97,7 +133,7 @@ function Navbar({isAuthenticated, onLogout, displayName, profilePic}) {
         {
             isAuthenticated ?
                 <><GridItem colStart={11} colEnd={12} pt={1.5}>
-                    <IconButton icon={<BellIcon boxSize={6}/>} color="secondary.light" bg={'primary.main'}/>
+                    <NotificationPopover />
                 </GridItem>
                     <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'} pt={1.5}>
                         <UserAvatar name={displayName} logout={onLogout} profilePic={profilePic}/>

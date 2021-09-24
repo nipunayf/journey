@@ -14,7 +14,7 @@ import {
     VStack,
 } from "@chakra-ui/react"
 import Rating from './Rating'
-import NoResult from '../Popups/NoResults'
+import NoResult from '../Alert/NoResults'
 import {useState} from "react";
 import DatePicker from 'react-datepicker';
 
