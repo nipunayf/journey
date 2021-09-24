@@ -11,10 +11,10 @@ export default function MainPlaceCard(props) {
         getDescription(name);
     },[])
 
-    console.log(props.placeDetails);
+    console.log('Main placeDetails are: ',props.name);
 
     const img = props.image ? props.image : 'https://www.couponraja.in/theroyale/wp-content/uploads/2017/12/cover-10-most-beautiful-places-in-sri-lanka-explore-the-emerald-island-632x480.jpg'
-    const name = props.placeDetails.name ? props.placeDetails.name : 'SRI LANKA';
+    const name = props.name ? props.name: "No Name"
 
     const types = props.placeDetails.types ? props.placeDetails.types : ['attraction'];
     const rating = props.placeDetails.rating ? Math.round(props.placeDetails.rating) : 0;

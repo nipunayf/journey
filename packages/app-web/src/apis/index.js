@@ -3,6 +3,7 @@ require('dotenv').config();
 
 
 export const getPlaceDescription = async (name) => {
+    console.log('name is',name)
     console.log("getPlaceDescription start executing")
     const config = {
         method: 'get',
@@ -20,9 +21,11 @@ export const getPlaceDescription = async (name) => {
     try {
 
         let response = await axios(config);
+        console.log('description is ',response.data.extract);
             return response.data.extract;
 
     } catch (e) {
+        console.log('error in getPlaceDescription')
         console.log(e);
         return 'No Description'
 
@@ -41,6 +44,7 @@ export const getPlaceDetails= async (id) => {
         return response.data.result;
 
     } catch (e) {
+        console.log('error in getPlaceDetails')
         console.log(e);
         return 'No Details'
 
@@ -72,6 +76,7 @@ export const getNearbyPlaces = async(data) => {
         return response.data.results;
 
     } catch (e) {
+        console.log('error in getNearbyPlaces')
         console.log(e);
         return 'No Nearby Places'
 

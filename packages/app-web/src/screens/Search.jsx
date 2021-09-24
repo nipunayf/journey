@@ -16,6 +16,7 @@ export default function Search() {
 
     const location = useLocation();
 
+    const name = location.state.Name;
     const image = location.state.Image;
     const placeId = location.state.Id;
 
@@ -41,7 +42,7 @@ export default function Search() {
         <div>
             <Navbar/>
             <Flex paddingTop={20} paddingX={20} align={"center"}>
-                <MainPlaceCard image={image} placeDetails={placeDetails} />
+                <MainPlaceCard image={image} placeDetails={placeDetails} name={name} />
             </Flex>
             <Stack paddingTop={5}>
                 <Heading

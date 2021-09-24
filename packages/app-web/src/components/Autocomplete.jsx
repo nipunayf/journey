@@ -24,6 +24,7 @@ export default function AutoComplete() {
         const Details = {
             Image:image,
             Id:autocomplete.getPlace().place_id,
+            Name:autocomplete.getPlace().name
         }
         console.log(Details);
         history.push({
