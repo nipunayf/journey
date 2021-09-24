@@ -1,5 +1,6 @@
 import DestinationList from '../containers/Itinerary/DestinationList'
 import Members from '../containers/Itinerary/Members'
+import NewDestination from '../containers/Itinerary/NewDestination'
 import Navbar from "../containers/Navbar/Navbar";
 import {
     Accordion,
@@ -22,14 +23,7 @@ export default function Itinerary() {
             <Navbar/>
             <Box pt={24}/>
             <HStack spacing={3} pl={4}>
-                <Button
-                    leftIcon={<AddIcon />}
-                    bg={'green.400'}
-                    color={'white'}
-                    onClick={() => {}}
-                    _hover={{bg: 'green.500'}}>
-                    Destination
-                </Button>
+                <NewDestination />
                 <Members/>
             </HStack>
             <Accordion defaultIndex={[0]} allowMultiple w={'45%'} pt={5} pl={4}>

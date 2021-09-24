@@ -1,5 +1,6 @@
 import {
-    Button, Divider,
+    Button,
+    Divider,
     Drawer,
     DrawerBody,
     DrawerContent,
@@ -21,7 +22,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datepicker.css';
 
-export default function DestinationDrawer({property}) {
+export default function DestinationDrawer({property, isRemove}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [startDate, setStartDate] = useState(new Date(property.date));
     const [startArrival, setStartArrival] = useState(new Date());
@@ -40,9 +41,12 @@ export default function DestinationDrawer({property}) {
                             <Rating number={property.ratings}/>
                         </VStack>
                         <Spacer/>
-                        <Button colorScheme="red" size="sm">
-                            Remove
-                        </Button>
+                        {isRemove ? <Button colorScheme="red" size="sm">
+                                Remove
+                            </Button> :
+                            <Button colorScheme="green" size="sm">
+                                Add
+                            </Button>}
                     </HStack>
                 </DrawerHeader>
                 <DrawerBody align={'center'}>
@@ -51,11 +55,11 @@ export default function DestinationDrawer({property}) {
                     <HStack>
                         <Heading size={'sn'} mr={4}>Date: </Heading>
                         <DatePicker
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        dateFormat={"MMMM d, yyyy"}
-                        fixedHeight
-                        filterDate={date => date >= new Date()}/>
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            dateFormat={"MMMM d, yyyy"}
+                            fixedHeight
+                            filterDate={date => date >= new Date()}/>
                     </HStack>
                     <HStack pt={3}>
                         <Heading size={'sn'}>Arrival: </Heading>
@@ -68,7 +72,7 @@ export default function DestinationDrawer({property}) {
                             timeCaption="Time"
                             dateFormat="h:mm aa"
                         />
-                        <Spacer />
+                        <Spacer/>
                         <Heading size={'sn'}>Departure: </Heading>
                         <DatePicker
                             selected={startArrival}

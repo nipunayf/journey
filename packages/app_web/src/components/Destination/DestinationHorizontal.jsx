@@ -2,7 +2,7 @@ import {Button, Heading, HStack, Image, Spacer, Text, useDisclosure, VStack} fro
 import Rating from'./Rating'
 import DestinationDrawer from './DestinationDrawer';
 
-export default function DestinationHorizontal() {
+export default function DestinationHorizontal({isRemove}) {
     const height = 120
     const width = 240
 
@@ -17,7 +17,7 @@ export default function DestinationHorizontal() {
     }
 
     return (
-        <HStack borderWidth="1px" borderRadius="lg" minW={width} maxW={520} h={height} boxShadow="xl" minW={width}
+        <HStack borderWidth="1px" borderRadius="lg" minW={width} maxW={520} minH={height} boxShadow="xl" minW={width}
                 justifyItems={'left'} overflow={'hidden'} pr={4}>
             <Image src={property.imageUrl} alt={property.title} htmlWidth={180} htmlHeight={180}/>
             <VStack alignItems={'left'} spacing={1}>
@@ -33,6 +33,7 @@ export default function DestinationHorizontal() {
 
             <DestinationDrawer
                 property={property}
+                isRemove={isRemove}
             />
         </HStack>
     );
