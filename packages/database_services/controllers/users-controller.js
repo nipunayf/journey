@@ -34,7 +34,7 @@ const addUser = async (req, res) => {
     if (req.body.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' details')
 
-    //check if the user alrady exists in the database
+    //check if the user already exists in the database
     const checkUserResult = await userStore.where('userID', '==', req.body.userID).get()
     if (checkUserResult.size > 0)
         return errorMessage(res, 'User already exists')
@@ -73,7 +73,7 @@ const updateUser = async (req, res) => {
 
     //Updating the firestore
     const batch = transaction();
-    batch.update(result.docs[0]._ref, req.body)
+    batch.update(result.docs[0]._ref, Object.fromEntries(Object.entries(req.body).filter(([_, v]) => v != null)))
 
     //Updating itinerary store if display name is changed
     if (req.body.displayName) {

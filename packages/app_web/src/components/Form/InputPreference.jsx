@@ -38,13 +38,12 @@ function RadioCard(props) {
 export default function InputPreference({title, options, formik, id}) {
 
     const setValue = value => {
-        formik.setFieldValue(id, value)
+        formik.setFieldValue(id, options.indexOf(value)-1)
     }
-
 
     const {getRootProps, getRadioProps} = useRadioGroup({
         name: "framework",
-        value: formik.values[id],
+        value: options[formik.values[id]+1],
         onChange: setValue
     })
 

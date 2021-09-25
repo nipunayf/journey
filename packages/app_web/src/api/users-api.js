@@ -16,10 +16,17 @@ export const getUser = (id) => getRequest(`${URL}/${id}`);
  */
 export const createUser = (data) => postRequest(`${URL}`,data);
 
-// export const editUserProfile = (id, data) => {
-//     data = Object.assign({first_name: null, last_name: null, method: null}, data);
-//     return putRequest(`${URL}/${id}`, data);
-// }
+/**
+ * Updates an existing user
+ * @param id
+ * @param data
+ * @returns {Promise<{data: *, message: *}|{code: *, error: *, title: *, message: *}|{code: number, error: *, title: *, message: string}|undefined>}
+ */
+export const updateUser = (id, data) => {
+    data = Object.assign({firstName: null, lastName: null, preferences: null}, data);
+    return putRequest(`${URL}/${id}`, data);
+}
+
 //
 // export const deleteUser = (id) => deleteRequest(`${URL}/${id}`);
 

@@ -13,7 +13,7 @@ export const storeObject = (item, object) => {
  * @returns {any} - object
  */
 export const getObject = (item) =>
-    JSON.parse(localStorage.getItem("names"));
+    JSON.parse(localStorage.getItem(item));
 
 /**
  * Updates an existing object

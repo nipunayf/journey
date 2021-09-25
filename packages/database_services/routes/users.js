@@ -14,9 +14,11 @@ router.post('/',
     addUser);
 
 router.put('/:userID',
+    auth,
     updateUser);
 
 router.delete('/:userID',
+    auth,
     deleteUser);
 
 

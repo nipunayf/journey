@@ -1,4 +1,5 @@
 export {
     getUser,
-    createUser
+    createUser,
+    updateUser
 } from './users-api'
