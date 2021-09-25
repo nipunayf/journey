@@ -23,6 +23,8 @@ import InputBox from "../Form/InputBox";
 import {handleErrors} from "./firebase-utils";
 import * as actions from "../../store/actions";
 import {connect} from "react-redux";
+import {getUser} from "../../api";
+import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 
 function SignInAuth(props) {
     const history = useHistory();
@@ -40,18 +42,32 @@ function SignInAuth(props) {
             const app = initializeApp(firebaseConfig);
             const auth = getAuth();
             signInWithEmailAndPassword(auth, values.email, values.password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    props.onAuth(
-                        user.accessToken,
-                        user.uid,
-                        user.displayName,
-                        user.photoURL,
-                        user.email
-                    );
-                    console.log(user);
-                    history.push('/')
-                })
+                .then(async result => {
+                        props.onAuth(
+                            result.user.accessToken,
+                            result.user.uid,
+                            result.user.email
+                        );
+
+                        //Check if the user is in the db
+                        const userResult = await getUser(result.user.uid);
+                        if (userResult.data) {
+                            props.onProfileInit(
+                                userResult.data.firstName,
+                                userResult.data.lastName,
+                                userResult.data.profilePic,
+                                userResult.data.preferences,
+                                userResult.data.itineraries
+                            )
+                            generateSuccessMessage(toast, 'Logged in successfully',
+                                `Welcome back ${userResult.data.firstName}!`)
+                            history.push('/');
+                        } else {
+                            generateErrorMessage(toast, 'Log-in failed', userResult.message)
+                            props.onLogout();
+                        }
+                    }
+                    )
                 .catch((error) => {
                     handleErrors(toast, error.code);
                     formik.setSubmitting(false)
@@ -87,11 +103,13 @@ function SignInAuth(props) {
     );
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onAuth: (token, userID, displayName, profilePic, email) => dispatch(actions.authSuccess(token, userID, displayName, profilePic, email)),
+    const mapDispatchToProps = dispatch => {
+        return {
+            onAuth: (token, userID, email) => dispatch(actions.authSuccess(token, userID, email)),
+            onLogout: () => dispatch(actions.logout()),
+            onProfileInit: (firstName, lastName, profilePic, preferences, itineraries) => dispatch(actions.initializeProfile(firstName, lastName, profilePic, preferences, itineraries))
+        };
     };
-};
 
 export default connect(null, mapDispatchToProps)(SignInAuth);
 

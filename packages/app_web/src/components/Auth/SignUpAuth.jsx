@@ -9,7 +9,8 @@ import InputBox from "../Form/InputBox";
 import {handleErrors} from "./firebase-utils";
 import * as actions from "../../store/actions";
 import {connect} from "react-redux";
-import {generateSuccessMessage} from "../../utils/toast";
+import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
+import {createUser} from "../../api";
 
 function SignUpAuth(props) {
     const history = useHistory();
@@ -32,28 +33,50 @@ function SignUpAuth(props) {
             const app = initializeApp(firebaseConfig);
             let auth = getAuth();
             createUserWithEmailAndPassword(auth, values.email, values.password)
-                .then((userCredential) => {
-                    const user = userCredential.user;
+                .then((result) => {
                     props.onAuth(
-                        user.accessToken,
-                        user.uid,
-                        `${formik.values.firstName} ${formik.values.lastName}`,
-                        null,
-                        user.email
+                        result.user.accessToken,
+                        result.user.uid,
+                        result.user.email
                     );
+
                     auth = getAuth();
                     updateProfile(auth.currentUser, {
-                        displayName: `${formik.values.firstName} ${formik.values.lastName}`
-                    }).then(() => {
-                        generateSuccessMessage(toast, 'Account Created',`Hello ${formik.values.firstName}, We have successfully created an account for you.`)
-                        history.push('/');
+                        displayName: `${values.firstName} ${values.lastName}`
+                    }).then(async () => {
+                        const newUser = await createUser({
+                            userID: result.user.uid,
+                            firstName: values.firstName,
+                            lastName: values.lastName,
+                            profilePic: null,
+                            email: result.user.email,
+                        })
+                        if (newUser.data) {
+                            props.onProfileInit(
+                                values.firstName,
+                                values.lastName,
+                                null,
+                                {
+                                    budget: 0,
+                                    popularity: 0,
+                                    energy: 0,
+                                    knowledge: 0
+                                },
+                                null
+                            )
+                            generateSuccessMessage(toast, 'Account created successfully', `Welcome ${values.firstName}, Start planning your itinerary by first searching your desired destination`);
+                            history.push('/');
+                        } else {
+                            console.log('Profile Update FAILED')
+                            generateErrorMessage(toast, 'Account creation failed', newUser.message);
+                            props.onLogout();
+                        }
                     }).catch((error) => {
                         handleErrors(toast, error.code);
                     });
-                    formik.setSubmitting(false)
-                    history.push('/');
                 })
                 .catch((error) => {
+                    console.log('Other FAILED')
                     handleErrors(toast, error.code);
                     formik.setSubmitting(false)
                 });
@@ -83,7 +106,9 @@ function SignUpAuth(props) {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (token, userID, displayName, profilePic, email) => dispatch(actions.authSuccess(token, userID, displayName, profilePic, email)),
+        onAuth: (token, userID, email) => dispatch(actions.authSuccess(token, userID, email)),
+        onLogout: () => dispatch(actions.logout()),
+        onProfileInit: (firstName, lastName, profilePic, preferences, itineraries) => dispatch(actions.initializeProfile(firstName, lastName, profilePic, preferences, itineraries))
     };
 };
 

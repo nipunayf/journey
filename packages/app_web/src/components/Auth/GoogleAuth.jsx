@@ -41,7 +41,7 @@ const GAuthButton = (props) => {
                         `Welcome back ${userResult.data.firstName}!`)
                     history.push('/');
 
-                } else {
+                } else if(result.code === 404) {
                     //Creates a new user
                     const newUser = await createUser({
                         userID: result.user.uid,
@@ -67,9 +67,11 @@ const GAuthButton = (props) => {
                         history.push('/');
                     } else {
                         generateErrorMessage(toast, 'Account creation failed', newUser.message);
-                        console.log('creation failed');
                         props.onLogout();
                     }
+                }
+                else {
+                    generateErrorMessage(toast, 'Something went wrong', userResult.message);
                 }
             }).catch((error) => {
             handleErrors(toast, error.code);
