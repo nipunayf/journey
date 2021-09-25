@@ -56,7 +56,7 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
             if (result.data) {
                 generateSuccessMessage(toast, 'Account updated successfully',
                     'We have successfully updated your profile');
-                onProfileUpdate(firstName, lastName, outputPreferences);
+                onProfileUpdate(values.firstName, values.lastName, outputPreferences);
             } else {
                 generateErrorMessage(toast, 'Account update failed', result.message);
             }
@@ -89,12 +89,13 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
                         color={'white'}
                         w={350}
                         mx={'15%'}
-                        isDisabled={firstName === formik.values.firstName
+                        isDisabled={(firstName === formik.values.firstName
                         && lastName === formik.values.lastName
                         && preferences.budget === formik.values.budget
                         && preferences.popularity === formik.values.popularity
                         && preferences.energy === formik.values.energy
-                        && preferences.knowledge === formik.values.knowledge}
+                        && preferences.knowledge === formik.values.knowledge)
+                        || !formik.isValid}
                         onClick={formik.handleSubmit}
                         isLoading={formik.isSubmitting}
                         my={4}
