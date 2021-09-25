@@ -1,3 +1,6 @@
+//General constants
+const BASE_API = "http://localhost:5000/";
+
 //Account Types enum
 const StateEnum = {
     INACTIVE: 1,
@@ -10,5 +13,6 @@ const StateEnum = {
 Object.freeze(StateEnum);
 
 module.exports = {
-    StateEnum
+    StateEnum,
+    BASE_API
 }

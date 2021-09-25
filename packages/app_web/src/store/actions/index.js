@@ -1,11 +1,10 @@
 export {
     logout,
-    setAuthRedirectPath,
     authCheckState,
     authSuccess,
 } from './auth';
 
 export  {
-    updateName,
-    updateProfilePicture
+    initializeProfile,
+    updateProfile
 } from './profile';

@@ -1,15 +1,13 @@
 import * as actionTypes from './action-types';
-// import axios from '../../api/axios';
+import axios from  '../../api/axios'
 
 
-export const authSuccess = (token, userID, displayName, profilePic, email) => {
-    // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+export const authSuccess = (token, userID, email) => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     //Saving the user variables
     localStorage.setItem('token', token);
     localStorage.setItem('userID', userID);
-    localStorage.setItem('displayName', displayName);
-    localStorage.setItem('profilePic', profilePic);
     localStorage.setItem('email', email);
 
     //Set the expiration date
@@ -20,20 +18,13 @@ export const authSuccess = (token, userID, displayName, profilePic, email) => {
         type: actionTypes.AUTH_SUCCESS,
         token: token,
         user: userID,
-        displayName: displayName,
-        profilePic: profilePic,
         email: email
     };
 };
 
 export const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expirationDate');
-    localStorage.removeItem('userID');
-    localStorage.removeItem('displayName');
-    localStorage.removeItem('profilePic');
-    localStorage.removeItem('email');
-    // delete axios.defaults.headers.common['Authorization'];
+    localStorage.clear();
+    delete axios.defaults.headers.common['Authorization'];
 
     return {
         type: actionTypes.AUTH_LOGOUT
@@ -48,12 +39,6 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-export const setAuthRedirectPath = (path) => {
-    return {
-        type: actionTypes.SET_AUTH_REDIRECT_PATH,
-        path: path
-    };
-};
 
 export const authCheckState = () => {
     return dispatch => {
@@ -75,8 +60,3 @@ export const authCheckState = () => {
         }
     };
 };
-
-
-
-
-

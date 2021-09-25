@@ -32,6 +32,5 @@ export default function Dashboard() {
             <ItineraryCard/>
             <ItineraryCard/>
         </ItineraryContainer>
-
     </>)
 }

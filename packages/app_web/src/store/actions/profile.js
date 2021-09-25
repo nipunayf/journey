@@ -1,21 +1,32 @@
 import * as actionTypes from "./action-types";
+import {storeObject} from "../../utils/local-storage";
 
-export const updateName = (firstName, lastName) => {
+export const initializeProfile = (firstName, lastName, profilePic, preferences, itineraries) => {
     localStorage.setItem('firstName', firstName);
     localStorage.setItem('lastName', lastName);
+    localStorage.setItem('profilePic', profilePic);
+    storeObject('preferences', preferences);
+    storeObject('itineraries', itineraries);
 
     return {
-        type: actionTypes.UPDATE_NAME,
-        firstName: firstName,
-        lastName: lastName
+        type: actionTypes.INITIALIZE_PROFILE,
+        firstName,
+        lastName,
+        profilePic,
+        preferences,
+        itineraries,
     }
 }
 
-export const updateProfilePicture = (profilePic) => {
-    localStorage.setItem('profilePic', profilePic);
+export const updateProfile = (firstName, lastName, preferences) => {
+    localStorage.setItem('firstName', firstName);
+    localStorage.setItem('lastName', lastName);
+    storeObject('preferences', preferences);
 
     return {
-        type: actionTypes.UPDATE_PROFILE_PICTURE,
-        profilePic: profilePic
+        type: actionTypes.UPDATE_PROFILE,
+        firstName,
+        lastName,
+        preferences
     }
 }

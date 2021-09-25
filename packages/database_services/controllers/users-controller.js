@@ -30,6 +30,7 @@ const getUser = async (req, res) => {
  */
 const addUser = async (req, res) => {
     //user attempting to access another user profile
+    console.log(req.body.userID, req.user);
     if (req.body.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' details')
 
@@ -39,7 +40,12 @@ const addUser = async (req, res) => {
         return errorMessage(res, 'User already exists')
 
     //adds user to the database
-    const result = await userStore.add({...req.body, isDeleted: 0});
+    const result = await userStore.add({...req.body, isDeleted: 0, itineraries: {}, preferences: {
+            budget: 0,
+            popularity: 0,
+            energy: 0,
+            knowledge: 0
+        }});
     return successMessage(res, result);
 }
 

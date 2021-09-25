@@ -21,11 +21,11 @@ function ProfileInfo({formik, profilePic, displayName}) {
 }
 
 
-function Settings({profilePic, displayName}) {
+function Settings({profilePic, firstName, lastName}) {
     const formik = useFormik({
         initialValues: {
-            firstName: displayName.split(' ')[0],
-            lastName: displayName.split(' ')[1],
+            firstName: firstName,
+            lastName: lastName,
             budget: 'Average',
             popularity: 'Moderate',
             energy: 'Medium-Paced',
@@ -60,7 +60,7 @@ function Settings({profilePic, displayName}) {
                     boxShadow={'lg'}
                     minW={'90vh'}
                     p={8}>
-                    <ProfileInfo formik={formik} profilePic={profilePic} displayName={displayName}/>
+                    <ProfileInfo formik={formik} profilePic={profilePic} displayName={`${firstName} ${lastName}`}/>
                     <Heading size={"lg"} py={5}>Preferences</Heading>
                     <Preferences formik={formik}/>
                     <Box py={3}/>
@@ -83,8 +83,9 @@ function Settings({profilePic, displayName}) {
 
 const mapStateToProps = state => {
     return {
-        displayName: state.displayName,
-        profilePic: state.profilePic
+        firstName: state.profile.firstName,
+        lastName: state.profile.lastName,
+        profilePic: state.profile.profilePic
     };
 };
 

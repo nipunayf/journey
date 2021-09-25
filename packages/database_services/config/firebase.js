@@ -9,7 +9,7 @@ admin.initializeApp({
 module.exports = {
     userStore: admin.app().firestore().collection('users'),
     itineraryStore: admin.app().firestore().collection('itineraries'),
-    auth: admin.app().auth(),
+    authenticate: admin.app().auth(),
     transaction: () => admin.app().firestore().batch()
 }
 

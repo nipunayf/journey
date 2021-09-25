@@ -59,7 +59,7 @@ const NotificationPopover = () => {
     );
 }
 
-const UserAvatar = ({name, logout, profilePic}) => {
+const UserAvatar = ({firstName, lastName, logout, profilePic}) => {
     const history = useHistory();
 
     return (
@@ -72,12 +72,12 @@ const UserAvatar = ({name, logout, profilePic}) => {
                     cursor={'pointer'}
                     minW={0}>
                     <HStack>
-                        <Text fontSize={14}>{name.split(' ')[0]}</Text>
-                        <Avatar height={10} width={10} size={'sm'} name={name} src={profilePic}/>
+                        <Text fontSize={14}>{firstName}</Text>
+                        <Avatar height={10} width={10} size={'sm'} name={`${firstName} ${lastName}`} src={profilePic}/>
                     </HStack>
                 </MenuButton>
                 <MenuList>
-                    <Text color={'black'}>{name}</Text>
+                    <Text color={'black'}>{`${firstName} ${lastName}`}</Text>
                     <MenuDivider/>
                     <MenuItem color={'black'} icon={<SettingsIcon/>} onClick={() => {
                         history.push('/settings')
@@ -93,7 +93,7 @@ const UserAvatar = ({name, logout, profilePic}) => {
     );
 }
 
-function Navbar({isAuthenticated, onLogout, displayName, profilePic}) {
+function Navbar({isAuthenticated, onLogout, firstName, lastName, profilePic}) {
     const history = useHistory();
 
     return <Grid templateColumns="repeat(12, 1fr)" bg="primary.main" w="100%" gap={2} align="center" py={2} px={1}
@@ -136,7 +136,7 @@ function Navbar({isAuthenticated, onLogout, displayName, profilePic}) {
                     <NotificationPopover />
                 </GridItem>
                     <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'} pt={1.5}>
-                        <UserAvatar name={displayName} logout={onLogout} profilePic={profilePic}/>
+                        <UserAvatar firstName={firstName} lastName={lastName} logout={onLogout} profilePic={profilePic}/>
                     </GridItem></> :
                 <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'} pt={1.5}>
                     <Button
@@ -157,9 +157,10 @@ function Navbar({isAuthenticated, onLogout, displayName, profilePic}) {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.token !== null,
-        displayName: state.displayName,
-        profilePic: state.profilePic
+        isAuthenticated: state.auth.token !== null,
+        firstName: state.profile.firstName,
+        lastName: state.profile.lastName,
+        profilePic: state.profile.profilePic
     };
 };
 
