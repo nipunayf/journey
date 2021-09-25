@@ -3,7 +3,8 @@ import {View, StyleSheet, ScrollView, FlatList,Text} from 'react-native';
 import CardComponent from '../Components/card';
 import StepIndicator from 'react-native-step-indicator';
 import dummyData from './data';
-
+import FormButton from '../Components/FormButton';
+import {AuthContext} from '../navigation/AuthProvider'
 
 
 const ItineraryScreen = props => {
@@ -51,7 +52,8 @@ const ItineraryScreen = props => {
     }
   }, []);
   
-  
+  const {logout} = React.useContext(AuthContext)
+
   return (
     <View style={{flex:1}}>
       <View style={styles.container}>
@@ -74,6 +76,7 @@ const ItineraryScreen = props => {
           />
         </View>
       </View>
+      <FormButton buttonTitle='Logout' onPress = {() => logout()} />
     </View>
   );
 };
