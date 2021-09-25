@@ -72,12 +72,12 @@ const UserAvatar = ({firstName, lastName, logout, profilePic}) => {
                     cursor={'pointer'}
                     minW={0}>
                     <HStack>
-                        <Text fontSize={14}>{firstName}</Text>
+                        <Text fontSize={14} noOfLines={1} isTrucated w={16}>{firstName}</Text>
                         <Avatar height={10} width={10} size={'sm'} name={`${firstName} ${lastName}`} src={profilePic}/>
                     </HStack>
                 </MenuButton>
                 <MenuList>
-                    <Text color={'black'}>{`${firstName} ${lastName}`}</Text>
+                    <Text color={'black'} noOfLines={1} isTruncated w={'90%'}>{`${firstName} ${lastName}`}</Text>
                     <MenuDivider/>
                     <MenuItem color={'black'} icon={<SettingsIcon/>} onClick={() => {
                         history.push('/settings')

@@ -36,8 +36,8 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
             knowledge: preferences.knowledge,
         },
         validationSchema: Yup.object({
-            firstName: Yup.string().required('Required'),
-            lastName: Yup.string().required('Required'),
+            firstName: Yup.string().required('Required').max(20, 'Should be less than 20 characters'),
+            lastName: Yup.string().required('Required').max(20, 'Should be less than 20 characters'),
         }),
         onSubmit: async values => {
             const outputPreferences = {

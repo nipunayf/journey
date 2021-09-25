@@ -23,8 +23,10 @@ import {useFormik} from "formik";
 import ReserveDatesModal from './ReserveDatesModal'
 import AddMembersModal from './AddMembersModal'
 import ConfirmPreferencesModal from './ConfirmPreferencesModal'
+import * as actions from "../../store/actions";
+import {connect} from "react-redux";
 
-export default function CreateItinerary() {
+function CreateItinerary({preferences}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [screen, setScreen] = useState(0);
 
@@ -43,10 +45,10 @@ export default function CreateItinerary() {
             startDate: null,
             endDate: null,
             isGroup: false,
-            budget: 'Average',
-            popularity: 'Moderate',
-            energy: 'Medium-Paced',
-            knowledge: 'Average',
+            budget: preferences.budget,
+            popularity: preferences.popularity,
+            energy: preferences.energy,
+            knowledge: preferences.knowledge,
             email: ''
         },
         onSubmit: values => {
@@ -73,3 +75,11 @@ export default function CreateItinerary() {
         </Modal>
     </>;
 }
+
+const mapStateToProps = state => {
+    return {
+        preferences: state.profile.preferences,
+    };
+};
+
+export default connect(mapStateToProps, null)(CreateItinerary);

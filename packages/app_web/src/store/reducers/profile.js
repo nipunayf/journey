@@ -27,11 +27,22 @@ const initializeProfile = (state, action) => {
     })
 }
 
+const clearProfile = (state, action) => {
+    return updateObject(state, {
+        firstName: null,
+        lastName: null,
+        profilePic: null,
+        preferences: null,
+        itineraries: null
+    })
+}
+
 
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) {
         case actionTypes.INITIALIZE_PROFILE: return initializeProfile(state, action);
         case actionTypes.UPDATE_PROFILE: return updateProfile(state, action);
+        case actionTypes.CLEAR_PROFILE: return clearProfile(state, action);
         default:
             return state;
     }

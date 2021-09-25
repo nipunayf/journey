@@ -30,7 +30,6 @@ const getUser = async (req, res) => {
  */
 const addUser = async (req, res) => {
     //user attempting to access another user profile
-    console.log(req.body.userID, req.user);
     if (req.body.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' details')
 

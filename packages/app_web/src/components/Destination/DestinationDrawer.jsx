@@ -22,16 +22,16 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datepicker.css';
 
-export default function DestinationDrawer({property, isRemove}) {
+export default function DestinationDrawer({property, isRemove, select}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [startDate, setStartDate] = useState(new Date(property.date));
     const [startArrival, setStartArrival] = useState(new Date());
 
     return (<>
-        <Button variant={'outline'} size={'sm'} color={'secondary.main'} onClick={onOpen}>
+        <Button variant={'outline'} size={'sm'} color={'secondary.main'} onClick={() => {onOpen(); select(true);}}>
             View
         </Button>
-        <Drawer onClose={onClose} isOpen={isOpen} size={'md'}>
+        <Drawer onClose={() => {onClose(); select(false)}} isOpen={isOpen} size={'md'}>
             <DrawerOverlay/>
             <DrawerContent bg={'primary.main'}>
                 <DrawerHeader>

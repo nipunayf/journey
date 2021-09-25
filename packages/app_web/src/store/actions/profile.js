@@ -30,3 +30,9 @@ export const updateProfile = (firstName, lastName, preferences) => {
         preferences
     }
 }
+
+export const clearProfile = () => {
+    return {
+        type: actionTypes.CLEAR_PROFILE
+    }
+}

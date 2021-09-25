@@ -1,10 +1,13 @@
 import {Button, Heading, HStack, Image, Spacer, Text, useDisclosure, VStack} from "@chakra-ui/react";
 import Rating from'./Rating'
 import DestinationDrawer from './DestinationDrawer';
+import {useState} from "react";
 
 export default function DestinationHorizontal({isRemove}) {
     const height = 120
     const width = 240
+
+    const [isSelected, select] = useState(false);
 
     const property = {
         imageUrl: "https://bit.ly/2Z4KKcF",
@@ -17,8 +20,8 @@ export default function DestinationHorizontal({isRemove}) {
     }
 
     return (
-        <HStack borderWidth="1px" borderRadius="lg" minW={width} maxW={520} minH={height} boxShadow="xl" minW={width}
-                justifyItems={'left'} overflow={'hidden'} pr={4}>
+        <HStack borderWidth={isSelected ? "3px" : "1px"} borderRadius="lg" minW={width} maxW={520} minH={height} boxShadow="xl" minW={width}
+                justifyItems={'left'} overflow={'hidden'} pr={4} borderColor={isSelected ? 'secondary.main' : 'grey.700'}>
             <Image src={property.imageUrl} alt={property.title} htmlWidth={180} htmlHeight={180}/>
             <VStack alignItems={'left'} spacing={1}>
                 <Heading size={'sm'}>
@@ -34,6 +37,7 @@ export default function DestinationHorizontal({isRemove}) {
             <DestinationDrawer
                 property={property}
                 isRemove={isRemove}
+                select={select}
             />
         </HStack>
     );

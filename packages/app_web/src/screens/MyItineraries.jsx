@@ -63,9 +63,11 @@ function SearchBar() {
             <Spacer/>
             <HStack><Heading size={14}>State:</Heading>
                 <Select placeholder="State" w={36}>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
+                    <option value="1">Inactive</option>
+                    <option value="2">Incompatible</option>
+                    <option value="3">Active</option>
+                    <option value="4">To Be Reviewed</option>
+                    <option value="5">Reviewed</option>
                 </Select>
             </HStack>
         </HStack>

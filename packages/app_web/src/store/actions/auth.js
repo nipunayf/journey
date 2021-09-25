@@ -1,6 +1,6 @@
 import * as actionTypes from './action-types';
 import axios from  '../../api/axios'
-import {initializeProfile} from "./profile";
+import {clearProfile, initializeProfile} from "./profile";
 import {getObject} from "../../utils/local-storage";
 
 
@@ -24,7 +24,7 @@ export const authSuccess = (token, userID, email) => {
     };
 };
 
-export const logout = () => {
+export const clearAuth = () => {
     localStorage.clear();
     delete axios.defaults.headers.common['Authorization'];
 
@@ -32,6 +32,13 @@ export const logout = () => {
         type: actionTypes.AUTH_LOGOUT
     };
 };
+
+export const logout = () => {
+    return dispatch => {
+        dispatch(clearAuth())
+        dispatch(clearProfile())
+    }
+}
 
 export const checkAuthTimeout = (expirationTime) => {
     return dispatch => {
