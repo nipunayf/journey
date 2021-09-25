@@ -14,7 +14,7 @@ import {connect} from "react-redux";
 import AddMembersModal from "../CreateItinerary/AddMembersModal";
 import {MdGroup} from "react-icons/all";
 
-function Members({displayName, profilePic}) {
+function Members({displayName, profilePic, email}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (<>
@@ -33,7 +33,7 @@ function Members({displayName, profilePic}) {
                 <ModalCloseButton/>
                 <ModalBody alignItems={'center'}>
                     <VStack w={"100%"} spacing={4} align={'left'} overflowY={'auto'} maxH={180}>
-                        <Member email={'test@test.com'} name={displayName} profilePic={profilePic} isOwner={true}/>
+                        <Member email={email} name={displayName} profilePic={profilePic} isOwner={true}/>
                     </VStack>
                 </ModalBody>
             </ModalContent>
@@ -44,8 +44,9 @@ function Members({displayName, profilePic}) {
 
 const mapStateToProps = state => {
     return {
-        displayName: state.displayName,
-        profilePic: state.profilePic
+        displayName: `${state.profile.firstName} ${state.profile.lastName}`,
+        email: state.auth.email,
+        profilePic: state.profile.profilePic,
     };
 };
 

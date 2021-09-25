@@ -10,6 +10,13 @@ const URL = "users";
 export const getUser = (id) => getRequest(`${URL}/${id}`);
 
 /**
+ * Get user for given email
+ * @param email
+ * @returns {Promise<{data: *, message: *}|{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|undefined>}
+ */
+export const getUserByEmail = (email) => getRequest(`${URL}?email=${email}`);
+
+/**
  * Creates a new user
  * @param data
  * @returns {Promise<{data: *, message: *}|{code: *, error: *, title: *, message: *}|{code: number, error: *, title: *, message: string}|undefined>}

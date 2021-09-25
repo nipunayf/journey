@@ -23,6 +23,23 @@ const getUser = async (req, res) => {
 }
 
 /**
+ * Returns a user for a given email
+ * @param req
+ * @param res
+ * @returns {Promise<*>}
+ */
+const getUserByEmail = async (req, res) => {
+    //fetching from firestore
+    const result = await userStore.where('email', '==', req.query.email).where('isDeleted', '==', 0).get();
+
+
+    if (result.size > 0) //document found in firestore
+        return successMessage(res,  (({firstName, lastName, email, profilePic}) => ({firstName, lastName, email, profilePic}))(result.docs[0].data(0)))
+    else //document not found
+        return errorMessage(res, 'User not found')
+}
+
+/**
  * Add an user to the database
  * @param req
  * @param res
@@ -113,6 +130,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
     getUser,
+    getUserByEmail,
     addUser,
     updateUser,
     deleteUser

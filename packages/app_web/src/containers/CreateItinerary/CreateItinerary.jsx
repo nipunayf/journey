@@ -1,29 +1,12 @@
-import {
-    Button,
-    FormControl, FormErrorMessage, FormLabel,
-    HStack, Input,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Switch,
-    Text,
-    useDisclosure
-} from "@chakra-ui/react";
+import {Button, Modal, ModalContent, ModalOverlay, useDisclosure} from "@chakra-ui/react";
 import {useState} from "react";
-import DatePicker from "react-datepicker";
 
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../components/Destination/datepicker.css';
-import Preferences from "../InputCollection/Preferences";
 import {useFormik} from "formik";
 import ReserveDatesModal from './ReserveDatesModal'
 import AddMembersModal from './AddMembersModal'
 import ConfirmPreferencesModal from './ConfirmPreferencesModal'
-import * as actions from "../../store/actions";
 import {connect} from "react-redux";
 
 function CreateItinerary({preferences}) {
@@ -68,8 +51,10 @@ function CreateItinerary({preferences}) {
         <Modal onClose={onClose} size={'md'} isOpen={isOpen}>
             <ModalOverlay/>
             <ModalContent minW={600} minH={500}>
-                {screen === 0 ? <ReserveDatesModal destinationName={property.name} setScreen={setScreen} parentFormik={formik}/> :
-                    screen === 1 ? <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen} onClose={onClose}/> :
+                {screen === 0 ?
+                    <ReserveDatesModal destinationName={property.name} setScreen={setScreen} parentFormik={formik}/> :
+                    screen === 1 ?
+                        <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen} onClose={onClose}/> :
                         <AddMembersModal setScreen={setScreen} parentFormik={formik}/>}
             </ModalContent>
         </Modal>

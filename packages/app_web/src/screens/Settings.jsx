@@ -90,11 +90,11 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
                         w={350}
                         mx={'15%'}
                         isDisabled={(firstName === formik.values.firstName
-                        && lastName === formik.values.lastName
-                        && preferences.budget === formik.values.budget
-                        && preferences.popularity === formik.values.popularity
-                        && preferences.energy === formik.values.energy
-                        && preferences.knowledge === formik.values.knowledge)
+                            && lastName === formik.values.lastName
+                            && preferences.budget === formik.values.budget
+                            && preferences.popularity === formik.values.popularity
+                            && preferences.energy === formik.values.energy
+                            && preferences.knowledge === formik.values.knowledge)
                         || !formik.isValid}
                         onClick={formik.handleSubmit}
                         isLoading={formik.isSubmitting}
@@ -124,6 +124,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
-
