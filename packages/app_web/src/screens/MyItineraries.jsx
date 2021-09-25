@@ -17,7 +17,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../components/Destination/datepicker.css';
 import {useState} from "react";
 import Navbar from "../containers/Navbar/Navbar";
-import ItineraryCard from "../components/Itinerary/Itinerary";
+import ItineraryCard from "../components/Itinerary/ItineraryCard";
 
 function SearchBar() {
     const [dateRange, setDateRange] = useState([null, null]);

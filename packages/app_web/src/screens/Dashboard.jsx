@@ -1,13 +1,13 @@
 import Navbar from "../containers/Navbar/Navbar";
 
-import ItineraryCard from '../components/Itinerary/Itinerary'
+import ItineraryCard from '../components/Itinerary/ItineraryCard'
 import {Box, Heading, HStack, VStack} from "@chakra-ui/react";
 
 const ItineraryContainer = ({title, children}) => {
     return (
         <VStack py={2} mx={10} alignItems={'left'}>
             <Heading size={'lg'}>{title}...</Heading>
-            <HStack spacing={4} overflowX={'scroll'} py={2}>
+            <HStack spacing={4} overflowX={'auto'} py={2}>
                 {children}
             </HStack>
         </VStack>

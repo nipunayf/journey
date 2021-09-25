@@ -10,11 +10,13 @@ import {
     AccordionPanel,
     Box,
     Button,
-    HStack
+    HStack,
+    Spacer
 } from "@chakra-ui/react";
 import CreateItinerary from "../containers/CreateItinerary/CreateItinerary";
 import {AddIcon} from "@chakra-ui/icons";
 import {MdGroup} from "react-icons/all";
+import StateChangeButton from "../components/Itinerary/StateChangeButton";
 
 
 export default function Itinerary() {
@@ -22,9 +24,11 @@ export default function Itinerary() {
         <>
             <Navbar/>
             <Box pt={24}/>
-            <HStack spacing={3} pl={4}>
+            <HStack spacing={3} px={4}>
                 <NewDestination />
                 <Members/>
+                <Spacer />
+                <StateChangeButton state={1}/>
             </HStack>
             <Accordion defaultIndex={[0]} allowMultiple w={'45%'} pt={5} pl={4}>
                 <AccordionItem>

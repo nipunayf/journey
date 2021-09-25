@@ -1,5 +1,6 @@
 import {Badge, Box, Button, HStack, Image, Text} from "@chakra-ui/react";
 import {useHistory} from "react-router-dom";
+import Status from "./Status";
 
 export default function ItineraryCard() {
     const history = useHistory()
@@ -20,9 +21,7 @@ export default function ItineraryCard() {
 
             <Box py="6" px={2}>
                 <Box d="flex" alignItems="baseline">
-                    <Badge borderRadius="full" px="2" colorScheme="red">
-                        Inactive
-                    </Badge>
+                    <Status state={1} />
                     <Box
                         color="gray.500"
                         fontWeight="semibold"
