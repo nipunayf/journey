@@ -5,24 +5,33 @@ const initialState = {
     token: null,
     user: null,
     email: null,
+    isAuthenticated: false
 };
 
-const authSuccess = (state, action) => {
-    return updateObject( state, {
+const authLogin = (state, action) => {
+    return updateObject(state, {
         token: action.token,
         user: action.user,
         email: action.email
-     } );
+    });
 };
+
+const authSuccess = (state, action) => {
+    return updateObject(state, {isAuthenticated: true})
+}
 
 const authLogout = (state, action) => {
-    return updateObject(state, { token: null, user: null, email: null });
+    return updateObject(state, {token: null, user: null, email: null, isAuthenticated: false});
 };
 
-const reducer = ( state = initialState, action ) => {
-    switch ( action.type ) {
-        case actionTypes.AUTH_SUCCESS: return authSuccess(state, action);
-        case actionTypes.AUTH_LOGOUT: return authLogout(state, action);
+const reducer = (state = initialState, action) => {
+    switch (action.type) {
+        case actionTypes.AUTH_LOGIN:
+            return authLogin(state, action);
+        case actionTypes.AUTH_LOGOUT:
+            return authLogout(state, action);
+        case actionTypes.AUTH_SUCCESS:
+            return authSuccess(state, action);
         default:
             return state;
     }

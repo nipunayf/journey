@@ -157,7 +157,7 @@ function Navbar({isAuthenticated, onLogout, firstName, lastName, profilePic}) {
 
 const mapStateToProps = state => {
     return {
-        isAuthenticated: state.auth.token !== null,
+        isAuthenticated: state.auth.isAuthenticated,
         firstName: state.profile.firstName,
         lastName: state.profile.lastName,
         profilePic: state.profile.profilePic

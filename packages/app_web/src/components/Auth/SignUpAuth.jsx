@@ -64,6 +64,7 @@ function SignUpAuth(props) {
                                 },
                                 null
                             )
+                            props.onSuccess();
                             generateSuccessMessage(toast, 'Account created successfully', `Welcome ${values.firstName}, Start planning your itinerary by first searching your desired destination`);
                             history.push('/');
                         } else {
@@ -74,6 +75,7 @@ function SignUpAuth(props) {
                     }).catch((error) => {
                         handleErrors(toast, error.code);
                     });
+                    formik.setSubmitting(false);
                 })
                 .catch((error) => {
                     console.log('Other FAILED')
@@ -106,7 +108,8 @@ function SignUpAuth(props) {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (token, userID, email) => dispatch(actions.authSuccess(token, userID, email)),
+        onAuth: (token, userID, email) => dispatch(actions.authLogin(token, userID, email)),
+        onSuccess: () => dispatch(actions.authSuccess()),
         onLogout: () => dispatch(actions.logout()),
         onProfileInit: (firstName, lastName, profilePic, preferences, itineraries) => dispatch(actions.initializeProfile(firstName, lastName, profilePic, preferences, itineraries))
     };

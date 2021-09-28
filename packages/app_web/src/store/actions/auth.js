@@ -1,10 +1,10 @@
 import * as actionTypes from './action-types';
-import axios from  '../../api/axios'
+import axios from '../../api/axios'
 import {clearProfile, initializeProfile} from "./profile";
-import {getObject} from "../../utils/local-storage";
+import {getObject, storeObject} from "../../utils/local-storage";
 
 
-export const authSuccess = (token, userID, email) => {
+export const authLogin = (token, userID, email) => {
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     //Saving the user variables
@@ -17,12 +17,20 @@ export const authSuccess = (token, userID, email) => {
     localStorage.setItem('expirationDate', expirationDate);
 
     return {
-        type: actionTypes.AUTH_SUCCESS,
+        type: actionTypes.AUTH_LOGIN,
         token: token,
         user: userID,
         email: email
     };
 };
+
+export const authSuccess = () => {
+    storeObject('isAuthenticated', true)
+
+    return {
+        type: actionTypes.AUTH_SUCCESS
+    }
+}
 
 export const clearAuth = () => {
     localStorage.clear();
@@ -66,8 +74,10 @@ export const authCheckState = () => {
                 const profilePic = localStorage.getItem('profilePic');
                 const preferences = getObject('preferences');
                 const itineraries = getObject('itineraries');
-                dispatch(authSuccess(token, userID, email));
-                dispatch(initializeProfile(firstName, lastName, profilePic, preferences, itineraries))
+                const isAuthenticated = getObject('isAuthenticated')
+                dispatch(authLogin(token, userID, email));
+                dispatch(initializeProfile(firstName, lastName, profilePic, preferences, itineraries));
+                dispatch(authSuccess());
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
             }
         }

@@ -37,11 +37,11 @@ const GAuthButton = (props) => {
                         userResult.data.preferences,
                         userResult.data.itineraries
                     )
+                    props.onSuccess();
                     generateSuccessMessage(toast, 'Logged in successfully',
                         `Welcome back ${userResult.data.firstName}!`)
                     history.push('/');
-
-                } else if(result.code === 404) {
+                } else if(userResult.code === 404) {
                     //Creates a new user
                     const newUser = await createUser({
                         userID: result.user.uid,
@@ -63,6 +63,7 @@ const GAuthButton = (props) => {
                             },
                             null
                         )
+                        props.onSuccess();
                         generateSuccessMessage(toast, 'Account created successfully', `Welcome ${result.user.displayName.split(' ')[0]}, Start planning your itinerary by first searching your desired destination`);
                         history.push('/');
                     } else {
@@ -90,8 +91,9 @@ const GAuthButton = (props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (token, userID, email) => dispatch(actions.authSuccess(token, userID, email)),
-        onLogout: () => dispatch(actions.logout('/')),
+        onAuth: (token, userID, email) => dispatch(actions.authLogin(token, userID, email)),
+        onSuccess: () => dispatch(actions.authSuccess()),
+        onLogout: () => dispatch(actions.logout()),
         onProfileInit: (firstName, lastName, profilePic, preferences, itineraries) => dispatch(actions.initializeProfile(firstName, lastName, profilePic, preferences, itineraries))
     };
 };

@@ -959,13 +959,23 @@ const processedDestinations = destinations.results.map(object => {
 
 const pickRandomDestination = (availableIndices) => {
     const random = Math.floor(Math.random() * availableIndices.length);
-    ;
     const value = processedDestinations[random]
     availableIndices.splice(random, 1)
     return value;
 }
 
-const generateItinarary = () => {
+function makeID(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() *
+            charactersLength));
+    }
+    return result;
+}
+
+const generateItinerary = (values) => {
     const availableIndices = new Array(20);
     for (let i = 0; i < availableIndices.length; ++i) {
         availableIndices[i] = i;
@@ -973,26 +983,33 @@ const generateItinarary = () => {
 
     const itinerary = {}
     const pickedDestination = pickRandomDestination(availableIndices)
+    itinerary.id = makeID(10);
     itinerary.name = pickedDestination.name
     itinerary.state = 1;
     itinerary.image = pickedDestination.image;
     itinerary.destinations = {};
 
-    const dates = [new Date('2021-12-17').toLocaleDateString(),
-        new Date('2021-12-18').toLocaleDateString(),
-        new Date('2021-12-19').toLocaleDateString()]
+    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
-    itinerary.destinations[dates[0]] = {
-        itinerary
+    const dates = [];
+    let loop = new Date(values.startDate)
+    let endDate = new Date(values.endDate)
+    while(loop <= endDate){
+        dates.push(loop.toLocaleDateString("en-US", options));
+        const newDate = loop.setDate(loop.getDate() + 1);
+        loop = new Date(newDate);
     }
 
     dates.forEach(date => {
         itinerary.destinations[date] = []
-        const times = [['10:30', '12:30'], ['14:30', '17:00'], ['19:30', '21:00']];
-        for (let i = 0; i < 3; i++) {
+        const times = [['10:30', '12:30'], ['14:30', '16:20'], ['17:30', '19:00'], ['19:40', '21:30']];
+
+        const random = Math.floor(Math.random() * times.length);
+        for (let i = 0; i < random; i++) {
             const randomDest = pickRandomDestination(availableIndices)
             itinerary.destinations[date].push({
                     placeID: randomDest.place_id,
+                    name: randomDest.name,
                     image: randomDest.image,
                     rating: randomDest.rating,
                     arrival: times[i][0],
@@ -1002,8 +1019,9 @@ const generateItinarary = () => {
         }
     })
 
-    itinerary.destinations[dates[1]].push({
+    itinerary.destinations[dates[0]].push({
         placeID: pickedDestination.place_id,
+        name: pickedDestination.name,
         image: pickedDestination.image,
         rating: pickedDestination.rating,
         arrival: '08:00',
@@ -1013,4 +1031,4 @@ const generateItinarary = () => {
     return itinerary
 }
 
-export default generateItinarary()
+export default generateItinerary

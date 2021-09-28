@@ -1,24 +1,10 @@
-import {
-    Flex,
-    Box,
-    FormControl,
-    FormLabel,
-    Input,
-    Checkbox,
-    Stack,
-    Link,
-    Button,
-    Heading,
-    Text,
-    Center, Image,
-    FormErrorMessage, useToast
-} from '@chakra-ui/react';
-import { useFormik } from 'formik';
+import {Button, Checkbox, Link, Stack, useToast} from '@chakra-ui/react';
+import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {getAuth, GoogleAuthProvider, signInWithEmailAndPassword} from "firebase/auth";
+import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 import firebaseConfig from './firebase_secret.json';
 import {initializeApp} from "firebase/app";
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 import InputBox from "../Form/InputBox";
 import {handleErrors} from "./firebase-utils";
 import * as actions from "../../store/actions";
@@ -49,8 +35,11 @@ function SignInAuth(props) {
                             result.user.email
                         );
 
+                        console.log('before')
+
                         //Check if the user is in the db
                         const userResult = await getUser(result.user.uid);
+                        console.log('after')
                         if (userResult.data) {
                             props.onProfileInit(
                                 userResult.data.firstName,
@@ -59,6 +48,7 @@ function SignInAuth(props) {
                                 userResult.data.preferences,
                                 userResult.data.itineraries
                             )
+                            props.onSuccess();
                             generateSuccessMessage(toast, 'Logged in successfully',
                                 `Welcome back ${userResult.data.firstName}!`)
                             history.push('/');
@@ -66,11 +56,12 @@ function SignInAuth(props) {
                             generateErrorMessage(toast, 'Log-in failed', userResult.message)
                             props.onLogout();
                         }
+                        formik.setSubmitting(false);
                     }
                     )
                 .catch((error) => {
                     handleErrors(toast, error.code);
-                    formik.setSubmitting(false)
+                    formik.setSubmitting(false);
                 });
         }
     })
@@ -105,8 +96,9 @@ function SignInAuth(props) {
 
     const mapDispatchToProps = dispatch => {
         return {
-            onAuth: (token, userID, email) => dispatch(actions.authSuccess(token, userID, email)),
-            onLogout: () => dispatch(actions.logout()),
+            onAuth: (token, userID, email) => dispatch(actions.authLogin(token, userID, email)),
+            onSuccess: () => dispatch(actions.authSuccess()),
+            onLogout: () => dispatch(actions.logout('/')),
             onProfileInit: (firstName, lastName, profilePic, preferences, itineraries) => dispatch(actions.initializeProfile(firstName, lastName, profilePic, preferences, itineraries))
         };
     };

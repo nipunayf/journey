@@ -2,6 +2,8 @@ import Navbar from "../containers/Navbar/Navbar";
 
 import ItineraryCard from '../components/Itinerary/ItineraryCard'
 import {Box, Heading, HStack, VStack} from "@chakra-ui/react";
+import {StateEnum} from "../utils/constants";
+import CreateItinerary from "../containers/CreateItinerary/CreateItinerary";
 
 const ItineraryContainer = ({title, children}) => {
     return (
@@ -18,19 +20,21 @@ export default function Dashboard() {
     return (<>
         <Navbar/>
         <Box py={10}/>
+        <CreateItinerary/>
         <ItineraryContainer title={'Be ready for'}>
-            <ItineraryCard/>
-            <ItineraryCard/>
+            <ItineraryCard state={StateEnum.ACTIVE}/>
+            <ItineraryCard state={StateEnum.ACTIVE}/>
         </ItineraryContainer>
         <ItineraryContainer title={'Continue planning'}>
-            <ItineraryCard/>
-            <ItineraryCard/>
-            <ItineraryCard/>
-            <ItineraryCard/>
+            <ItineraryCard state={StateEnum.INACTIVE}/>
+            <ItineraryCard state={StateEnum.INACTIVE}/>
+            <ItineraryCard state={StateEnum.INACTIVE}/>
+            <ItineraryCard state={StateEnum.INACTIVE}/>
         </ItineraryContainer>
         <ItineraryContainer title={'Take your time to review these'}>
-            <ItineraryCard/>
-            <ItineraryCard/>
+            <ItineraryCard state={StateEnum.TO_BE_REVIEWED}/>
+            <ItineraryCard state={StateEnum.TO_BE_REVIEWED}/>
+            <ItineraryCard state={StateEnum.TO_BE_REVIEWED}/>
         </ItineraryContainer>
     </>)
 }
