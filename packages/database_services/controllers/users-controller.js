@@ -19,7 +19,7 @@ const getUser = async (req, res) => {
     if (result.size > 0) //document found in firestore
         return successMessage(res, result.docs[0].data(0))
     else //document not found
-        return errorMessage(res, 'User not found')
+        return errorMessage(res, 'User not found', 404)
 }
 
 /**

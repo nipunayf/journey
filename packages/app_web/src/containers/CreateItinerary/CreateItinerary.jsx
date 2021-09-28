@@ -8,10 +8,13 @@ import ReserveDatesModal from './ReserveDatesModal'
 import AddMembersModal from './AddMembersModal'
 import ConfirmPreferencesModal from './ConfirmPreferencesModal'
 import {connect} from "react-redux";
+import generateItinerary from "../../utils/mock.json";
+import {useHistory} from "react-router-dom";
 
 function CreateItinerary({preferences}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [screen, setScreen] = useState(0);
+    const history = useHistory();
 
     const property = {
         imageUrl: "https://bit.ly/2Z4KKcF",
@@ -35,7 +38,9 @@ function CreateItinerary({preferences}) {
             email: ''
         },
         onSubmit: values => {
-            console.log(values)
+            const itinerary = generateItinerary(values);
+            console.log(itinerary);
+            history.push(`/itinerary/${itinerary.id}`, { itinerary: itinerary });
         }
     });
 

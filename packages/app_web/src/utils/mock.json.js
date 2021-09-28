@@ -959,6 +959,7 @@ const processedDestinations = destinations.results.map(object => {
 
 const pickRandomDestination = (availableIndices) => {
     const random = Math.floor(Math.random() * availableIndices.length);
+
     const value = processedDestinations[random]
     availableIndices.splice(random, 1)
     return value;
@@ -974,6 +975,7 @@ function makeID(length) {
     }
     return result;
 }
+
 
 const generateItinerary = (values) => {
     const availableIndices = new Array(20);
@@ -1003,8 +1005,9 @@ const generateItinerary = (values) => {
     dates.forEach(date => {
         itinerary.destinations[date] = []
         const times = [['10:30', '12:30'], ['14:30', '16:20'], ['17:30', '19:00'], ['19:40', '21:30']];
+        let random = Math.floor(Math.random() * times.length);
+        random = random < 2 ? 2 : random;
 
-        const random = Math.floor(Math.random() * times.length);
         for (let i = 0; i < random; i++) {
             const randomDest = pickRandomDestination(availableIndices)
             itinerary.destinations[date].push({
@@ -1019,7 +1022,7 @@ const generateItinerary = (values) => {
         }
     })
 
-    itinerary.destinations[dates[0]].push({
+    itinerary.destinations[dates[0]].unshift({
         placeID: pickedDestination.place_id,
         name: pickedDestination.name,
         image: pickedDestination.image,

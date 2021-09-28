@@ -1,7 +1,7 @@
-import DestinationList from '../containers/Itinerary/DestinationList'
 import Members from '../containers/Itinerary/Members'
 import NewDestination from '../containers/Itinerary/NewDestination'
 import Navbar from "../containers/Navbar/Navbar";
+import DateAccordion from "../containers/Itinerary/DateAccordion";
 import {
     Accordion,
     AccordionButton,
@@ -13,13 +13,14 @@ import {
     HStack,
     Spacer
 } from "@chakra-ui/react";
-import CreateItinerary from "../containers/CreateItinerary/CreateItinerary";
-import {AddIcon} from "@chakra-ui/icons";
-import {MdGroup} from "react-icons/all";
 import StateChangeButton from "../components/Itinerary/StateChangeButton";
+import {useLocation} from "react-router-dom";
 
 
 export default function Itinerary() {
+    const location = useLocation();
+    const itinerary = location.state.itinerary;
+
     return(
         <>
             <Navbar/>
@@ -31,34 +32,9 @@ export default function Itinerary() {
                 <StateChangeButton state={1}/>
             </HStack>
             <Accordion defaultIndex={[0]} allowMultiple w={'45%'} pt={5} pl={4}>
-                <AccordionItem>
-                    <h2>
-                        <AccordionButton>
-                            <Box flex="1" textAlign="left">
-                                October 29, 2021
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                        <DestinationList/>
-                    </AccordionPanel>
-                </AccordionItem>
-                <AccordionItem>
-                    <h2>
-                        <AccordionButton>
-                            <Box flex="1" textAlign="left">
-                                October 29, 2021
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-                    </h2>
-                    <AccordionPanel pb={4}>
-                        <DestinationList/>
-                    </AccordionPanel>
-                </AccordionItem>
+                {Object.keys(itinerary.destinations).map(date =>
+                <DateAccordion date={date} destinations={itinerary.destinations[date]}/>)}
             </Accordion>
-            <CreateItinerary/>
         </>
     );
 }

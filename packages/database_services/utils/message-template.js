@@ -8,6 +8,7 @@
  */
 const successMessage = (response, results, message = "", status = 200) => {
     const output = { results : results, message: message };
+    logger(output);
     return response.status(status).send(output);
 }
 
@@ -19,8 +20,17 @@ const successMessage = (response, results, message = "", status = 200) => {
  * @param {Number} status - status code of the response. default = 400
  */
 const errorMessage = (response, message, status = 400) => {
-    const output = { object : null, message: message }
+    const output = { results : null, message: message }
+    logger(output);
     return response.status(status).send(output);
+}
+
+const logger = (output) => {
+    if (process.env.NODE_ENV !== 'test') {
+        console.log('Results: ', output.results);
+        console.log('Message: ', output.message);
+        console.log('=======');
+    }
 }
 
 module.exports = {

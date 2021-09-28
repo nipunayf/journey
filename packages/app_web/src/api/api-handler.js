@@ -29,12 +29,13 @@ export default class APIHandler {
     /**
      * axios get request
      * @param url
+     * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async getRequest(url) {
+    async getRequest(url, output = 'results') {
         try {
             let response = await this.instance.get(url);
-            return generateSuccessOutput(response);
+            return generateSuccessOutput(response, output);
         } catch (error) {
             return generateErrorOutput(error);
         }
@@ -44,12 +45,13 @@ export default class APIHandler {
      * axios post request
      * @param url
      * @param data
+     * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async postRequest (url, data) {
+    async postRequest (url, data, output = 'result') {
         try {
             let response = await this.instance.post(url, data);
-            return generateSuccessOutput(response);
+            return generateSuccessOutput(response ,output);
         } catch (error) {
             return generateErrorOutput(error);
         }
@@ -60,12 +62,13 @@ export default class APIHandler {
      * @param url
      * @param data - optional
      * @param headers
+     * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async putRequest (url, data, headers = {}) {
+    async putRequest (url, data, headers = {}, output = 'result') {
         try {
             let response = (data) ? await this.instance.put(url, data, headers) : await this.instance.put(url, headers);
-            return generateSuccessOutput(response);
+            return generateSuccessOutput(response, output);
         } catch (error) {
             return generateErrorOutput(error);
         }
@@ -74,12 +77,13 @@ export default class APIHandler {
     /**
      * axios delete request
      * @param url
+     * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async deleteRequest (url) {
+    async deleteRequest (url, output = 'result') {
         try {
             let response = await this.instance.delete(url);
-            return generateSuccessOutput(response);
+            return generateSuccessOutput(response, output);
         } catch (error) {
             return generateErrorOutput(error);
         }
@@ -89,11 +93,12 @@ export default class APIHandler {
 /**
  * Generates an output object for 200 and 201 responses
  * @param response
+ * @param output
  * @returns {{data, message}}
  */
-const generateSuccessOutput = (response) => {
+const generateSuccessOutput = (response, output) => {
     return {
-        data: response.data.results,
+        data: response.data[output],
         message: response.data.message,
     }
 }
@@ -121,8 +126,10 @@ const generateErrorOutput = (error) => {
 }
 
 const databaseServices = new APIHandler(BaseURLEnum.DATABASE_SERVICE)
+const mapsServices = new APIHandler(BaseURLEnum.GOOGLE_MAPS)
 
 export {
-    databaseServices
+    databaseServices,
+    mapsServices
 }
 

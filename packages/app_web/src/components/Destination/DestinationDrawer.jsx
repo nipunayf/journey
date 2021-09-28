@@ -22,9 +22,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './datepicker.css';
 
-export default function DestinationDrawer({property, isRemove, select}) {
+export default function DestinationDrawer({info, isRemove, select}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
-    const [startDate, setStartDate] = useState(new Date(property.date));
+    const [startDate, setStartDate] = useState(new Date(info.date));
     const [startArrival, setStartArrival] = useState(new Date());
 
     return (<>
@@ -37,8 +37,8 @@ export default function DestinationDrawer({property, isRemove, select}) {
                 <DrawerHeader>
                     <HStack>
                         <VStack alignItems={'left'} spacing={1}>
-                            <Text color={'black'}>{property.name}</Text>
-                            <Rating number={property.ratings}/>
+                            <Text color={'black'}>{info.name}</Text>
+                            <Rating number={info.ratings}/>
                         </VStack>
                         <Spacer/>
                         {isRemove ? <Button colorScheme="red" size="sm">
@@ -50,7 +50,7 @@ export default function DestinationDrawer({property, isRemove, select}) {
                     </HStack>
                 </DrawerHeader>
                 <DrawerBody align={'center'}>
-                    <Image borderWidth="1px" borderRadius="lg" src={property.imageUrl} alt={property.title} pb={3}
+                    <Image borderWidth="1px" borderRadius="lg" src={info.imageUrl} alt={info.title} pb={3}
                            htmlWidth={360} htmlHeight={180}/>
                     <HStack>
                         <Heading size={'sn'} mr={4}>Date: </Heading>
@@ -85,7 +85,7 @@ export default function DestinationDrawer({property, isRemove, select}) {
                         />
                     </HStack>
                     <Divider pt={3}/>
-                    <Text pt={1} align={'left'}>{property.description}</Text>
+                    <Text pt={1} align={'left'}>{info.description}</Text>
                     <Heading pt={3} size={'md'} align={'left'}>Alternatives:</Heading>
                     <NoResult message={'Sorry! There are no alternatives for this destination'}/>
                 </DrawerBody>

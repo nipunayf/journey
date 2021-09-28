@@ -27,3 +27,6 @@ yarn-error.log*
 
 #Firebase config
 /src/components/Auth/firebase_secret.json
+
+#Google Maps API KEY
+/src/api/google_maps_config.json

@@ -1,6 +1,7 @@
 import {Button, ModalBody, ModalCloseButton, ModalFooter, ModalHeader} from "@chakra-ui/react";
 import Preferences from "../InputCollection/Preferences";
 import {useFormik} from "formik";
+import generateItinerary from '../../utils/mock.json';
 
 export default function ({parentFormik, setScreen, onClose}) {
     const formik = useFormik({

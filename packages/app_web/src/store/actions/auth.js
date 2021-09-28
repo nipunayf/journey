@@ -64,7 +64,7 @@ export const authCheckState = () => {
             dispatch(logout());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            const isAuthenticated = getObject('isAuthenticated')
+            const isAuthenticated = getObject('isAuthenticated');
             if (expirationDate <= new Date()) {
                 dispatch(logout());
             } else if (isAuthenticated) {
@@ -78,6 +78,7 @@ export const authCheckState = () => {
 
                 dispatch(authLogin(token, userID, email));
                 dispatch(initializeProfile(firstName, lastName, profilePic, preferences, itineraries));
+                dispatch(authSuccess());
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
             }
         }

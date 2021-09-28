@@ -135,7 +135,6 @@ const updateItinerary = async (req, res) => {
         //TODO: Improve the code to support any amount of attributes
         //Itinerary state is being changed
         if (req.body.state) {
-
             //Since the state is changed to REVIEWED, removing the itinerary from the user store
             if (req.body.state === StateEnum.REVIEWED)
                 body = {

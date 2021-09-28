@@ -4,11 +4,11 @@ const info = (...params) => {
     }
 }
 
-const requestLogger = (request, response, next) => {
-    info('Method:', request.method);
-    info('Path:  ', request.path);
-    info('Body:  ', request.body);
-    info('Query: ', request.query);
+const requestLogger = (req, res, next) => {
+    info('Method:', req.method);
+    info('Path:  ', req.path);
+    info('Body:  ', req.body);
+    info('Query: ', req.query);
     info('---');
     next();
 }
