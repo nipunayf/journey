@@ -1,11 +1,11 @@
 import * as actionTypes from './action-types';
-import axios from '../../api/axios'
+import {databaseServices} from '../../api/api-handler'
 import {clearProfile, initializeProfile} from "./profile";
 import {getObject, storeObject} from "../../utils/local-storage";
 
 
 export const authLogin = (token, userID, email) => {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    databaseServices.setToken(token);
 
     //Saving the user variables
     localStorage.setItem('token', token);
@@ -34,7 +34,7 @@ export const authSuccess = () => {
 
 export const clearAuth = () => {
     localStorage.clear();
-    delete axios.defaults.headers.common['Authorization'];
+    databaseServices.deleteToken();
 
     return {
         type: actionTypes.AUTH_LOGOUT
@@ -64,9 +64,10 @@ export const authCheckState = () => {
             dispatch(logout());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
+            const isAuthenticated = getObject('isAuthenticated')
             if (expirationDate <= new Date()) {
                 dispatch(logout());
-            } else {
+            } else if (isAuthenticated) {
                 const userID = localStorage.getItem('userID');
                 const email = localStorage.getItem('email');
                 const firstName = localStorage.getItem('firstName');
@@ -74,10 +75,9 @@ export const authCheckState = () => {
                 const profilePic = localStorage.getItem('profilePic');
                 const preferences = getObject('preferences');
                 const itineraries = getObject('itineraries');
-                const isAuthenticated = getObject('isAuthenticated')
+
                 dispatch(authLogin(token, userID, email));
                 dispatch(initializeProfile(firstName, lastName, profilePic, preferences, itineraries));
-                dispatch(authSuccess());
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000));
             }
         }
