@@ -40,8 +40,10 @@ function CreateItinerary({preferences}) {
         onSubmit: values => {
             const itinerary = generateItinerary(values);
             console.log(itinerary);
-            history.push(`/itinerary/${itinerary.id}`, { itinerary: itinerary });
+
+            history.push('/itinerary/', { itinerary: itinerary });
         }
+
     });
 
     return <>

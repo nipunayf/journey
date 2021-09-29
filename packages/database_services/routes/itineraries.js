@@ -6,7 +6,7 @@ const {getItineraries,
     updateItinerary,
     deleteItinerary} = require('../controllers/itineraries-controller');
 
-router.get('/itineraryID',
+router.get('/:itineraryID',
     auth,
     getItinerary);
 

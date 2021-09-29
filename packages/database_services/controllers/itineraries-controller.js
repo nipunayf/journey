@@ -58,7 +58,8 @@ const getItinerary = async (req, res) => {
         if (!result.members.includes(req.user))
             return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
-        return successMessage(res, formatDestinationDates(req.params.itineraryID, result));
+        console.log(result.destinations);
+        return successMessage(res, {...result, id: req.params.itineraryID});
     } else
         return errorMessage(res, 'Itinerary not found');
 }

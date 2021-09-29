@@ -1,18 +1,29 @@
-import {Badge, Box, Button, HStack, Image, Text} from "@chakra-ui/react";
+import {Badge, Box, Button, HStack, Image, Text, useToast} from "@chakra-ui/react";
 import {useHistory} from "react-router-dom";
 import Status from "./Status";
 import {getPlacePhoto} from "../../api/maps-api";
 import {formatDate} from "../../utils/date-format";
+import {useState} from "react";
+import {getItinerary} from "../../api/itineraries-api";
+import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 
 export default function ItineraryCard({info}) {
     const history = useHistory()
+    const [loading, setLoading] = useState(false);
+    const toast = useToast();
 
-    const onViewMore = () => {
+    const onViewMore = async () => {
         //fetch itinerary from the database
+        setLoading(true);
+        const result = await getItinerary(info.id);
+        if (result.data) {
+            generateSuccessMessage(toast, 'Itinerary fetched successfully', '');
+            history.push(`/itinerary/${info.id}`, { itinerary: result.data });
+        } else {
+            generateErrorMessage(toast, 'Unable to fetch the itinerary', result.message)
+        }
 
-
-        //route to itinerary page
-        // history.push('/itinerary')
+        setLoading(false);
     }
 
     const IMAGE_HEIGHT = 220
@@ -21,7 +32,6 @@ export default function ItineraryCard({info}) {
     return (
         <Box borderWidth="1px" borderRadius="lg" maxW={BOX_WIDTH} minH={BOX_HEIGHT} maxH={BOX_HEIGHT} boxShadow="xl" minW={BOX_WIDTH} overflow={'hidden'}>
             <Image src={getPlacePhoto(info.image)} alt={info.location} minW={BOX_WIDTH} maxH={IMAGE_HEIGHT} minH={IMAGE_HEIGHT}/>
-
             <Box py="6" px={2}>
                 <Box d="flex" alignItems="baseline">
                     <Status state={info.state} />
@@ -50,7 +60,7 @@ export default function ItineraryCard({info}) {
                 <Box ml={2} fontSize={14} fontColor={'grey.700'}>
                     {`${formatDate(info.startDate)} ${String.fromCodePoint(parseInt('2192', 16))} ${formatDate(info.endDate)}`}
                 </Box>
-                <Button colorScheme="blue" size="sm" variant="outline" mt={3} ml={BOX_WIDTH / 2} onClick={onViewMore}>
+                <Button isLoading={loading} colorScheme="blue" size="sm" variant="outline" mt={3} ml={BOX_WIDTH / 2} onClick={onViewMore}>
                     View Itinerary
                 </Button>
             </Box>
