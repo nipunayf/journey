@@ -99,13 +99,16 @@ function Navbar({isAuthenticated, onLogout, firstName, lastName, profilePic}) {
     return <Grid templateColumns="repeat(12, 1fr)" bg="primary.main" w="100%" gap={2} align="center" py={2} px={1}
                  borderBottomRadius="2rem" position="fixed" top={0} zIndex={1} opacity={0.9}>
         <GridItem colSpan={3}>
-            <Image
-                src='./journey-logo.png'
-                w={120}
-                h={55}
-                onClick={() => {
-                    history.push('/')
-                }}/>
+            <Button bgImage={'url(./journey-logo.png)'}
+                    bgSize={120}
+                    bgRepeat="no-repeat"
+                    bgColor={'primary.main'}
+                    w={120}
+                    h={55}
+                    _hover={{color: 'primary.dark', opacity:0.4}}
+                    onClick={() => {
+                        history.push('/')
+                    }}/>
         </GridItem>
         <GridItem colStart={5} colEnd={9}>
             <InputGroup pt={1}>

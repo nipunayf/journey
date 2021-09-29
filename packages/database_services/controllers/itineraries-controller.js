@@ -1,7 +1,7 @@
 const {userStore, itineraryStore, transaction} = require('../config/firebase');
 const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
-const {formatDatetime} = require('../utils/format');
+const {formatDestinationDates} = require('../utils/format');
 const {StateEnum} = require('../utils/constants');
 
 
@@ -32,7 +32,7 @@ const getItineraries = async (req, res) => {
     result = await result.get();
 
     if (result.size > 0) {
-        return successMessage(res, result.docs.map(doc => formatDatetime(doc.id, (doc.data()))));
+        return successMessage(res, result.docs.map(doc => formatDestinationDates(doc.id, (doc.data()))));
     } else
         return errorMessage(res, 'Itinerary not found');
 }
@@ -58,7 +58,7 @@ const getItinerary = async (req, res) => {
         if (!result.members.includes(req.user))
             return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
-        return successMessage(res, formatDatetime(req.params.itineraryID, result));
+        return successMessage(res, formatDestinationDates(req.params.itineraryID, result));
     } else
         return errorMessage(res, 'Itinerary not found');
 }
@@ -70,33 +70,38 @@ const getItinerary = async (req, res) => {
  * @returns {Promise<void>}
  */
 const createItinerary = async (req, res) => {
+    console.log(req.user);
+
     //User attempting to access another user profile
     if (req.params.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    const dates = Object.keys(req.body.destinations);
 
     //Creates the itinerary document
     const userID = req.user
     const data = {
         location: req.body.location,
-        state: StateEnum.INACTIVE,
         destinations: req.body.destinations,
+        state: StateEnum.INACTIVE,
         members: [userID],
         memberInfo: {}
     }
-    data.memberInfo[userID] = {displayName: req.displayName, review: 0};
+    data.memberInfo[userID] = {displayName: req.body.displayName, review: 0};
     const batch = transaction();
     const itDocRef = itineraryStore.doc();
     batch.create(itDocRef, data);
 
     //Updating the user document
     const userDocRef = await userStore.where('userID', '==', req.user).get();
-    const itineraries = {
-        [itDocRef.id]: {
+
+    batch.update(userDocRef.docs[0]._ref, {[`itineraries.${itDocRef.id}`]: {
             location: req.body.location,
-            state: StateEnum.INACTIVE
-        }
-    };
-    batch.update(userDocRef.docs[0]._ref, {itineraries})
+            state: StateEnum.INACTIVE,
+            startDate: new Date(dates[0]),
+            endDate: new Date(dates.at(-1)),
+            image: req.body.image,
+        }});
 
     //Writing the commits to the firestore
     await batch.commit();

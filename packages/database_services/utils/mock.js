@@ -33,13 +33,13 @@ const generateItineraryMock = params => {
     return {
         location: params.location,
         state: params.state,
-        destinations: [
-            {
-                arrivalDatetime: new Date('2021-10-12T03:20'),
-                departureDatetime: new Date('2021-10-12T05:20'),
+        destinations: {
+            [new Date('2021-10-12T03:20')]: {
+                arrival: new Date('2021-10-12T03:20'),
+                departure: new Date('2021-10-12T05:20'),
                 place_id: 'p'
             }
-        ],
+        },
         members: params.members,
         memberInfo: {
             [`${params.members[0]}`]: {

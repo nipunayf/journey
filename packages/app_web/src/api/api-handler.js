@@ -29,10 +29,12 @@ export default class APIHandler {
     /**
      * axios get request
      * @param url
+     * @param setUser - sets the user ID to the url
      * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async getRequest(url, output = 'results') {
+    async getRequest(url, setUser=false, output = 'results') {
+        if (setUser) url = setUserID(url);
         try {
             let response = await this.instance.get(url);
             return generateSuccessOutput(response, output);
@@ -45,10 +47,12 @@ export default class APIHandler {
      * axios post request
      * @param url
      * @param data
+     * @param setUser - sets the user ID to the url
      * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async postRequest (url, data, output = 'result') {
+    async postRequest (url, data, setUser=false, output = 'results') {
+        if (setUser) url = setUserID(url);
         try {
             let response = await this.instance.post(url, data);
             return generateSuccessOutput(response ,output);
@@ -61,11 +65,12 @@ export default class APIHandler {
      * axios put request
      * @param url
      * @param data - optional
+     * @param setUser - sets the user ID to the url
      * @param headers
      * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async putRequest (url, data, headers = {}, output = 'result') {
+    async putRequest (url, data, setUser=false, headers = {}, output = 'results') {
         try {
             let response = (data) ? await this.instance.put(url, data, headers) : await this.instance.put(url, headers);
             return generateSuccessOutput(response, output);
@@ -77,10 +82,11 @@ export default class APIHandler {
     /**
      * axios delete request
      * @param url
+     * @param setUser - sets the user ID to the url
      * @param output
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
-    async deleteRequest (url, output = 'result') {
+    async deleteRequest (url, setUser=false, output = 'results') {
         try {
             let response = await this.instance.delete(url);
             return generateSuccessOutput(response, output);
@@ -125,11 +131,23 @@ const generateErrorOutput = (error) => {
         }
 }
 
+/**
+ * Attaches the userID to the url
+ * @param url
+ * @return {string}
+ */
+const setUserID = url => {
+    const userID = localStorage.getItem('userID');
+    return `/users/${userID}/`+ url;
+}
+
 const databaseServices = new APIHandler(BaseURLEnum.DATABASE_SERVICE)
 const mapsServices = new APIHandler(BaseURLEnum.GOOGLE_MAPS)
+const wikiServices = new APIHandler(BaseURLEnum.WIKIPEDIA)
 
 export {
     databaseServices,
-    mapsServices
+    mapsServices,
+    wikiServices
 }
 

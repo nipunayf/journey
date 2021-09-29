@@ -17,7 +17,8 @@ Object.freeze(StateEnum);
  */
 const BaseURLEnum = {
     DATABASE_SERVICE: 'http://localhost:5000/',
-    GOOGLE_MAPS: 'https://maps.googleapis.com/maps/api/'
+    GOOGLE_MAPS: 'https://maps.googleapis.com/maps/api/',
+    WIKIPEDIA: 'https://en.wikipedia.org/api/rest_v1/'
 }
 Object.freeze(BaseURLEnum);
 

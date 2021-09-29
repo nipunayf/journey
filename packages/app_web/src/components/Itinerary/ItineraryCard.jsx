@@ -13,6 +13,14 @@ export default function ItineraryCard({state}) {
         endDate: "30th December 2021"
     }
 
+    const onViewMore = () => {
+        //fetch itinerary from the database
+
+
+        //route to itinerary page
+        // history.push('/itinerary')
+    }
+
     const height = 370
     const width = 320
     return (
@@ -47,7 +55,7 @@ export default function ItineraryCard({state}) {
                 <Box ml={2} fontSize={14} fontColor={'grey.700'}>
                     {`${property.startDate} ${String.fromCodePoint(parseInt('2192', 16))} ${property.endDate}`}
                 </Box>
-                <Button colorScheme="blue" size="sm" variant="outline" mt={3} ml={width / 2} onClick={() => history.push('/itinerary')}>
+                <Button colorScheme="blue" size="sm" variant="outline" mt={3} ml={width / 2} onClick={onViewMore}>
                     View Itinerary
                 </Button>
             </Box>

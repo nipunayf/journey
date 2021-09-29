@@ -54,9 +54,6 @@ export default function NewDestination({displayName, profilePic}) {
                         <Link/>
                     </InputGroup>
                     <VStack w={"100%"} spacing={4} align={'left'} overflowY={'auto'} maxH={400} pt={10}>
-                        <DestinationHorizontal isSelected/>
-                        <DestinationHorizontal />
-                        <DestinationHorizontal />
                     </VStack>
                 </ModalBody>
             </ModalContent>

@@ -5,17 +5,15 @@ import {useState} from "react";
 import {getPlacePhoto} from "../../api/maps-api";
 import {formatTime} from "../../utils/date-format";
 
-export default function DestinationHorizontal({isRemove, info}) {
+export default function DestinationHorizontal({isRemove, info, date}) {
     const height = 120
     const width = 520
-
-
     const [isSelected, select] = useState(false);
 
     return (
         <HStack borderWidth={isSelected ? "3px" : "1px"} borderRadius="lg" minW={width} maxW={width} minH={height} maxH={height} boxShadow="xl"
-                justifyItems={'left'} overflow={'hidden'} pr={4} borderColor={isSelected ? 'secondary.main' : 'grey.700'}>
-            <Image src={getPlacePhoto(info.image)} alt={info.title} htmlWidth={180} htmlHeight={180}/>
+                justifyItems={'left'} overflow={'hidden'} pr={4} borderColor={isSelected ? 'secondary.main' : 'grey.700'} overflow={'hidden'}>
+            <Image src={getPlacePhoto(info.image)} alt={info.name} maxW={180} minH={height} />
             <VStack alignItems={'left'} spacing={1}>
                 <Heading pb={1.5} size={'sm'}>
                     {info.name}
@@ -30,6 +28,7 @@ export default function DestinationHorizontal({isRemove, info}) {
                 info={info}
                 isRemove={isRemove}
                 select={select}
+                date={date}
             />
         </HStack>
     );

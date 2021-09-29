@@ -6,7 +6,7 @@ const {
     updateItinerary,
     deleteItinerary
 } = require('../../controllers/itineraries-controller');
-const {formatDatetime} = require('../../utils/format');
+const {formatDestinationDates, formatUserDates} = require('../../utils/format');
 const {StateEnum} = require('../../utils/constants');
 const {
     generateReqMock,
@@ -152,13 +152,15 @@ describe('Create a new itinerary', function () {
         init();
         body = {
             location: 'Kandy',
-            destinations: [
-                {
-                    arrivalDatetime: new Date('2021-10-12T03:20'),
-                    departureDatetime: new Date('2021-10-12T05:20'),
+            destinations: {
+                [new Date('2021-10-12T03:20')]: {
+                    arrival: new Date('2021-10-12T03:20'),
+                    departure: new Date('2021-10-12T05:20'),
                     place_id: 'p'
                 }
-            ]
+            },
+            image: 'some-image',
+            displayName: 'Kumar Sangakkara'
         };
         await userStore.add({
             displayName: 'Kumar Sangakkara',
@@ -181,8 +183,7 @@ describe('Create a new itinerary', function () {
     //The default values must be set for new itineraries (state - INACTIVE, memberInfo, members)
     it('should update the firestore database', async function () {
         const result = await createItinerary(generateReqMock({
-            body,
-            displayName: 'Kumar Sangakkara'
+            body
         }), res);
 
         //Obtains the created itinerary from the firestore
@@ -191,25 +192,7 @@ describe('Create a new itinerary', function () {
         try {
             //Checks if the output of the function is correct
             expect(dbResult.id).toBe(result.results);
-            expectPropertyInArray([formatDatetime(result.results, dbResult.data())], {
-                location: 'Kandy',
-                state: StateEnum.INACTIVE,
-                destinations: [
-                    {
-                        arrivalDatetime: new Date('2021-10-12T03:20'),
-                        departureDatetime: new Date('2021-10-12T05:20'),
-                        place_id: 'p'
-                    }
-                ],
-                id: result.results,
-                members: ['a'],
-                memberInfo: {
-                    a: {
-                        displayName: 'Kumar Sangakkara',
-                        review: 0
-                    }
-                }
-            })
+            expect(dbResult.data()).toMatchSnapshot();
         } finally {
             await removeItinerary(result.results)
         }
@@ -218,8 +201,7 @@ describe('Create a new itinerary', function () {
     //Userstore must be updated with the new itinerary
     it('should update user store', async function () {
         const result = await createItinerary(generateReqMock({
-            body,
-            displayName: 'Kumar Sangakkara'
+            body
         }), res);
 
         //Obtain the user document from the firestore
@@ -231,7 +213,13 @@ describe('Create a new itinerary', function () {
             }
         };
         try {
-            expectPropertyInArray([userDoc.docs[0].data().itineraries], expected)
+            expect(formatUserDates(userDoc.docs[0].data()).itineraries[result.results]).toMatchObject({
+                image: "some-image",
+                location: "Kandy",
+                state: 1,
+                startDate: new Date('2021-10-12T03:20'),
+                endDate: new Date('2021-10-12T03:20'),
+            })
         } finally {
             await removeItinerary(result.results);
         }
@@ -273,32 +261,32 @@ describe('Update an itinerary', function () {
         const result = await updateItinerary(generateReqMock({
             itineraryID: itKandyID,
             body: {
-                destinations: [
-                    {
-                        arrivalDatetime: new Date('2021-10-12T03:20'),
-                        departureDatetime: new Date('2021-10-12T05:20'),
+                destinations: {
+                    [new Date('2021-10-12T03:20')]: {
+                        arrival: new Date('2021-10-12T03:20'),
+                        departure: new Date('2021-10-12T05:20'),
                         place_id: 'p'
                     },
-                    {
-                        arrivalDatetime: new Date('2021-10-12T08:20'),
-                        departureDatetime: new Date('2021-10-12T09:20'),
+                    [new Date('2021-10-12T08:20')]: {
+                        arrival: new Date('2021-10-12T08:20'),
+                        departure: new Date('2021-10-12T09:20'),
                         place_id: 'q'
                     }
-                ]
+                }
             }
         }), res);
 
         try {
             expect(result.results).toBeTruthy();
             const dbResult = await itineraryStore.doc(itKandyID).get();
-            expect(formatDatetime(itKandyID, dbResult.data()).destinations).toContainEqual({
-                arrivalDatetime: new Date('2021-10-12T03:20'),
-                departureDatetime: new Date('2021-10-12T05:20'),
+            expect(formatDestinationDates(itKandyID, dbResult.data()).destinations[new Date('2021-10-12T03:20')]).toStrictEqual({
+                arrival: new Date('2021-10-12T03:20'),
+                departure: new Date('2021-10-12T05:20'),
                 place_id: 'p'
             });
-            expect(formatDatetime(itKandyID, dbResult.data()).destinations).toContainEqual({
-                arrivalDatetime: new Date('2021-10-12T08:20'),
-                departureDatetime: new Date('2021-10-12T09:20'),
+            expect(formatDestinationDates(itKandyID, dbResult.data()).destinations[new Date('2021-10-12T08:20')]).toStrictEqual({
+                arrival: new Date('2021-10-12T08:20'),
+                departure: new Date('2021-10-12T09:20'),
                 place_id: 'q'
             });
         } finally {

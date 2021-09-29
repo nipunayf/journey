@@ -21,7 +21,8 @@ describe('Getting an existing user', function () {
             email: 'sanga@test.com',
             userID: 'a',
             preferences: [0, 0, 0, 0, 0],
-            isDeleted: 0
+            isDeleted: 0,
+            itineraries: {}
         })
     });
 
@@ -179,13 +180,13 @@ describe('Updating an existing user', function () {
         const itKandyID = await itineraryStore.add({
             location: 'Kandy',
             state: 1,
-            destinations: [
-                {
-                    arrivalDatetime: new Date('2021-10-12T03:20'),
-                    departureDatetime: new Date('2021-10-12T05:20'),
+            destinations: {
+                [new Date('2021-10-12T03:20')]: {
+                    arrival: new Date('2021-10-12T03:20'),
+                    departure: new Date('2021-10-12T05:20'),
                     place_id: 'p'
                 }
-            ],
+            },
             members: ['c'],
             memberInfo: {
                 c: {

@@ -12,4 +12,3 @@ export const formatTime = timeString => {
 
     return dateObj.toLocaleTimeString('en-us',timeOptions);
 }
-

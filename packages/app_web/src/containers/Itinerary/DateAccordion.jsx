@@ -15,7 +15,7 @@ export default function DateAccordion({date, destinations}) {
             </h2>
             <AccordionPanel pb={4}>
                 <VStack spacing={5}>
-                    {destinations.map(destination => <DestinationHorizontal info={destination} id={destination.placeID} isRemove/>)}
+                    {destinations.map(destination => <DestinationHorizontal info={destination} id={destination.placeID} isRemove date={date}/>)}
                 </VStack>
             </AccordionPanel>
         </AccordionItem>

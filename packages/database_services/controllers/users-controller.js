@@ -1,6 +1,7 @@
 const {userStore, itineraryStore, transaction} = require('../config/firebase');
 const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
+const {formatUserDates} = require("../utils/format");
 
 /**
  * Returns a user for given ID
@@ -17,7 +18,7 @@ const getUser = async (req, res) => {
     const result = await userStore.where('userID', '==', req.user).where('isDeleted', '==', 0).get();
 
     if (result.size > 0) //document found in firestore
-        return successMessage(res, result.docs[0].data(0))
+        return successMessage(res, formatUserDates(result.docs[0].data(0)))
     else //document not found
         return errorMessage(res, 'User not found', 404)
 }
