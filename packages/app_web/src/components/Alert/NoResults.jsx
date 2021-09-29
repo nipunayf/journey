@@ -3,9 +3,9 @@ import {
     AlertIcon,
 } from "@chakra-ui/react"
 
-const NoResults = ({message}) => {
+const NoResults = ({height = 20, message}) => {
     return (
-        <Alert status="info" borderRadius="1rem" minH={20} w="100%" minWidth="350px">
+        <Alert status="info" borderRadius="1rem" minH={height} w="100%" minWidth="350px">
             <AlertIcon />
             {message}
         </Alert>

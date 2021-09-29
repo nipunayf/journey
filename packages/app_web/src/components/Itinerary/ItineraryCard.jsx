@@ -1,17 +1,11 @@
 import {Badge, Box, Button, HStack, Image, Text} from "@chakra-ui/react";
 import {useHistory} from "react-router-dom";
 import Status from "./Status";
+import {getPlacePhoto} from "../../api/maps-api";
+import {formatDate} from "../../utils/date-format";
 
-export default function ItineraryCard({state}) {
+export default function ItineraryCard({info}) {
     const history = useHistory()
-
-    const property = {
-        imageUrl: "https://bit.ly/2Z4KKcF",
-        days: 3,
-        title: "Kandy",
-        startDate: "27th December 2021",
-        endDate: "30th December 2021"
-    }
 
     const onViewMore = () => {
         //fetch itinerary from the database
@@ -21,15 +15,16 @@ export default function ItineraryCard({state}) {
         // history.push('/itinerary')
     }
 
-    const height = 370
-    const width = 320
+    const IMAGE_HEIGHT = 220
+    const BOX_WIDTH = 320
+    const BOX_HEIGHT = 370
     return (
-        <Box borderWidth="1px" borderRadius="lg" w={width} h={height} boxShadow="xl" minW={width}>
-            <Image src={property.imageUrl} alt={property.title} htmlWidth={width} htmlHeight={height}/>
+        <Box borderWidth="1px" borderRadius="lg" maxW={BOX_WIDTH} minH={BOX_HEIGHT} maxH={BOX_HEIGHT} boxShadow="xl" minW={BOX_WIDTH} overflow={'hidden'}>
+            <Image src={getPlacePhoto(info.image)} alt={info.location} minW={BOX_WIDTH} maxH={IMAGE_HEIGHT} minH={IMAGE_HEIGHT}/>
 
             <Box py="6" px={2}>
                 <Box d="flex" alignItems="baseline">
-                    <Status state={state} />
+                    <Status state={info.state} />
                     <Box
                         color="gray.500"
                         fontWeight="semibold"
@@ -38,7 +33,7 @@ export default function ItineraryCard({state}) {
                         textTransform="uppercase"
                         ml="2"
                     >
-                        {property.days} days
+                        1 days
                     </Box>
                 </Box>
 
@@ -50,12 +45,12 @@ export default function ItineraryCard({state}) {
                     isTruncated
                     ml={2}
                 >
-                    {property.title}
+                    {info.location}
                 </Box>
                 <Box ml={2} fontSize={14} fontColor={'grey.700'}>
-                    {`${property.startDate} ${String.fromCodePoint(parseInt('2192', 16))} ${property.endDate}`}
+                    {`${formatDate(info.startDate)} ${String.fromCodePoint(parseInt('2192', 16))} ${formatDate(info.endDate)}`}
                 </Box>
-                <Button colorScheme="blue" size="sm" variant="outline" mt={3} ml={width / 2} onClick={onViewMore}>
+                <Button colorScheme="blue" size="sm" variant="outline" mt={3} ml={BOX_WIDTH / 2} onClick={onViewMore}>
                     View Itinerary
                 </Button>
             </Box>

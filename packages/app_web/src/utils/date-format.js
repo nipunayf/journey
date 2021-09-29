@@ -12,3 +12,10 @@ export const formatTime = timeString => {
 
     return dateObj.toLocaleTimeString('en-us',timeOptions);
 }
+
+export const formatDate = (dateString, isShortDate = false) => {
+    const longOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+    const shortOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+
+    return new Date(dateString).toLocaleDateString("en-US", shortOptions)
+}
