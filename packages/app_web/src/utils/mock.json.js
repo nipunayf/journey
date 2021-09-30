@@ -951,7 +951,13 @@ const destinations = {
 }
 
 const processedDestinations = destinations.results.map(object => {
-    const filtered = (({rating, place_id, photos, name}) => ({rating, place_id, photos, name}))(object)
+    const filtered = (({rating, place_id, photos, geometry, name}) => ({
+        rating,
+        place_id,
+        photos,
+        geometry,
+        name
+    }))(object)
     filtered.image = filtered.photos[0].photo_reference
     delete filtered['photos'];
     return filtered
@@ -969,7 +975,7 @@ function makeID(length) {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
-    for (let i = 0; i < length; i++ ) {
+    for (let i = 0; i < length; i++) {
         result += characters.charAt(Math.floor(Math.random() *
             charactersLength));
     }
@@ -991,12 +997,12 @@ const generateItinerary = (values) => {
     itinerary.image = pickedDestination.image;
     itinerary.destinations = {};
 
-    let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
+    let options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
 
     const dates = [];
     let loop = new Date(values.startDate)
     let endDate = new Date(values.endDate)
-    while(loop <= endDate){
+    while (loop <= endDate) {
         dates.push(loop.toLocaleDateString("en-US", options));
         const newDate = loop.setDate(loop.getDate() + 1);
         loop = new Date(newDate);
@@ -1014,6 +1020,7 @@ const generateItinerary = (values) => {
                     placeID: randomDest.place_id,
                     name: randomDest.name,
                     image: randomDest.image,
+                    geometry: randomDest.geometry.location,
                     rating: randomDest.rating,
                     arrival: times[i][0],
                     departure: times[i][1]
@@ -1026,6 +1033,7 @@ const generateItinerary = (values) => {
         placeID: pickedDestination.place_id,
         name: pickedDestination.name,
         image: pickedDestination.image,
+        geometry: pickedDestination.geometry.location,
         rating: pickedDestination.rating,
         arrival: '08:00',
         departure: '09:30'

@@ -126,7 +126,7 @@ const generateErrorOutput = (error) => {
         return {
             error: error,
             title: error.message,
-            code: error.response.status,
+            code: error.response? error.response.status : 400,
             message: "Cannot connect to the server"
         }
 }

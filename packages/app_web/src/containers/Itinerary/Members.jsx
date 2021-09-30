@@ -21,6 +21,7 @@ function Members({displayName, profilePic, email}) {
         <Button
             leftIcon={<MdGroup />}
             bg={'secondary.light'}
+            size={'sm'}
             color={'white'}
             onClick={onOpen}
             _hover={{bg: 'blue.500'}}>

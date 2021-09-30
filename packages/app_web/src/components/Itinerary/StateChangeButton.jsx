@@ -8,6 +8,7 @@ export default function StateChangeButton({state}) {
             return <Button
                 leftIcon={<MdPlayArrow />}
                 bg={'green.400'}
+                size={'sm'}
                 color={'white'}
                 onClick={() => {}}
                 _hover={{bg: 'green.500'}}>
@@ -18,6 +19,7 @@ export default function StateChangeButton({state}) {
             return <Button
                 leftIcon={<MdPlayArrow />}
                 bg={'green.400'}
+                size={'sm'}
                 color={'white'}
                 onClick={() => {}}
                 isDisabled
@@ -29,6 +31,7 @@ export default function StateChangeButton({state}) {
             return <Button
                 leftIcon={<MdHighlightOff />}
                 bg={'red.400'}
+                size={'sm'}
                 color={'white'}
                 onClick={() => {}}
                 _hover={{bg: 'red.500'}}>
@@ -39,6 +42,7 @@ export default function StateChangeButton({state}) {
             return <Button
                 leftIcon={<MdRateReview />}
                 bg={'secondary.light'}
+                size={'sm'}
                 color={'white'}
                 onClick={() => {}}
                 _hover={{bg: 'blue.500'}}>

@@ -52,13 +52,12 @@ const getItinerary = async (req, res) => {
     let result = await itineraryStore.doc(req.params.itineraryID).get();
 
     if (result._fieldsProto) { //Document found in fire store
-        result = result.data();
+        result = formatDestinationDates(req.params.itineraryID, result.data());
 
         //Check if the user is a member of the itinerary
         if (!result.members.includes(req.user))
             return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
-        console.log(result.destinations);
         return successMessage(res, {...result, id: req.params.itineraryID});
     } else
         return errorMessage(res, 'Itinerary not found');

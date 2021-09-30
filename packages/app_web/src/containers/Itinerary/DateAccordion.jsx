@@ -2,7 +2,7 @@ import {AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, VSta
 import DestinationHorizontal from "../../components/Destination/DestinationHorizontal";
 
 
-export default function DateAccordion({date, destinations}) {
+export default function DateAccordion({date, destinations, onHover}) {
     return(
         <AccordionItem>
             <h2>
@@ -15,7 +15,7 @@ export default function DateAccordion({date, destinations}) {
             </h2>
             <AccordionPanel pb={4}>
                 <VStack spacing={5}>
-                    {destinations.map(destination => <DestinationHorizontal info={destination} id={destination.placeID} isRemove date={date}/>)}
+                    {destinations.map(destination => <DestinationHorizontal info={destination} id={destination.placeID} isRemove date={date} onHover={onHover}/>)}
                 </VStack>
             </AccordionPanel>
         </AccordionItem>

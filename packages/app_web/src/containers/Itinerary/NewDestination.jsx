@@ -21,6 +21,7 @@ export default function NewDestination({displayName, profilePic}) {
         <Button
             leftIcon={<AddIcon />}
             bg={'green.400'}
+            size={'sm'}
             color={'white'}
             onClick={onOpen}
             _hover={{bg: 'green.500'}}>
