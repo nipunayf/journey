@@ -31,7 +31,7 @@ export default function ItineraryCard({info}) {
     const BOX_HEIGHT = 370
     return (
         <Box borderWidth="1px" borderRadius="lg" maxW={BOX_WIDTH} minH={BOX_HEIGHT} maxH={BOX_HEIGHT} boxShadow="xl" minW={BOX_WIDTH} overflow={'hidden'}>
-            <Image src={getPlacePhoto(info.image)} alt={info.location} minW={BOX_WIDTH} maxH={IMAGE_HEIGHT} minH={IMAGE_HEIGHT}/>
+            <Image src={getPlacePhoto(info.image)} alt={info.location} minW={BOX_WIDTH} maxH={IMAGE_HEIGHT} minH={IMAGE_HEIGHT} fallbackSrc='placeholder.jpg'/>
             <Box py="6" px={2}>
                 <Box d="flex" alignItems="baseline">
                     <Status state={info.state} />

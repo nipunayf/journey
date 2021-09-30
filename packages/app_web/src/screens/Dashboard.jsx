@@ -65,7 +65,6 @@ function Dashboard({itineraries}) {
                                                                   message={'You do not have any itineraries at the moment. Start creating a new itinerary by searching a destination'}/>
             : <>
                 <Box py={10}/>
-                <CreateItinerary/>
                 <ItineraryContainer title={'Continue planning'} children={inactiveItineraries}/>
                 <ItineraryContainer title={'Fix these'} children={incompatibleItineraries}/>
                 <ItineraryContainer title={'Be ready for'} children={activeItineraries}/>

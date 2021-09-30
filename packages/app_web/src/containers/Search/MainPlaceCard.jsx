@@ -48,7 +48,7 @@ export default function MainPlaceCard(props) {
                     boxShadow={"sm"}
                     bg={'grey.200'}
                     _hover={'lg'}>
-                    <Image h="400px" objectFit={"cover"} src={img} alt={name}/>
+                    <Image h="400px" objectFit={"cover"} src={img} alt={name} fallbackSrc='placeholder.jpg'/>
                     <Box p={5}>
                         <Stack isInline align={"baseline"}>
                             {types.map((object) => <Badge variant={"solid"} rounded={"full"} px={2}>{object}</Badge>)}

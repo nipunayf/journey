@@ -73,7 +73,7 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
                 </DrawerHeader>
                 <DrawerBody align={'center'}>
                     <Image borderWidth="1px" borderRadius="lg" src={getPlacePhoto(info.image)} alt={info.name} pb={3}
-                           minW={width} maxW={width} minH={height} maxH={height}/>
+                           minW={width} maxW={width} minH={height} maxH={height} fallbackSrc='placeholder.jpg'/>
                     <HStack>
                         <Heading size={'sm'} mr={4}>Date: </Heading>
                         <DatePicker

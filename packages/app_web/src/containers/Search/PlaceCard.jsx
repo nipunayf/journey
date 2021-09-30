@@ -24,7 +24,7 @@ export default function PlaceCard(props) {
     return (
         <Box borderWidth="1px" borderRadius="lg" maxW={BOX_WIDTH} minH={BOX_HEIGHT} maxH={BOX_HEIGHT} boxShadow="xl"
              minW={BOX_WIDTH} overflow={'hidden'}>
-            <Image src={image} alt={name} minW={BOX_WIDTH} maxH={IMAGE_HEIGHT} minH={IMAGE_HEIGHT}/>
+            <Image src={image} alt={name} minW={BOX_WIDTH} maxH={IMAGE_HEIGHT} minH={IMAGE_HEIGHT} fallbackSrc='placeholder.jpg'/>
             <Box py="6" px={2}>
                 <Box d="flex" alignItems="baseline">
                     <Text as={'h4'} fontSize={'sm'} fontWeight={'semibold'}>
