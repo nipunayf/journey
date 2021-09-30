@@ -10,9 +10,9 @@ export default function Search() {
     const [nearby, setNearby] = useState([1]);
     const [placeDetails, setDetails] = useState('');
 
-    useEffect(() => {
-        getDetails(placeId);
-    }, []);
+    useEffect(async () => {
+        await getDetails(placeId);
+    }, [nearby]);
 
     const location = useLocation();
 
@@ -61,7 +61,6 @@ export default function Search() {
             <Flex>
                 <SimpleGrid columns={{base: 1, md: 2, lg: 4}} spacing={10} pt={5} px={5} pb={4}>
                     {nearby.map((object) => <PlaceCard {...object}/>)}
-
                 </SimpleGrid>
             </Flex>
         </div>
