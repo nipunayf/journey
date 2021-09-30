@@ -12,11 +12,6 @@ export default function GoogleMaps({markers, defaultMarker}) {
                 center={defaultMarker.geometry}
                 defaultZoom={16}
             >
-                {/*{markers.map(marker => <MapMarker*/}
-                {/*    id={marker.id}*/}
-                {/*    lat={marker.geometry.lat}*/}
-                {/*    lng={marker.geometry.lng}*/}
-                {/*    isSelected={marker.geometry === defaultMarker.geometry}/>)}*/}
 
                 {markers.map(marker => {
                     console.log(defaultMarker)

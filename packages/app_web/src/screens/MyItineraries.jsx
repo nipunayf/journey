@@ -17,7 +17,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../components/Destination/datepicker.css';
 import {useState} from "react";
 import Navbar from "../containers/Navbar/Navbar";
-import ItineraryCard from "../components/Itinerary/ItineraryCard";
+import NoResultsSplash from "../components/Alert/NoResultsSplash";
 
 function SearchBar() {
     const [dateRange, setDateRange] = useState([null, null]);
@@ -39,12 +39,6 @@ function SearchBar() {
                     // value={keyword}
                     // onKeyPress={((e) => {if (e.key === 'Enter' && keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')}}).bind(this)}
                 />
-                <IconButton
-                    icon={<Search2Icon/>}
-                    // onClick={() => { if (keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')} }}
-                    bg="secondary.light"
-                    color="white"/>
-                <Link/>
             </InputGroup>
             <Spacer/>
             <HStack>
@@ -70,17 +64,20 @@ function SearchBar() {
                     <option value="5">Reviewed</option>
                 </Select>
             </HStack>
+            <Spacer />
+            <IconButton
+                icon={<Search2Icon/>}
+                // onClick={() => { if (keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')} }}
+                bg="secondary.light"
+                color="white"/>
+            <Link/>
         </HStack>
     );
 }
 
 function ItineraryContainer() {
     return(
-        <SimpleGrid columns={{sm: 1, md: 2, lg: 3}} spacing="40px">
-            <ItineraryCard/>
-            <ItineraryCard/>
-            <ItineraryCard/>
-            <ItineraryCard/>
+        <SimpleGrid columns={{sm: 1, md: 2, lg: 3}} spacing="40px" pb={5} pt={8}>
         </SimpleGrid>
     );
 }
@@ -88,9 +85,10 @@ function ItineraryContainer() {
 export default function MyItineraries() {
     return (<>
         <Navbar />
-        <VStack pt={20} align={'center'} w={'100%'} spacing={8} pb={5}>
+        <VStack pt={20} align={'center'} w={'100%'}>
             <SearchBar/>
-            <ItineraryContainer />
+            {/*<ItineraryContainer />*/}
+            <NoResultsSplash message={'Enter valid keywords'}/>
         </VStack>
     </>);
 }

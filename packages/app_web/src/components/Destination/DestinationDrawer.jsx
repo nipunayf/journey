@@ -21,7 +21,7 @@ import DatePicker from 'react-datepicker';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import './datepicker.css';
-import {getDescription, getPlacePhoto} from "../../api/maps-api";
+import {getPlaceDescription, getPlacePhoto} from "../../api/maps-api";
 
 export default function DestinationDrawer({info, isRemove, select, date}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -34,7 +34,7 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
 
     //fetches the description when the component mounts
     useEffect(async () => {
-        const result = await getDescription(info.name);
+        const result = await getPlaceDescription(info.name);
         if (result.data) {
             setDescription(result.data);
         } else {

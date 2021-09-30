@@ -1,13 +1,11 @@
 import {
     Avatar,
-    Badge,
     Button,
     Flex,
     Grid,
     GridItem,
     HStack,
     IconButton,
-    Image,
     Input,
     InputGroup,
     InputLeftElement,
@@ -33,6 +31,7 @@ import {useHistory} from 'react-router-dom';
 import * as actions from '../../store/actions';
 import {connect} from "react-redux";
 import NoResults from "../../components/Alert/NoResults";
+import SearchBar from "./SearchBar";
 
 const NotificationPopover = () => {
     return (
@@ -105,41 +104,22 @@ function Navbar({isAuthenticated, onLogout, firstName, lastName, profilePic}) {
                     bgColor={'primary.main'}
                     w={120}
                     h={55}
-                    _hover={{color: 'primary.dark', opacity:0.4}}
+                    _hover={{color: 'primary.dark', opacity: 0.4}}
                     onClick={() => {
                         history.push('/')
                     }}/>
         </GridItem>
         <GridItem colStart={5} colEnd={9}>
-            <InputGroup pt={1}>
-                <InputLeftElement
-                    pointerEvents="none"
-                    children={<Search2Icon color="white.100"/>}
-                    pt={2}
-                />
-                <Input
-                    type="search"
-                    placeholder="Search Destinations"
-                    isRequired
-                    // onChange={((e) => {setKeyword(e.target.value)}).bind(this)}
-                    // value={keyword}
-                    // onKeyPress={((e) => {if (e.key === 'Enter' && keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')}}).bind(this)}
-                />
-                <IconButton
-                    icon={<Search2Icon/>}
-                    // onClick={() => { if (keyword.length !== 0) {history.push(`/search/${keyword}`, { keyword: keyword }); setKeyword('')} }}
-                    bg="secondary.light"
-                    color="white"/>
-                <Link/>
-            </InputGroup>
+            <SearchBar />
         </GridItem>
         {
             isAuthenticated ?
                 <><GridItem colStart={11} colEnd={12} pt={1.5} justifySelf={'center'}>
-                    <NotificationPopover />
+                    <NotificationPopover/>
                 </GridItem>
                     <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'} pt={1.5}>
-                        <UserAvatar firstName={firstName} lastName={lastName} logout={onLogout} profilePic={profilePic}/>
+                        <UserAvatar firstName={firstName} lastName={lastName} logout={onLogout}
+                                    profilePic={profilePic}/>
                     </GridItem></> :
                 <GridItem colStart={12} colEnd={14} color="white" alignItems={'center'} pt={1.5}>
                     <Button
