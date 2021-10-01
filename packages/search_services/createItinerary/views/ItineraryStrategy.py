@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-import RuleBasedItinerary
+from . import RuleBasedItinerary
 
 
 class ItineraryStrategy(APIView):

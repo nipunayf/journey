@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-4#a7xbpt$6!s!2plx=t)pad$ljay##@p&59$p2ej%s2bc_*#)(
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -40,7 +38,6 @@ INSTALLED_APPS = [
     'createItinerary.apps.CreateitineraryConfig',
     'rest_framework',
     'corsheaders',
-    'createItinerary'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +76,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'search_services.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -89,7 +85,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -129,7 +124,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -137,5 +131,8 @@ STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+# GOOGLE API KEY
+GOOGLE_API_KEY = 'AIzaSyATku-yiZOrGTDU50boXfuwX14EH88S1b0'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
