@@ -6,18 +6,20 @@ import {getPlaceDescription} from '../../api'
 export default function MainPlaceCard(props) {
     const [description, setDescription] = useState('');
 
-    useEffect(() => {
-        getDescription(name);
-    }, [])
-
     console.log('Main placeDetails are: ', props.name);
 
     const img = props.image ? props.image : 'https://www.couponraja.in/theroyale/wp-content/uploads/2017/12/cover-10-most-beautiful-places-in-sri-lanka-explore-the-emerald-island-632x480.jpg'
-    const name = props.name ? props.name : "No Name"
 
+    const name = props.name ? props.name : "No Name"
     const types = props.placeDetails.types ? props.placeDetails.types : ['attraction'];
+
     const rating = props.placeDetails.rating ? Math.round(props.placeDetails.rating) : 0;
     const user_ratings_total = props.placeDetails.user_ratings_total ? props.placeDetails.user_ratings_total : '0';
+
+    useEffect(async () => {
+        await getDescription(name);
+    }, [name])
+
 
     async function getDescription(name) {
         const description = await getPlaceDescription(name);
