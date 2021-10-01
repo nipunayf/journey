@@ -55,7 +55,7 @@ export default function PlaceCard(props) {
                 <Box ml={2} fontSize={14} fontColor={'grey.700'}>
                     <Rating number={rating}/>
                 </Box>
-                <CreateItinerary />
+                <CreateItinerary info={props} />
             </Box>
         </Box>
     )

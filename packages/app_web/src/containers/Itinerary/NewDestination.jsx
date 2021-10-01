@@ -20,11 +20,11 @@ export default function NewDestination({displayName, profilePic}) {
     return (<>
         <Button
             leftIcon={<AddIcon />}
-            bg={'green.400'}
+            bg={'secondary.light'}
             size={'sm'}
             color={'white'}
             onClick={onOpen}
-            _hover={{bg: 'green.500'}}>
+            _hover={{bg: 'blue.500'}}>
             Destination
         </Button>
         <Modal onClose={onClose} size={'md'} isOpen={isOpen}>

@@ -16,8 +16,8 @@ export default function MainPlaceCard(props) {
     const rating = props.placeDetails.rating ? Math.round(props.placeDetails.rating) : 0;
     const user_ratings_total = props.placeDetails.user_ratings_total ? props.placeDetails.user_ratings_total : '0';
 
-    useEffect(async () => {
-        await getDescription(name);
+    useEffect(() => {
+        getDescription(name);
     }, [name])
 
 

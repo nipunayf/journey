@@ -11,20 +11,10 @@ import {connect} from "react-redux";
 import generateItinerary from "../../utils/mock.json";
 import {useHistory} from "react-router-dom";
 
-function CreateItinerary({preferences}) {
+function CreateItinerary({preferences, info}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [screen, setScreen] = useState(0);
     const history = useHistory();
-
-    const property = {
-        imageUrl: "https://bit.ly/2Z4KKcF",
-        name: 'Peradeniya Botanical Garden',
-        date: 'October 29, 2021',
-        arrival: '8:00am',
-        departure: '10:00am',
-        description: 'Royal Botanic Gardens, Peradeniya are about 5.5 km to the west of the city of Kandy in the Central Province of Sri Lanka. In 2016, the garden was visited by 1.2 million locals and 400,000 foreign visitors. It is near the Mahaweli River. It is renowned for its collection of orchids',
-        ratings: 4.6,
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -61,7 +51,7 @@ function CreateItinerary({preferences}) {
             <ModalOverlay/>
             <ModalContent minW={600} minH={500}>
                 {screen === 0 ?
-                    <ReserveDatesModal destinationName={property.name} setScreen={setScreen} parentFormik={formik}/> :
+                    <ReserveDatesModal destinationName={info.name} setScreen={setScreen} parentFormik={formik}/> :
                     screen === 1 ?
                         <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen} onClose={onClose}/> :
                         <AddMembersModal setScreen={setScreen} parentFormik={formik}/>}

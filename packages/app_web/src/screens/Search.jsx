@@ -7,18 +7,19 @@ import {getNearbyPlaces, getPlaceDetails} from "../api";
 import React, {useEffect, useState} from "react";
 
 export default function Search() {
-    const [nearby, setNearby] = useState([1]);
+    const [nearby, setNearby] = useState([]);
     const [placeDetails, setDetails] = useState('');
-
-    useEffect(async () => {
-        await getDetails(placeId);
-    }, [nearby]);
 
     const location = useLocation();
 
     const name = location.state.Name;
     const image = location.state.Image;
     const placeId = location.state.Id;
+
+    useEffect(() => {
+        console.log('state changed')
+        getDetails(placeId);
+    }, [placeId])
 
     async function getDetails(id) {
         const placeDetails = await getPlaceDetails(id);
