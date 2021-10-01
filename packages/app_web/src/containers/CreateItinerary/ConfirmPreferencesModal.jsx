@@ -10,12 +10,14 @@ export default function ({parentFormik, setScreen, onClose}) {
             popularity: parentFormik.values.popularity,
             energy: parentFormik.values.energy,
             knowledge: parentFormik.values.knowledge,
+            introversion: parentFormik.values.introversion,
         },
         onSubmit: values => {
             parentFormik.setFieldValue('budget', formik.values.budget);
             parentFormik.setFieldValue('popularity', formik.values.popularity);
             parentFormik.setFieldValue('energy', formik.values.energy);
             parentFormik.setFieldValue('knowledge', formik.values.knowledge);
+            parentFormik.setFieldValue('introversion', formik.values.introversion);
         }
     });
 

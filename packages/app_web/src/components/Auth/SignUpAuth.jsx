@@ -60,7 +60,8 @@ function SignUpAuth(props) {
                                     budget: 0,
                                     popularity: 0,
                                     energy: 0,
-                                    knowledge: 0
+                                    knowledge: 0,
+                                    introversion: 0
                                 },
                                 null
                             )

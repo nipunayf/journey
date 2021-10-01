@@ -35,6 +35,7 @@ function CreateItinerary({preferences}) {
             popularity: preferences.popularity,
             energy: preferences.energy,
             knowledge: preferences.knowledge,
+            introversion: preferences.introversion,
             email: ''
         },
         onSubmit: values => {

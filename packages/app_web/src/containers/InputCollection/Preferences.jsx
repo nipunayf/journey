@@ -24,6 +24,11 @@ export default function Preferences({formik}) {
                 options={["Entertaining", "Average", "Informational"]}
                 id={'knowledge'}
                 formik={formik}/>
+            <InputPreference
+                title={"Introversion"}
+                options={["In-Doors", "Balanced", "Nature"]}
+                id={'introversion'}
+                formik={formik}/>
         </VStack>
     </>;
 }

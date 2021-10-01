@@ -61,7 +61,8 @@ const addUser = async (req, res) => {
             budget: 0,
             popularity: 0,
             energy: 0,
-            knowledge: 0
+            knowledge: 0,
+            introversion: 0
         }});
     return successMessage(res, result);
 }

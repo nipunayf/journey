@@ -34,6 +34,7 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
             popularity: preferences.popularity,
             energy: preferences.energy,
             knowledge: preferences.knowledge,
+            introversion: preferences.introversion,
         },
         validationSchema: Yup.object({
             firstName: Yup.string().required('Required').max(20, 'Should be less than 20 characters'),
@@ -44,7 +45,8 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
                 budget: values.budget,
                 popularity: values.popularity,
                 energy: values.energy,
-                knowledge: values.knowledge
+                knowledge: values.knowledge,
+                introversion: values.introversion
             };
 
             const result = await updateUser(userID, {
@@ -95,7 +97,8 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
                             && preferences.budget === formik.values.budget
                             && preferences.popularity === formik.values.popularity
                             && preferences.energy === formik.values.energy
-                            && preferences.knowledge === formik.values.knowledge)
+                            && preferences.knowledge === formik.values.knowledge
+                            && preferences.introversion === formik.values.introversion)
                         || !formik.isValid}
                         onClick={formik.handleSubmit}
                         isLoading={formik.isSubmitting}
