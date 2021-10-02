@@ -1,18 +1,17 @@
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from . import RuleBasedItinerary
+import json
 
 
-class ItineraryStrategy(APIView):
-    def __init__(self, itinerary_strategy=None, **kwargs):
-        super().__init__(**kwargs)
-        self.itinerary_strategy = itinerary_strategy
+class ItineraryCreator(APIView):
+    def get(self,parameters):
+        parameters = json.loads(parameters.body.decode("utf-8"))
+        initial_places = RuleBasedItinerary.initialPlaces(parameters)
+        filterPlacesbyType = RuleBasedItinerary.filterPlacesbyType(initial_places)
+        sortbyDistance = RuleBasedItinerary.sortbyDistance(parameters, filterPlacesbyType)
+        ranking = RuleBasedItinerary.ranking(sortbyDistance)
+        route = RuleBasedItinerary.itinerary(parameters, ranking)
 
-    def create_itinerary(self):
-        global itinerary
-        if self.itinerary_strategy:
-            itinerary: object = self.itinerary_strategy(self)
-        return itinerary
+        return Response(route)
 
-
-if __name__ == "main":
-    ItineraryStrategy(itinerary_strategy=RuleBasedItinerary)

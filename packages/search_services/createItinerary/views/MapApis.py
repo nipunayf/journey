@@ -3,19 +3,19 @@ import requests
 import time
 import googlemaps
 
-gmaps = googlemaps.Client(key=settings.GOOGLE_API_KEY)
-
 
 def nearbySearch(data, keyword):
-    location = data.location
-    if data.number_dates == 2:
+    print("Hi I am in nearbysearch")
+
+    location = data['location']
+    if data['number_dates'] == 2:
         radius = 20000
-    elif data.number_dates == 1:
+    elif data['number_dates'] == 1:
         radius = 10000
-    elif data.number_dates > 2:
+    elif data['number_dates'] > 2:
         radius = 50000
 
-    budget = data.budget
+    budget = data['budget']
 
     if budget == -1:
         price = 1
@@ -24,20 +24,19 @@ def nearbySearch(data, keyword):
     else:
         price = 4
 
-    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location.lat},{location.lng}&radius={radius}&type=tourist_attraction&keyword={keyword}&key={settings.GOOGLE_API_KEY}"
-
+    url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location['lat']},{location['lng']}&radius={radius}&type=tourist_attraction&keyword={keyword}&key={settings.GOOGLE_API_KEY}"
+    print(url)
     payload = {}
     headers = {}
     try:
         response = requests.request("GET", url, headers=headers, data=payload)
-        if response.status_code == '200':
-            print(response.json()['results'])
-            nearbySearchResult = response.json()['results']
-            return nearbySearchResult
-        else:
-            return []
+
+        print(response.json()['results'])
+        nearbySearchResult = response.json()['results']
+        return nearbySearchResult
+
     except:
-        print("error occurred while text searching")
+        print("error occurred while nearby searching")
         return 'No text search result'
 
 
@@ -56,7 +55,7 @@ def direction(parameters, results):
         else:
             break
         i += 1
-        
+
     print(waypoints)
     string = ''
     for val in waypoints[:-1]:
@@ -64,7 +63,7 @@ def direction(parameters, results):
 
     string += f"place_id:{waypoints[-1]}"
 
-    url = f"https://maps.googleapis.com/maps/api/directions/json?origin=place_id:{destination_id}&destination=place_id:{destination_id}&waypoints={string}&optimize_waypoint=True&key=AIzaSyATku-yiZOrGTDU50boXfuwX14EH88S1b0"
+    url = f"https://maps.googleapis.com/maps/api/directions/json?origin=place_id:{destination_id}&destination=place_id:{destination_id}&waypoints={string}&optimize_waypoint=True&key={settings.GOOGLE_API_KEY}"
     payload = {}
     headers = {}
 
@@ -75,7 +74,7 @@ def direction(parameters, results):
     directions_result = response.json()
 
     waypoint_order = directions_result['routes'][0]["waypoint_order"]
-    new_order = waypoint_order
+    new_order = waypoint_order[:]
     index = 0
     for o in waypoint_order:
         new_order[index] = waypoints[o]
@@ -87,10 +86,21 @@ def direction(parameters, results):
 
     string2 += f"place_id:{new_order[-1]}"
 
-    url = f"https://maps.googleapis.com/maps/api/directions/json?origin=place_id:{destination_id}&destination=place_id:{destination_id}&waypoints={string2}&key=AIzaSyATku-yiZOrGTDU50boXfuwX14EH88S1b0"
+    url = f"https://maps.googleapis.com/maps/api/directions/json?origin=place_id:{destination_id}&destination=place_id:{destination_id}&waypoints={string2}&key={settings.GOOGLE_API_KEY}"
     print(url)
     response2 = requests.request("GET", url, headers=headers, data=payload)
     directions_result_final = response2.json()
     print(directions_result_final)
 
     return directions_result_final
+
+
+def placeDetails(id):
+    url = f"https://maps.googleapis.com/maps/api/place/details/json?place_id={id}&key={settings.GOOGLE_API_KEY}"
+
+    payload = {}
+    headers = {}
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    return response.json()['result']

@@ -1,1 +1,2 @@
-from ItineraryStrategy import *
+from . import ItineraryStrategy
+

@@ -4,6 +4,7 @@ from sklearn import preprocessing
 import numpy as np
 import itertools
 import datetime
+from . import enums
 
 
 def initialPlaces(parameters):
@@ -12,14 +13,14 @@ def initialPlaces(parameters):
     # destination_name = parameters.name
     # number_dates = parameters.number_dates
     # dates = parameters.dates
-    preferences = parameters.preferences
+    preferences = parameters['preferences']
 
     # popularity = preferences.popularity
     # budget = preferences.budget
 
-    nature = preferences.nature
-    entertainment = preferences.entertainment
-    relax = preferences.relax
+    nature = preferences['nature']
+    entertainment = preferences['entertainment']
+    relax = preferences['relax']
 
     dic = {'NATURE': nature, 'ENTERTAINMENT': entertainment, 'RELAX': relax}
 
@@ -27,10 +28,11 @@ def initialPlaces(parameters):
     person_keyword = []
 
     for key in dic:
-        type_key = f"enums.Types.{key}"
-        type_not_key = f"enums.Types.NOT_{key}"
-        keyword_key = f"enums.Keywords.{key}"
-        keyword_not_key = f"enums.Keywords.NOT_{key}"
+        NOT_KEY = f'NOT_{key}'
+        type_key = enums.Types[key].value
+        type_not_key = enums.Types[NOT_KEY].value
+        keyword_key = enums.Keywords[key].value
+        keyword_not_key = enums.Keywords[NOT_KEY].value
         if dic[key] == -1:
             person_type += type_key
             person_keyword += keyword_key
@@ -47,24 +49,28 @@ def initialPlaces(parameters):
     results = {}
 
     for keyword in person_keyword:
-        r = MapApis.textSearch(parameters, keyword)
+        r = MapApis.nearbySearch(parameters, keyword)
         for i in r:
-            if i['name'] in results:
+            if i['place_id'] in results:
                 pass
             else:
-                results[i['name']] = i
+                results[i['place_id']] = i
 
     # return places according to the preferences(keywords)
+    print("result printing")
+    print(results)
     return results
 
 
 def filterPlacesbyType(results):
     results_copy = dict(results)
-    NEGLECT = enums.Types.NEGLECT
-    for key in results_copy:
-        for types in results_copy[key]["types"]:
+    NEGLECT = enums.Types.NEGLECT.value
+    for key in results:
+        for types in results[key]["types"]:
             if types in NEGLECT:
-                del results_copy[key]
+                if key in results_copy:
+                    del results_copy[key]
+
     return results_copy
 
 
@@ -97,12 +103,12 @@ def sortbyDistance(parameters, results):
         print(d)
         return d
 
-    lat = parameters["geometry"]['location']['lat']
-    lng = parameters["geometry"]['location']['lng']
+    lat = parameters['location']['lat']
+    lng = parameters['location']['lng']
 
     for key in results_copy:
-        distance = getDistance(lat, lng, results_copy[key]["geometry"]['location']['lat'],
-                               results_copy[key]["geometry"]['location']['lng'])
+        distance = getDistance(lat, lng, results_copy[key]['geometry']['location']['lat'],
+                               results_copy[key]['geometry']['location']['lng'])
         results_copy[key]['distance_from_origin'] = distance
 
     # results_copy = sorted(results_copy.items(), key=lambda x: x[1]['distance_from_origin'])
@@ -126,7 +132,7 @@ def ranking(results):
     rating_norm = preprocessing.normalize([rating_list], norm='max')
     total_rating_norm = preprocessing.normalize([total_rating_list], norm='max')
 
-    ranking = []
+    ranking = rating_list[:]
     i = 0
     for key in results_copy:
         ranking[i] = (1 - distance_norm[0][i]) * 0.5 + rating_norm[0][i] * 0.3 + total_rating_norm[0][i] * 0.2
@@ -248,3 +254,10 @@ def itinerary(parameters, results):
                 arrival_time = departure_time + travel_time
                 routes[day_4][id_list4[val]]['departure_time'] = arrival_time + spend_time
                 departure_time = arrival_time + spend_time
+
+    for day in routes:
+        for id in day:
+            id['result'] = results_copy[id]
+        else:
+            break
+    return routes
