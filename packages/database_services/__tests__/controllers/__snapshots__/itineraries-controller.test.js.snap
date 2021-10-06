@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Create a new itinerary should update the firestore database 1`] = `
+Object {
+  "destinations": Object {
+    "Tue Oct 12 2021 03:20:00 GMT+0530 (India Standard Time)": Object {
+      "arrival": Timestamp {
+        "_nanoseconds": 0,
+        "_seconds": 1633989000,
+      },
+      "departure": Timestamp {
+        "_nanoseconds": 0,
+        "_seconds": 1633996200,
+      },
+      "place_id": "p",
+    },
+  },
+  "location": "Kandy",
+  "memberInfo": Object {
+    "a": Object {
+      "displayName": "Kumar Sangakkara",
+      "review": 0,
+    },
+  },
+  "members": Array [
+    "a",
+  ],
+  "state": 1,
+}
+`;
