@@ -35,7 +35,7 @@ export const getPlaceDescription = async (name) => {
 export const getPlaceDetails= async (id) => {
     const config = {
         method: 'get',
-        url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=AIzaSyATku-yiZOrGTDU50boXfuwX14EH88S1b0`
+        url: `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&key=${API_KEY}`
     };
 
     try {
@@ -60,7 +60,7 @@ export const getNearbyPlaces = async(data) => {
     console.log('location is:',location);
     const config = {
         method: 'get',
-        url: `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.lat},${location.lng}&radius=${radius}&type=tourist_attraction&key=AIzaSyATku-yiZOrGTDU50boXfuwX14EH88S1b0`,
+        url: `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location.lat},${location.lng}&radius=${radius}&type=tourist_attraction&key=${API_KEY}`,
     };
     // axios(config)
     //     .then(function (response) {
