@@ -7,6 +7,6 @@ from ..strategy.ruleBased import main
 
 class ItineraryCreator(APIView):
     def get(self, parameters):
-        rulebased = ItineraryStrategy.ItineraryStrategy(main.RuleBasedMain(parameters))
-        route = rulebased.execute()
+        rulebased = ItineraryStrategy.ItineraryStrategy(main.RuleBasedMain)
+        route = rulebased.execute(parameters)
         return Response(route)
