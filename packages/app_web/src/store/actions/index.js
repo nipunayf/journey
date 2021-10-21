@@ -7,5 +7,7 @@ export {
 
 export  {
     initializeProfile,
-    updateProfile
+    updateProfile,
+    clearProfile,
+    updateState
 } from './profile';

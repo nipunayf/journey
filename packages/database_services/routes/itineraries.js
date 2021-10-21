@@ -18,4 +18,8 @@ router.post('/',
     auth,
     createItinerary)
 
+router.put('/:itineraryID',
+    auth,
+    updateItinerary)
+
 module.exports = router;

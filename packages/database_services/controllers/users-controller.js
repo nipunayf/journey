@@ -57,14 +57,14 @@ const addUser = async (req, res) => {
         return errorMessage(res, 'User already exists')
 
     //adds user to the database
-    const result = await userStore.add({...req.body, isDeleted: 0, itineraries: {}, preferences: {
+    await userStore.add({...req.body, isDeleted: 0, itineraries: {}, preferences: {
             budget: 0,
             popularity: 0,
             energy: 0,
             knowledge: 0,
             introversion: 0
         }});
-    return successMessage(res, result);
+    return successMessage(res, true);
 }
 
 /**
