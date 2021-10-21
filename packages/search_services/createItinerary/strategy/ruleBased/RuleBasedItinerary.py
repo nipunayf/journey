@@ -8,23 +8,23 @@ from ...helper import enums, MapApis
 
 
 # Helper functions
-def initialPlaces(parameters):
-    itinerary = None
-    # destination_id = parameters.destination_id
-    # destination_name = parameters.name
-    # number_dates = parameters.number_dates
-    # dates = parameters.dates
-    preferences = parameters['preferences']
+def nearbySearchResult(person_keyword, parameters):
+    results = {}
 
-    # popularity = preferences.popularity
-    # budget = preferences.budget
+    for keyword in person_keyword:
+        r = MapApis.nearbySearch(parameters, keyword)
+        for i in r:
+            if i['place_id'] in results:
+                pass
+            else:
+                results[i['place_id']] = i
 
-    nature = preferences['nature']
-    entertainment = preferences['entertainment']
-    relax = preferences['relax']
+    # with open("nearby_search_result.json", 'w', encoding='utf-8') as f:
+    #     f.write(json.dumps(results))
+    return results
 
-    dic = {'NATURE': nature, 'ENTERTAINMENT': entertainment, 'RELAX': relax}
 
+def createPersonKeyword(dic):
     person_type = []
     person_keyword = []
 
@@ -46,20 +46,35 @@ def initialPlaces(parameters):
 
     person_type = set(person_type)
     person_keyword = set(person_keyword)
+    # with open("person_keyword.txt", 'w', encoding='utf-8') as f:
+    #     f.write(str(person_keyword))
 
-    results = {}
+    return person_keyword
 
-    for keyword in person_keyword:
-        r = MapApis.nearbySearch(parameters, keyword)
-        for i in r:
-            if i['place_id'] in results:
-                pass
-            else:
-                results[i['place_id']] = i
+
+def initialPlaces(parameters):
+    # destination_id = parameters.destination_id
+    # destination_name = parameters.name
+    # number_dates = parameters.number_dates
+    # dates = parameters.dates
+    preferences = parameters['preferences']
+
+    # popularity = preferences.popularity
+    # budget = preferences.budget
+
+    nature = preferences['nature']
+    entertainment = preferences['entertainment']
+    relax = preferences['relax']
+
+    dic = {'NATURE': nature, 'ENTERTAINMENT': entertainment, 'RELAX': relax}
+
+    person_keyword = createPersonKeyword(dic)
+
+    results = nearbySearchResult(person_keyword, parameters)
 
     # return places according to the preferences(keywords)
-    print("result printing")
-    print(results)
+    # print("result printing")
+    # print(results)
     # with open("nearby_results.json", 'w', encoding='utf-8') as f:
     #     f.write(json.dumps(results))
     return results
@@ -74,6 +89,8 @@ def filterPlacesbyType(results):
                 if key in results_copy:
                     del results_copy[key]
 
+    # with open("filter_type_results.json", 'w', encoding='utf-8') as f:
+    #     f.write(json.dumps(results_copy))
     return results_copy
 
 
@@ -87,24 +104,29 @@ def filterPlacesbyType(results):
 #
 #     return results_copy
 
+def getDistance(lat1, lon1, lat2, lon2):
+    input = (lat1, lon1, lat2, lon2)
+    # with open("getdistance_input.txt", 'w', encoding='utf-8') as f:
+    #     f.write(str(input))
+
+    def deg2rad(deg):
+        return deg * (math.pi / 180)
+
+    R = 6371
+    dLat = deg2rad(lat2 - lat1)
+    dLon = deg2rad(lon2 - lon1)
+
+    a = math.sin(dLat / 2) * math.sin(dLat / 2) + math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * math.sin(
+        dLon / 2) * math.sin(dLon / 2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    d = R * c
+    # with open("getdistance.txt", 'w', encoding='utf-8') as f:
+    #     f.write(str(d))
+    return d
+
 
 def sortbyDistance(parameters, results):
     results_copy = dict(results)
-
-    def getDistance(lat1, lon1, lat2, lon2):
-        def deg2rad(deg):
-            return deg * (math.pi / 180)
-
-        R = 6371
-        dLat = deg2rad(lat2 - lat1)
-        dLon = deg2rad(lon2 - lon1)
-
-        a = math.sin(dLat / 2) * math.sin(dLat / 2) + math.cos(deg2rad(lat1)) * math.cos(deg2rad(lat2)) * math.sin(
-            dLon / 2) * math.sin(dLon / 2)
-        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        d = R * c
-        print(d)
-        return d
 
     lat = parameters['location']['lat']
     lng = parameters['location']['lng']
@@ -115,8 +137,8 @@ def sortbyDistance(parameters, results):
         results_copy[key]['distance_from_origin'] = distance
 
     # results_copy = sorted(results_copy.items(), key=lambda x: x[1]['distance_from_origin'])
-    with open("sorted_distance.json", 'w', encoding='utf-8') as f:
-        f.write(json.dumps(results_copy))
+    # with open("sorted_distance.json", 'w', encoding='utf-8') as f:
+    #     f.write(json.dumps(results_copy))
     return results_copy
 
 
@@ -145,6 +167,8 @@ def ranking(results):
 
     results_copy = dict(sorted(results_copy.items(), key=lambda x: x[1]['rank'], reverse=True))
 
+    # with open("ranking.json", 'w', encoding='utf-8') as f:
+    #     f.write(json.dumps(results_copy))
     return results_copy
 
 
@@ -208,8 +232,6 @@ def itinerary(parameters, results):
         routes['day_4'] = id_dic4
         id_list4 = place_ids[11:]
         leg_day4 = legs[11:]
-
-
 
     if leg_day1 != 0:
         arrival_time = datetime.timedelta(hours=8, minutes=00, seconds=00)
@@ -334,12 +356,12 @@ def itinerary(parameters, results):
                 routes['day_4'][id_list4[val]]['departure_time'] = str(arrival_time + spend_time)
                 departure_time = arrival_time + spend_time
 
-    print('ROUTE',routes)
+    print('ROUTE', routes)
     for day in routes:
         print(routes[day])
         for id in routes[day]:
             print(id)
             routes[day][id]['result'] = results_copy[id]
-        
+
     print(routes)
     return routes

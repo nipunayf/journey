@@ -1,0 +1,1 @@
+{'amusement_park', 'aquarium', 'park', 'hindu_temple', 'beach', 'indoor', 'art_gallery', 'place_of_worship', 'nature', 'relax', 'museum'}
