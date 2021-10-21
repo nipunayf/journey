@@ -1,5 +1,5 @@
 import * as actionTypes from "./action-types";
-import {storeObject} from "../../utils/local-storage";
+import {getObject, storeObject} from "../../utils/local-storage";
 
 export const initializeProfile = (firstName, lastName, profilePic, preferences, itineraries) => {
     localStorage.setItem('firstName', firstName);
@@ -30,6 +30,20 @@ export const updateProfile = (firstName, lastName, preferences) => {
         preferences
     }
 }
+
+export const updateState = (id, state) => {
+    const itinerary = getObject('itineraries');
+    itinerary[id].state = state;
+    storeObject('itineraries',itinerary);
+
+    return {
+        type: actionTypes.UPDATE_STATE,
+        state,
+        id
+    }
+}
+
+
 
 export const clearProfile = () => {
     return {

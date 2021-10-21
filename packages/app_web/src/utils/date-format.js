@@ -1,6 +1,5 @@
 /**
  * Returns a Date object to the given time string
- *
  * @param {string} timeString - should be of the format 'HH:MM'
  *
  * @return {string} - formatted date string
@@ -18,4 +17,18 @@ export const formatDate = (dateString, isShortDate = false) => {
     const shortOptions = { year: 'numeric', month: 'long', day: 'numeric' }
 
     return new Date(dateString).toLocaleDateString("en-US", shortOptions)
+}
+
+/**
+ * Calculate the difference between two dates
+ * @param startDate
+ * @param endDate
+ * @return {number}
+ */
+export const calculateDateDifference = (startDate, endDate) => {
+    const date1 = new Date(startDate)
+    const date2 = new Date(endDate)
+
+    const diffTime = Math.abs(date2 - date1);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 }

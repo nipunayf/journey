@@ -63,7 +63,7 @@ function SignUpAuth(props) {
                                     knowledge: 0,
                                     introversion: 0
                                 },
-                                null
+                                {}
                             )
                             props.onSuccess();
                             generateSuccessMessage(toast, 'Account created successfully', `Welcome ${values.firstName}, Start planning your itinerary by first searching your desired destination`);

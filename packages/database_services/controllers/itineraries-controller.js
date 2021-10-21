@@ -95,13 +95,15 @@ const createItinerary = async (req, res) => {
     //Updating the user document
     const userDocRef = await userStore.where('userID', '==', req.user).get();
 
-    batch.update(userDocRef.docs[0]._ref, {[`itineraries.${itDocRef.id}`]: {
+    batch.update(userDocRef.docs[0]._ref, {
+        [`itineraries.${itDocRef.id}`]: {
             location: req.body.location,
             state: StateEnum.INACTIVE,
             startDate: new Date(dates[0]),
             endDate: new Date(dates.at(-1)),
             image: req.body.image,
-        }});
+        }
+    });
 
     //Writing the commits to the firestore
     await batch.commit();
@@ -147,9 +149,8 @@ const updateItinerary = async (req, res) => {
                 }
             else
                 body = {
-                    itineraries: {
-                        [`${req.params.itineraryID}`]: {state: req.body.state}
-                    }
+                    [`itineraries.${req.params.itineraryID}.state`]: req.body.state
+                    // [`${req.params.itineraryID}`]: {state: req.body.state}
                 }
 
             //If location of the itinerary being change

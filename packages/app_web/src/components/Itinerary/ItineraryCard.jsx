@@ -2,7 +2,7 @@ import {Badge, Box, Button, HStack, Image, Text, useToast} from "@chakra-ui/reac
 import {useHistory} from "react-router-dom";
 import Status from "./Status";
 import {getPlacePhoto} from "../../api/maps-api";
-import {formatDate} from "../../utils/date-format";
+import {calculateDateDifference, formatDate} from "../../utils/date-format";
 import {useState} from "react";
 import {getItinerary} from "../../api/itineraries-api";
 import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
@@ -43,7 +43,7 @@ export default function ItineraryCard({info}) {
                         textTransform="uppercase"
                         ml="2"
                     >
-                        1 days
+                        {calculateDateDifference(info.endDate, info.startDate)} days
                     </Box>
                 </Box>
 

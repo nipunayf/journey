@@ -71,6 +71,7 @@ export default class APIHandler {
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
     async putRequest (url, data, setUser=false, headers = {}, output = 'results') {
+        if (setUser) url = setUserID(url);
         try {
             let response = (data) ? await this.instance.put(url, data, headers) : await this.instance.put(url, headers);
             return generateSuccessOutput(response, output);

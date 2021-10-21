@@ -53,16 +53,16 @@ function Itinerary({displayName}) {
                     <HStack spacing={3} px={4}>
                         <NewDestination/>
                         <Members/>
-                        <StateChangeButton state={1}/>
                         <Button
                             leftIcon={<MdSave/>}
-                            bg={'green.400'}
+                            bg={'secondary.light'}
                             color={'white'}
                             size={'sm'}
                             onClick={formik.handleSubmit}
-                            _hover={{bg: 'green.500'}}>
+                            _hover={{bg: 'blue.500'}}>
                             Save
                         </Button>
+                        <StateChangeButton state={1} id={itinerary.id}/>
                     </HStack>
                     <Accordion defaultIndex={[0]} allowMultiple minW={'45%'} pt={5} pl={4}>
                     {Object.keys(itinerary.destinations).map(date => {
