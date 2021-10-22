@@ -41,7 +41,6 @@ def nearbySearch(data, keyword):
 
 
 def direction(parameters, results):
-    api_key = 'AIzaSyATku-yiZOrGTDU50boXfuwX14EH88S1b0'
     number_dates = parameters['number_dates']
     destination_id = parameters['place_id']
     waypoints = []
