@@ -39,6 +39,20 @@ class RuleBasedTest(TestCase):
 
         self.assertEqual(RuleBasedItinerary.ranking(input), output)
 
+    def test_itinerary(self):
+        # Call the service to hit the mocked API.
+        with patch('createItinerary.helper.MapApis.direction') as mock_direction:
+            direction_result = json.load(open("createItinerary/tests/fixtures/direction_map.json"))
+            mock_direction.return_value.ok = True
+            mock_direction.return_value = direction_result
+
+            parameters = json.load(open("createItinerary/tests/fixtures/parameters.json"))
+            ranking_result = json.load(open("createItinerary/tests/fixtures/ranking.json"))
+            route = json.load(open("createItinerary/tests/fixtures/final_route.json"))
+            mocked = RuleBasedItinerary.itinerary(parameters, ranking_result)
+
+            self.assertEqual(type(mocked), type(route))
+
 
 class MapApiTest(TestCase):
     def test_nearby_search(self):
@@ -60,7 +74,7 @@ class MapApiTest(TestCase):
             # mocked_keys = mocked.json().pop().keys()
 
         self.assertEqual(mocked, result)
-        
+
     def test_direction(self):
         # Call the service to hit the actual API.
         """

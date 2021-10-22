@@ -356,12 +356,12 @@ def itinerary(parameters, results):
                 routes['day_4'][id_list4[val]]['departure_time'] = str(arrival_time + spend_time)
                 departure_time = arrival_time + spend_time
 
-    print('ROUTE', routes)
+    # print('ROUTE', routes)
     for day in routes:
-        print(routes[day])
+        # print(routes[day])
         for id in routes[day]:
-            print(id)
+            # print(id)
             routes[day][id]['result'] = results_copy[id]
 
-    print(routes)
+    # print(routes)
     return routes
