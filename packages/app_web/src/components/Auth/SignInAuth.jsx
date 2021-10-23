@@ -84,6 +84,7 @@ function SignInAuth(props) {
                     onClick={formik.handleSubmit}
                     isDisabled={!formik.isValid}
                     isLoading={formik.isSubmitting}
+                    data-cy={'submit'}
                     _hover={{
                         bg: 'blue.500',
                     }}>
