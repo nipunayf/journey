@@ -5,19 +5,19 @@
  * @returns {*&{destinations: (*|[{arrival: *, departure: *, place_id: string}]|[{arrival: *, departure: *, place_id: string}]|[{arrival: *, departure: *, place_id: string}]), id}}
  */
 const formatDestinationDates = (id, object) => {
-    console.log(object);
     const destinations = object.destinations;
     const dates = Object.keys(destinations);
 
-    dates.sort((a,b) => {
+    dates.sort((a, b) => {
         return new Date(a) - new Date(b);
     })
 
     const orderedDestinations = {};
     dates.forEach(date => {
+        destinations[date].arrival = formatFirestoreTimestamp(destinations[date].arrival);
+        destinations[date].departure = formatFirestoreTimestamp(destinations[date].departure);
         orderedDestinations[date] = destinations[date]
     })
-
 
     return {
         ...object,
