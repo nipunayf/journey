@@ -10,8 +10,31 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@ant-design/icons": "^4.6.4",
+    "@react-native-firebase/app": "^12.8.0",
+    "@react-native-firebase/auth": "^12.8.0",
+    "@react-navigation/bottom-tabs": "^6.0.5",
+    "@react-navigation/native": "^6.0.2",
+    "@react-navigation/native-stack": "^6.1.0",
+    "formik": "^2.2.9",
+    "native-forms": "^1.6.5",
     "react": "17.0.2",
-    "react-native": "0.65.1"
+    "react-native": "0.65.1",
+    "react-native-elements": "^3.4.2",
+    "react-native-form-component": "^0.1.23",
+    "react-native-gesture-handler": "^1.10.3",
+    "react-native-modal": "^13.0.0",
+    "react-native-push-notification": "^8.1.0",
+    "react-native-reanimated": "^2.2.1",
+    "react-native-safe-area-context": "^3.3.2",
+    "react-native-screens": "^3.7.0",
+    "react-native-step-indicator": "^1.0.3",
+    "react-native-swiper": "^1.6.0",
+    "react-native-vector-icons": "^8.1.0",
+    "react-navigation": "^4.4.4",
+    "react-navigation-stack": "^2.10.4",
+    "react-navigation-tabs": "^2.11.1",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
