@@ -1,0 +1,629 @@
+{
+    "day_1": {
+        "ChIJjZGWMENc4zoRUQYqNLog9Y4": {
+            "arrival_time": "8:00:00",
+            "departure_time": "8:00:00",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.401800499999998,
+                        "lng": 80.6898511
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.402884179892721,
+                            "lng": 80.69146347989273
+                        },
+                        "southwest": {
+                            "lat": 7.400184520107278,
+                            "lng": 80.68876382010728
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                "name": "Hunnasgiriya Water Fall",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 1280,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/115837990960327171679\">Champika Hewawasam</a>"
+                        ],
+                        "photo_reference": "Aap_uEC2dcB0cnSEQAohYT55QelqvTpzlh2t2P-M17ZRu-3JpTMXySAFk4ZXlyBt8DIY0DbmD1l4n7WwPih5ja7llkP8cjuDbIlBfk7mFJYeKA2aUX-HJWOvbRTVkv2mlvEYqY09fTguFKcU4a_a0fvVRTgep8AmZNduY1mT4vItZIGhXF-b",
+                        "width": 960
+                    }
+                ],
+                "place_id": "ChIJjZGWMENc4zoRUQYqNLog9Y4",
+                "rating": 4.5,
+                "reference": "ChIJjZGWMENc4zoRUQYqNLog9Y4",
+                "scope": "GOOGLE",
+                "types": [
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 655,
+                "vicinity": "CM2Q+PWH, Matale",
+                "distance_from_origin": 13.601989826914275,
+                "rank": 0.677158612321954
+            }
+        },
+        "ChIJ9ftJsS1m4zoRh-gVwQrXZYE": {
+            "arrival_time": "9:04:48",
+            "departure_time": "11:04:48",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.293609,
+                        "lng": 80.641325
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.294765029892722,
+                            "lng": 80.64272435
+                        },
+                        "southwest": {
+                            "lat": 7.292065370107278,
+                            "lng": 80.63712695000001
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                "name": "Temple of the Sacred Tooth Relic",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 4000,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/108960141804233314123\">Olivier</a>"
+                        ],
+                        "photo_reference": "Aap_uEBm_W9KHBjEibO-WTi0XB2G6Cpd4PedGK-NBzM6gKQ5BEUuEMIJQtK5n8X0qxsZsPdpzoBVmFAPqKfib9eL9f__ZDeo-7SGx4fB7qtFuZ-vok3Ut-NfELa3Mhf_0dFFgNS4_e1zCElnXxehPXJo16aqsEWmlvs2x9FwCYOUXyrOte1M",
+                        "width": 6000
+                    }
+                ],
+                "place_id": "ChIJ9ftJsS1m4zoRh-gVwQrXZYE",
+                "plus_code": {
+                    "compound_code": "7JVR+CG Kandy",
+                    "global_code": "6MV27JVR+CG"
+                },
+                "rating": 4.7,
+                "reference": "ChIJ9ftJsS1m4zoRh-gVwQrXZYE",
+                "scope": "GOOGLE",
+                "types": [
+                    "tourist_attraction",
+                    "museum",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 18565,
+                "vicinity": "Sri Dalada Veediya, Kandy",
+                "distance_from_origin": 0.5657065169216512,
+                "rank": 0.977845257401293
+            }
+        },
+        "ChIJ_ZUvrpBo4zoRMxJ5v8KOzpI": {
+            "arrival_time": "11:19:45",
+            "departure_time": "13:19:45",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.268272800000001,
+                        "lng": 80.596599
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.269632629892723,
+                            "lng": 80.59793147989272
+                        },
+                        "southwest": {
+                            "lat": 7.266932970107279,
+                            "lng": 80.59523182010729
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/park-71.png",
+                "icon_background_color": "#4DB546",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/tree_pinlet",
+                "name": "Royal Botanic Gardens",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 1066,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/101394302016043348482\">Anton</a>"
+                        ],
+                        "photo_reference": "Aap_uECB7qiztMqJxBOvLqDkEUKMsuM3lZbHcgqhRewwBvCENJf62WhTA3tBKaupXzAxFDGp2Jg9s3Zw3-3M-5Zpqxu4W_l_z5tFz8g5dD_fXwqZwlpB_SGM8LCmChNI8Q7ucIfKTUPhx-AbGarAr_VNjMeVMjQNmZrVcZuSGuNVw-vGJNi1",
+                        "width": 1600
+                    }
+                ],
+                "place_id": "ChIJ_ZUvrpBo4zoRMxJ5v8KOzpI",
+                "plus_code": {
+                    "compound_code": "7H9W+8J Kandy",
+                    "global_code": "6MV27H9W+8J"
+                },
+                "rating": 4.6,
+                "reference": "ChIJ_ZUvrpBo4zoRMxJ5v8KOzpI",
+                "scope": "GOOGLE",
+                "types": [
+                    "tourist_attraction",
+                    "park",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 14367,
+                "vicinity": "Peradeniya Rd, Kandy",
+                "distance_from_origin": 5.116965243426641,
+                "rank": 0.8931943674904799
+            }
+        },
+        "ChIJzRSeIi9m4zoRsx-e03VJcd8": {
+            "arrival_time": "14:34:37",
+            "departure_time": "16:34:37",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.2888706,
+                        "lng": 80.6397782
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.290228179892721,
+                            "lng": 80.64112127989272
+                        },
+                        "southwest": {
+                            "lat": 7.287528520107277,
+                            "lng": 80.63842162010728
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                "name": "Kandy City View Point",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 3024,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/115847811002786976691\">vipula illanganthilake</a>"
+                        ],
+                        "photo_reference": "Aap_uEB4Ns69omHuw0Ea9c8ZDqsLcW1DHeAJZwbsG-X-Hc0vW7-j_21fqYSSMzTJrAmO7tEVuWnyUUubIT6zZd8jqHtutDzAp_U5W9Qhdl72JmDicCkW1Is36jVnDfc6vOUnkwqMRgMJvhD-ncoUlFxgJ0N0TszRE0IK0fLL7PwIK5Y1FDwd",
+                        "width": 4032
+                    }
+                ],
+                "place_id": "ChIJzRSeIi9m4zoRsx-e03VJcd8",
+                "plus_code": {
+                    "compound_code": "7JQQ+GW Kandy",
+                    "global_code": "6MV27JQQ+GW"
+                },
+                "rating": 4.6,
+                "reference": "ChIJzRSeIi9m4zoRsx-e03VJcd8",
+                "scope": "GOOGLE",
+                "types": [
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 1725,
+                "vicinity": "Kandy",
+                "distance_from_origin": 0.442497615423893,
+                "rank": 0.7913335015900053
+            }
+        }
+    },
+    "day_2": {
+        "ChIJ1-1_Fy9m4zoRn2Ggv2699-k": {
+            "arrival_time": "8:00:00",
+            "departure_time": "10:00:00",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.288817000000001,
+                        "lng": 80.63980529999999
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.290171229892722,
+                            "lng": 80.64113127989272
+                        },
+                        "southwest": {
+                            "lat": 7.287471570107278,
+                            "lng": 80.63843162010728
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                "name": "Arthur's Seat, Kandy",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 3456,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/108206623372392222270\">Ganeshamoorthy Srivaxsan</a>"
+                        ],
+                        "photo_reference": "Aap_uEB7p2GK4WVmUGAvFDbBi7g_onfe-4mqNQsXxWe4girBles7rqiv5BokyfRAq619HXTdaq-w8UPlFSh-QYVyPJjs0HiP5326IhXeVS89jT2502a6Vn4eoqahTpWS6-vQr6_qGy8pQPUYCc_7pQsMQrvSKW3gJ_UQcS9Yl6Vbyn8qm2XC",
+                        "width": 4608
+                    }
+                ],
+                "place_id": "ChIJ1-1_Fy9m4zoRn2Ggv2699-k",
+                "plus_code": {
+                    "compound_code": "7JQQ+GW Kandy",
+                    "global_code": "6MV27JQQ+GW"
+                },
+                "rating": 4.6,
+                "reference": "ChIJ1-1_Fy9m4zoRn2Ggv2699-k",
+                "scope": "GOOGLE",
+                "types": [
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 642,
+                "vicinity": "20000, Keerthi Sri Rajasinghe Mawatha, Kandy",
+                "distance_from_origin": 0.44861713750753923,
+                "rank": 0.7796214421819021
+            }
+        },
+        "ChIJLVaouy1m4zoRn1G0Gcgric8": {
+            "arrival_time": "10:10:42",
+            "departure_time": "12:10:42",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.2940263,
+                        "lng": 80.6418502
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.295377479892721,
+                            "lng": 80.64314182989271
+                        },
+                        "southwest": {
+                            "lat": 7.292677820107277,
+                            "lng": 80.64044217010728
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/museum-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/museum_pinlet",
+                "name": "World Buddhist Museum",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 960,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/103355194867733935296\">World Buddhist Museum</a>"
+                        ],
+                        "photo_reference": "Aap_uEAJ9DIb8XhioKJiUXNa8fmHs0jSqqc4nxJcw9s_XmnrHvNKRnixMoUaAwzBR3-8TJyBWNf_dcHDpbONEFBOrsdNAR_TVMobLCydzRLYVl26krndaKrAonj5sie7GmKOtS-pcKEsLB3kJsSYtdfbkQFOWfFM2Ufv6Ix2fPL0BMHH7U_C",
+                        "width": 704
+                    }
+                ],
+                "place_id": "ChIJLVaouy1m4zoRn1G0Gcgric8",
+                "plus_code": {
+                    "compound_code": "7JVR+JP Kandy",
+                    "global_code": "6MV27JVR+JP"
+                },
+                "rating": 4.7,
+                "reference": "ChIJLVaouy1m4zoRn1G0Gcgric8",
+                "scope": "GOOGLE",
+                "types": [
+                    "tourist_attraction",
+                    "museum",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 142,
+                "vicinity": "Hemamali Mawatha, Kandy",
+                "distance_from_origin": 0.6381943788182359,
+                "rank": 0.7788426419945036
+            }
+        },
+        "ChIJ98WqvStm4zoRYjELTTlNHPg": {
+            "arrival_time": "13:25:39",
+            "departure_time": "15:25:39",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.2940058,
+                        "lng": 80.6365938
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.295439879892722,
+                            "lng": 80.63783882989271
+                        },
+                        "southwest": {
+                            "lat": 7.292740220107278,
+                            "lng": 80.63513917010727
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/worship_hindu-71.png",
+                "icon_background_color": "#7B9EB0",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/worship_hindu_pinlet",
+                "name": "Kataragama Devalaya",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 3264,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/110668684123822778112\">Gajanatha Kobbekaduwe</a>"
+                        ],
+                        "photo_reference": "Aap_uEAVdAUhNmoBi6oJp-SyzRW7kBfxF1yad5bhYyAm8rVSVVq34Qtvowv3YJlGe3qDtoL4wyW82vrwSaeLXRPgKymvT6wfsSMtSfc_Si0eVYErlBRqtp2PS9y-mEhV4iMw8x_iwC4Fe6xJtI4OVLCBmBg-VxBzT5I-rtwNcjZYrMI9qqK7",
+                        "width": 2448
+                    }
+                ],
+                "place_id": "ChIJ98WqvStm4zoRYjELTTlNHPg",
+                "plus_code": {
+                    "compound_code": "7JVP+JJ Kandy",
+                    "global_code": "6MV27JVP+JJ"
+                },
+                "rating": 4.4,
+                "reference": "ChIJ98WqvStm4zoRYjELTTlNHPg",
+                "scope": "GOOGLE",
+                "types": [
+                    "hindu_temple",
+                    "tourist_attraction",
+                    "place_of_worship",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 1075,
+                "vicinity": "Sri Skanda Kumara Devala Ln, Kandy",
+                "distance_from_origin": 0.2879709323241719,
+                "rank": 0.7734659746103555
+            }
+        },
+        "ChIJ3wUJ-yxm4zoRb2GXS6LZV5U": {
+            "arrival_time": "15:30:53",
+            "departure_time": "17:30:53",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.295137800000001,
+                        "lng": 80.6402866
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.296449979892721,
+                            "lng": 80.64163617989271
+                        },
+                        "southwest": {
+                            "lat": 7.293750320107277,
+                            "lng": 80.63893652010726
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/generic_business-71.png",
+                "icon_background_color": "#7B9EB0",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/generic_pinlet",
+                "name": "Vishnu Devalaya-kandy",
+                "photos": [
+                    {
+                        "height": 3456,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/104575198956632988277\">Isuru Rajapakshe</a>"
+                        ],
+                        "photo_reference": "Aap_uEArEsf5Yep01Nh1dLA0mg46tpYKImxSXMhbRLZzQkZK2sMa2hGuUQzaT9BF2Ao2HV0cMBB9yWzTrKEQjJwdug-7Obc28EaKhf9eN_ckoWlSF2mxSrIF1EiPY5Wv2PtvkVL7nbv5T258V6ESvhX0gEok0bdAdHA9OlzISfadQmYV2aRZ",
+                        "width": 5184
+                    }
+                ],
+                "place_id": "ChIJ3wUJ-yxm4zoRb2GXS6LZV5U",
+                "plus_code": {
+                    "compound_code": "7JWR+34 Kandy",
+                    "global_code": "6MV27JWR+34"
+                },
+                "rating": 4.6,
+                "reference": "ChIJ3wUJ-yxm4zoRb2GXS6LZV5U",
+                "scope": "GOOGLE",
+                "types": [
+                    "place_of_worship",
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 32,
+                "vicinity": "Temple Square, Kandy",
+                "distance_from_origin": 0.5726435970319547,
+                "rank": 0.7721390438226203
+            }
+        }
+    },
+    "day_3": {
+        "ChIJdUzJyS1m4zoRWNMpKf6FGA4": {
+            "arrival_time": "8:00:00",
+            "departure_time": "10:00:00",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.293460899999999,
+                        "lng": 80.64151059999999
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.294808279892721,
+                            "lng": 80.64296527989272
+                        },
+                        "southwest": {
+                            "lat": 7.292108620107277,
+                            "lng": 80.64026562010727
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/museum-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/museum_pinlet",
+                "name": "Temple of the Tooth Museum",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 1067,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/102154866008824111507\">Jonathan Newby</a>"
+                        ],
+                        "photo_reference": "Aap_uEA0VtFLgudI9_Jp8FHiID564xUftEHXcWxv3Th-YLXUOC046aoHQIDCicwP2r3Cy097tVebE3yC_tImao29Ho_9jym6NHrfrR5sfsJ25EMIX2ozaV4t3g5wlmaziMl-JkBvYkTok2kWE6k37F0jQ7k6TCbqFhCVWjPkzm5T52ZCLzmC",
+                        "width": 1600
+                    }
+                ],
+                "place_id": "ChIJdUzJyS1m4zoRWNMpKf6FGA4",
+                "rating": 4.5,
+                "reference": "ChIJdUzJyS1m4zoRWNMpKf6FGA4",
+                "scope": "GOOGLE",
+                "types": [
+                    "museum",
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 191,
+                "vicinity": "7JVR+9JJ, Kandy",
+                "distance_from_origin": 0.5775752582014919,
+                "rank": 0.767815724631739
+            }
+        },
+        "ChIJF5KmrS1m4zoR2TlKIBtqjoY": {
+            "arrival_time": "10:00:21",
+            "departure_time": "12:00:21",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.294336899999999,
+                        "lng": 80.64118839999999
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.295683829892721,
+                            "lng": 80.64236682989271
+                        },
+                        "southwest": {
+                            "lat": 7.292984170107277,
+                            "lng": 80.63966717010726
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/museum-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/museum_pinlet",
+                "name": "Tusker \"Raja\" Museum",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 480,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/118089622763846577536\">DAMITH CHANDANA</a>"
+                        ],
+                        "photo_reference": "Aap_uECAZr6C1ziCNanPpRVpir2dP1BFDG63pkEZtE7hlI5K9vlzS8fUz4lY-3HDv1YN6JHrw0Elf96mo8QkMl9TSokDyHq-a3fMNnPab8TtNcbok3brHZNCE7uOXP_hQZbTFeJIw-4w3NlJE3g9EFw_6AbHm-XiqoNtFqqLy8GJABlcyVme",
+                        "width": 720
+                    }
+                ],
+                "place_id": "ChIJF5KmrS1m4zoR2TlKIBtqjoY",
+                "plus_code": {
+                    "compound_code": "7JVR+PF Kandy",
+                    "global_code": "6MV27JVR+PF"
+                },
+                "rating": 4.4,
+                "reference": "ChIJF5KmrS1m4zoR2TlKIBtqjoY",
+                "scope": "GOOGLE",
+                "types": [
+                    "museum",
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 105,
+                "vicinity": "Temple Square, Kandy",
+                "distance_from_origin": 0.5923301226192152,
+                "rank": 0.7607808853002339
+            }
+        },
+        "ChIJHR_swC1m4zoRV6TPwqwUh1Q": {
+            "arrival_time": "13:15:18",
+            "departure_time": "15:15:18",
+            "result": {
+                "business_status": "OPERATIONAL",
+                "geometry": {
+                    "location": {
+                        "lat": 7.293355000000001,
+                        "lng": 80.642189
+                    },
+                    "viewport": {
+                        "northeast": {
+                            "lat": 7.294611629892721,
+                            "lng": 80.64357652989273
+                        },
+                        "southwest": {
+                            "lat": 7.291911970107277,
+                            "lng": 80.64087687010728
+                        }
+                    }
+                },
+                "icon": "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/museum-71.png",
+                "icon_background_color": "#13B5C7",
+                "icon_mask_base_uri": "https://maps.gstatic.com/mapfiles/place_api/icons/v2/museum_pinlet",
+                "name": "ජාතික කෞතුකාගාරය. National Museum",
+                "opening_hours": {
+                    "open_now": true
+                },
+                "photos": [
+                    {
+                        "height": 720,
+                        "html_attributions": [
+                            "<a href=\"https://maps.google.com/maps/contrib/112430711530382861949\">Prashanth Karunothayam</a>"
+                        ],
+                        "photo_reference": "Aap_uEC0aSQceF38yAzHXqdTRnUoXFoEBtzS-5TYO0iM_nigqszG9OhLH6CZ6SDOq-yu5cRZbe7ky2nu4JRU5o5VRYzOFwLtYER8xenvCIxxuECCJKFETS3Q1DTPhzb9Qkl6Z7QLC6f1l5Udi_AjF-BmxJfR1k0mN5RO_dd3NyZC6WilrQyY",
+                        "width": 1280
+                    }
+                ],
+                "place_id": "ChIJHR_swC1m4zoRV6TPwqwUh1Q",
+                "rating": 4.2,
+                "reference": "ChIJHR_swC1m4zoRV6TPwqwUh1Q",
+                "scope": "GOOGLE",
+                "types": [
+                    "museum",
+                    "tourist_attraction",
+                    "point_of_interest",
+                    "establishment"
+                ],
+                "user_ratings_total": 108,
+                "vicinity": "7JVR+8VW, Kandy",
+                "distance_from_origin": 0.6429997149960608,
+                "rank": 0.7484410693226189
+            }
+        }
+    }
+}
