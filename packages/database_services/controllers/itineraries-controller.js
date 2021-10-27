@@ -154,7 +154,7 @@ const updateItinerary = async (req, res) => {
                 }
 
             //If location of the itinerary being change
-            if (req.body.location) body.itineraries[req.params.itineraryID].location = req.body.location;
+            if (req.body.location) body[`itineraries.${req.params.itineraryID}.location`] = req.body.location;
         }
 
         //If only the location of the itinerary being changed
