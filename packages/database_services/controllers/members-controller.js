@@ -8,7 +8,7 @@ const {StateEnum} = require("../utils/constants");
  * Add a member to the itinerary
  * @param req
  * @param res
- * @returns {Promise<void>}
+ https://www.youtube.com/watch?v=-1YWcInBOgg* @returns {Promise<void>}
  */
 const addMembers = async (req, res) => {
     //User attempting to access another user profile
