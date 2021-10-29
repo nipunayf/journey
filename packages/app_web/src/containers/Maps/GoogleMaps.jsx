@@ -14,7 +14,6 @@ export default function GoogleMaps({markers, defaultMarker}) {
             >
 
                 {markers.map(marker => {
-                    console.log(defaultMarker)
                     return <MapMarker
                         id={marker.id}
                         lat={marker.geometry.lat}

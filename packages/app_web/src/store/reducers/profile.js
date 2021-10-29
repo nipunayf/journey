@@ -46,6 +46,15 @@ const updateState = (state, action) => {
     })
 }
 
+const addItinerary = (state, action) => {
+    const itineraries = state.itineraries;
+    itineraries[action.id] = action.object;
+
+    return updateObject(state, {
+        itineraries
+    })
+}
+
 
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) {
@@ -53,6 +62,7 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.UPDATE_PROFILE: return updateProfile(state, action);
         case actionTypes.CLEAR_PROFILE: return clearProfile(state, action);
         case actionTypes.UPDATE_STATE: return updateState(state, action);
+        case actionTypes.ADD_ITINERARY: return addItinerary(state, action);
         default:
             return state;
     }

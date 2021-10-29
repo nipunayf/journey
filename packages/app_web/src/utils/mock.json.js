@@ -992,7 +992,7 @@ const generateItinerary = (values) => {
     const itinerary = {}
     const pickedDestination = pickRandomDestination(availableIndices)
     itinerary.id = makeID(10);
-    itinerary.name = pickedDestination.name
+    itinerary.location = pickedDestination.name
     itinerary.state = 1;
     itinerary.image = pickedDestination.image;
     itinerary.destinations = {};
@@ -1031,7 +1031,7 @@ const generateItinerary = (values) => {
 
     itinerary.destinations[dates[0]].unshift({
         placeID: pickedDestination.place_id,
-        name: pickedDestination.name,
+        location: pickedDestination.name,
         image: pickedDestination.image,
         geometry: pickedDestination.geometry.location,
         rating: pickedDestination.rating,
