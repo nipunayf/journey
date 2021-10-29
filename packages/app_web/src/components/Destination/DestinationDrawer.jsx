@@ -26,7 +26,8 @@ import {getPlaceDescription, getPlacePhoto} from "../../api/maps-api";
 export default function DestinationDrawer({info, isRemove, select, date}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [startDate, setStartDate] = useState(new Date(date));
-    const [startArrival, setStartArrival] = useState(new Date());
+    const [arrival, setArrival] = useState(new Date(date.toString() + ' ' + info.arrival));
+    const [departure, setDeparture] = useState(new Date(date.toString() + ' ' + info.departure));
     const [description, setDescription] = useState('');
 
     const width = 360
@@ -37,6 +38,7 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
         const result = await getPlaceDescription(info.name);
         if (result.data) {
             setDescription(result.data);
+            console.log(info)
         } else {
             setDescription('Cannot find a description');
         }
@@ -81,15 +83,17 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
                             onChange={(date) => setStartDate(date)}
                             dateFormat={"MMMM d, yyyy"}
                             fixedHeight
+                            disabled
                             filterDate={date => date >= new Date()}/>
                     </HStack>
                     <HStack pt={3}>
                         <Heading size={'sm'}>Arrival: </Heading>
                         <DatePicker
-                            selected={startArrival}
-                            onChange={(date) => setStartArrival(date)}
+                            selected={arrival}
+                            onChange={(date) => setArrival(date)}
                             showTimeSelect
                             showTimeSelectOnly
+                            disabled
                             timeIntervals={15}
                             timeCaption="Time"
                             dateFormat="h:mm aa"
@@ -97,10 +101,11 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
                         <Spacer/>
                         <Heading size={'sm'}>Departure: </Heading>
                         <DatePicker
-                            selected={startArrival}
-                            onChange={(date) => setStartArrival(date)}
+                            selected={departure}
+                            onChange={(date) => setDeparture(date)}
                             showTimeSelect
                             showTimeSelectOnly
+                            disabled
                             timeIntervals={15}
                             timeCaption="Time"
                             dateFormat="h:mm aa"

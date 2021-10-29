@@ -11,7 +11,6 @@ export const getPlaceDetails = id => mapsServices.getRequest(`place/details/json
 export const getNearbyPlaces = data => {
     let location = data.location;
     let radius = data.radius?data.radius:6000;
-    console.log(`place/nearbysearch/json?location=${location.lat},${location.lng}&radius=${radius}&type=tourist_attraction`);
     return mapsServices.getRequest(`place/nearbysearch/json?location=${location.lat},${location.lng}&radius=${radius}&type=tourist_attraction&key=${API_KEY}`)
 }
 

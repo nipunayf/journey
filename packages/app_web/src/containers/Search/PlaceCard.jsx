@@ -30,16 +30,6 @@ export default function PlaceCard(props) {
                     <Text as={'h4'} fontSize={'sm'} fontWeight={'semibold'}>
                         {user_ratings_total} Reviews
                     </Text>
-                    <Box
-                        color="gray.500"
-                        fontWeight="semibold"
-                        letterSpacing="wide"
-                        fontSize="xs"
-                        textTransform="uppercase"
-                        ml="2"
-                    >
-                        1 days
-                    </Box>
                 </Box>
 
                 <Box

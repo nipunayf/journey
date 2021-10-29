@@ -61,9 +61,9 @@ function Dashboard({itineraries}) {
 
     return (<>
         <Navbar/>
-        {Object.keys(itineraries).length === 0 ? <NoResultsSplash height={400}
-                                                                  message={'You do not have any itineraries at the moment. Start creating a new itinerary by searching a destination'}/>
-            : <>
+        {!itineraries ? <NoResultsSplash height={400}  message={'You do not have any itineraries at the moment. Start creating a new itinerary by searching a destination'}/>
+            : Object.keys(itineraries).length == 0 ? <NoResultsSplash height={400}  message={'You do not have any itineraries at the moment. Start creating a new itinerary by searching a destination'}/>
+                : <>
                 <Box py={10}/>
                 <ItineraryContainer title={'Continue planning'} children={inactiveItineraries}/>
                 <ItineraryContainer title={'Fix these'} children={incompatibleItineraries}/>

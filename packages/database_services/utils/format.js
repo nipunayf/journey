@@ -14,8 +14,10 @@ const formatDestinationDates = (id, object) => {
 
     const orderedDestinations = {};
     dates.forEach(date => {
-        destinations[date].arrival = formatFirestoreTimestamp(destinations[date].arrival);
-        destinations[date].departure = formatFirestoreTimestamp(destinations[date].departure);
+        if (typeof destinations[date].arrival == 'object') {
+            destinations[date].arrival = formatFirestoreTimestamp(destinations[date].arrival);
+            destinations[date].departure = formatFirestoreTimestamp(destinations[date].departure);
+        }
         orderedDestinations[date] = destinations[date]
     })
 

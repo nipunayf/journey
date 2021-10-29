@@ -12,13 +12,16 @@ import {generateErrorMessage, generateSuccessMessage} from "../utils/toast";
 import {connect} from "react-redux";
 import MapContainer from "../containers/Maps/GoogleMaps";
 import {useState} from "react";
+import * as actions from "../store/actions";
+import {StateEnum} from "../utils/constants";
 
 
-function Itinerary({displayName}) {
+function Itinerary({displayName, onAddItinerary}) {
     const location = useLocation();
     const itinerary = location.state.itinerary;
     const [defaultMarker, setDefaultMarker] = useState(Object.values(itinerary.destinations)[0][0]);
     const toast = useToast();
+    const [buttonState, setButtonState] = useState(itinerary.state);
 
     const formik = useFormik({
         initialValues: {
@@ -29,7 +32,7 @@ function Itinerary({displayName}) {
         onSubmit: async values => {
             //send the data to the firestore
             const result = await createItinerary({
-                location: itinerary.name,
+                location: itinerary.location,
                 image: itinerary.image,
                 destinations: values.destinations,
                 displayName
@@ -37,6 +40,16 @@ function Itinerary({displayName}) {
 
             if (result.data) {
                 generateSuccessMessage(toast, 'Itinerary saved', 'We have successfully saved your itinerary')
+
+                const dates = Object.keys(itinerary.destinations);
+                // Update the dashboard
+                onAddItinerary(result.data, {
+                    location: itinerary.location,
+                    image: itinerary.image,
+                    state: StateEnum.INACTIVE,
+                    startDate: new Date(dates[0]),
+                    endDate: new Date(dates.at(-1))
+                })
             } else {
                 generateErrorMessage(toast, 'Failed to save the itinerary', result?.message)
             }
@@ -51,7 +64,7 @@ function Itinerary({displayName}) {
             <HStack w={'100wh'} alignItems={'flex-start'} spacing={2} p={4}>
                 <VStack alignItems={'left'} overflowY={'scroll'} h={'80vh'} w={'80%'}>
                     <HStack spacing={3} px={4}>
-                        <NewDestination/>
+                        {/*<NewDestination/>*/}
                         <Members/>
                         <Button
                             leftIcon={<MdSave/>}
@@ -62,12 +75,11 @@ function Itinerary({displayName}) {
                             _hover={{bg: 'blue.500'}}>
                             Save
                         </Button>
-                        <StateChangeButton state={1} id={itinerary.id}/>
+                        <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>
                     </HStack>
                     <Accordion defaultIndex={[0]} allowMultiple minW={'45%'} pt={5} pl={4}>
                     {Object.keys(itinerary.destinations).map(date => {
                         if (itinerary.destinations[date].length > 0) {
-                            console.log(defaultMarker)
                             return <DateAccordion date={date} destinations={itinerary.destinations[date]}
                                                   onHover={setDefaultMarker}/>;
                         }
@@ -86,4 +98,12 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, null)(Itinerary);
+const mapDispatchToProps = dispatch => {
+    return {
+        onAddItinerary: (id, object) => dispatch(actions.addItinerary(id, object))
+    };
+};
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Itinerary);

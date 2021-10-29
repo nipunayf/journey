@@ -992,7 +992,7 @@ const generateItinerary = (values) => {
     const itinerary = {}
     const pickedDestination = pickRandomDestination(availableIndices)
     itinerary.id = makeID(10);
-    itinerary.name = pickedDestination.name
+    itinerary.location = pickedDestination.name
     itinerary.state = 1;
     itinerary.image = pickedDestination.image;
     itinerary.destinations = {};
@@ -1039,6 +1039,7 @@ const generateItinerary = (values) => {
         departure: '09:30'
     })
 
+    console.log(itinerary);
     return itinerary
 }
 

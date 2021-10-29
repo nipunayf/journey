@@ -17,13 +17,13 @@ export default function Search() {
     const placeId = location.state.Id;
 
     useEffect(() => {
-        console.log('state changed')
         getDetails(placeId);
     }, [placeId])
 
     async function getDetails(id) {
         const placeDetails = await getPlaceDetails(id);
         if (placeDetails.data) {
+            console.log(placeDetails);
             setDetails(placeDetails.data);
             const data = {
                 location: {

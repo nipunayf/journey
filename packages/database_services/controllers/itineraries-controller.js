@@ -85,7 +85,8 @@ const createItinerary = async (req, res) => {
         destinations: req.body.destinations,
         state: StateEnum.INACTIVE,
         members: [userID],
-        memberInfo: {}
+        memberInfo: {},
+        image: req.body.image
     }
     data.memberInfo[userID] = {displayName: req.body.displayName, review: 0};
     const batch = transaction();

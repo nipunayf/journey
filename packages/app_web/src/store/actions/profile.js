@@ -34,7 +34,7 @@ export const updateProfile = (firstName, lastName, preferences) => {
 export const updateState = (id, state) => {
     const itinerary = getObject('itineraries');
     itinerary[id].state = state;
-    storeObject('itineraries',itinerary);
+    storeObject('itineraries', itinerary);
 
     return {
         type: actionTypes.UPDATE_STATE,
@@ -43,7 +43,17 @@ export const updateState = (id, state) => {
     }
 }
 
+export const addItinerary = (id, object) => {
+    const itinerary = getObject('itineraries');
+    itinerary[id] = object;
+    storeObject('itineraries', itinerary);
 
+    return {
+        type: actionTypes.ADD_ITINERARY,
+        object,
+        id
+    }
+}
 
 export const clearProfile = () => {
     return {
