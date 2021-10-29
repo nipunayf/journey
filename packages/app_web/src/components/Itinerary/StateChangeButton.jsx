@@ -9,14 +9,16 @@ import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
 function StateChangeButton({id, state, onStateUpdate, setState}) {
-    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const toast = useToast();
 
-    const onClick = (state) => async () => {
+    const onClick = (state, message) => async () => {
         //Updates the back-end firestore
+        setLoading(true);
         const result = await updateItinerary(id, {state});
         if (result.data) {
             generateSuccessMessage(toast, 'Updated itinerary successfully', message);
+            setLoading(false);
             setState(state);
             onStateUpdate(id, state);
         } else {
@@ -32,7 +34,8 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 bg={'green.400'}
                 size={'sm'}
                 color={'white'}
-                onClick={onClick(StateEnum.ACTIVE)}
+                isLoading={loading}
+                onClick={onClick(StateEnum.ACTIVE, 'The itinerary is successfully activated')}
                 _hover={{bg: 'green.500'}}>
                 Activate
             </Button>
@@ -43,6 +46,7 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 bg={'green.400'}
                 size={'sm'}
                 color={'white'}
+                isLoading={loading}
                 onClick={() => {}}
                 isDisabled
                 _hover={{bg: 'green.500'}}>
@@ -57,7 +61,8 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 bg={'red.400'}
                 size={'sm'}
                 color={'white'}
-                onClick={onClick(StateEnum.INACTIVE)}
+                isLoading={loading}
+                onClick={onClick(StateEnum.INACTIVE, 'The itinerary is successfully deactivated')}
                 _hover={{bg: 'red.500'}}>
                 Deactivate
             </Button>
@@ -69,7 +74,8 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 bg={'secondary.light'}
                 size={'sm'}
                 color={'white'}
-                onClick={onClick(5)}
+                isLoading={loading}
+                onClick={onClick(5, 'Thank you for your review')}
                 _hover={{bg: 'blue.500'}}>
                 Review
             </Button>
