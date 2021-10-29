@@ -21,6 +21,7 @@ function Itinerary({displayName, onAddItinerary}) {
     const itinerary = location.state.itinerary;
     const [defaultMarker, setDefaultMarker] = useState(Object.values(itinerary.destinations)[0][0]);
     const toast = useToast();
+    const [buttonState, setButtonState] = useState(itinerary.state);
 
     const formik = useFormik({
         initialValues: {
@@ -74,7 +75,7 @@ function Itinerary({displayName, onAddItinerary}) {
                             _hover={{bg: 'blue.500'}}>
                             Save
                         </Button>
-                        <StateChangeButton state={1} id={itinerary.id}/>
+                        <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>
                     </HStack>
                     <Accordion defaultIndex={[0]} allowMultiple minW={'45%'} pt={5} pl={4}>
                     {Object.keys(itinerary.destinations).map(date => {

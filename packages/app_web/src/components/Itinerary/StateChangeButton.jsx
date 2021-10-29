@@ -8,7 +8,7 @@ import * as actions from "../../store/actions";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
-function StateChangeButton({id, state, onStateUpdate}) {
+function StateChangeButton({id, state, onStateUpdate, setState}) {
     const [message, setMessage] = useState('');
     const toast = useToast();
 
@@ -17,6 +17,7 @@ function StateChangeButton({id, state, onStateUpdate}) {
         const result = await updateItinerary(id, {state});
         if (result.data) {
             generateSuccessMessage(toast, 'Updated itinerary successfully', message);
+            setState(state);
             onStateUpdate(id, state);
         } else {
             generateErrorMessage(toast, 'Unable to update the itinerary', result.message);
@@ -31,7 +32,7 @@ function StateChangeButton({id, state, onStateUpdate}) {
                 bg={'green.400'}
                 size={'sm'}
                 color={'white'}
-                onClick={onClick(3)}
+                onClick={onClick(StateEnum.ACTIVE)}
                 _hover={{bg: 'green.500'}}>
                 Activate
             </Button>
@@ -56,7 +57,7 @@ function StateChangeButton({id, state, onStateUpdate}) {
                 bg={'red.400'}
                 size={'sm'}
                 color={'white'}
-                onClick={onClick(1)}
+                onClick={onClick(StateEnum.INACTIVE)}
                 _hover={{bg: 'red.500'}}>
                 Deactivate
             </Button>
