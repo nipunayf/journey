@@ -79,7 +79,7 @@ export default function MainPlaceCard(props) {
                             {user_ratings_total} Reviews
                         </Text>}
                     </HStack>
-                    <CreateItinerary info={props.placeDetails} />
+                    {rating > 0 && <CreateItinerary info={props.placeDetails}/>}
                 </VStack>
             </HStack>
         </Stack>
