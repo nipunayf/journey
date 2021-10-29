@@ -17,7 +17,6 @@ export default function Search() {
     const placeId = location.state.Id;
 
     useEffect(() => {
-        console.log('state changed')
         getDetails(placeId);
     }, [placeId])
 

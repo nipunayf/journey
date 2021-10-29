@@ -1031,7 +1031,7 @@ const generateItinerary = (values) => {
 
     itinerary.destinations[dates[0]].unshift({
         placeID: pickedDestination.place_id,
-        location: pickedDestination.name,
+        name: pickedDestination.name,
         image: pickedDestination.image,
         geometry: pickedDestination.geometry.location,
         rating: pickedDestination.rating,
@@ -1039,6 +1039,7 @@ const generateItinerary = (values) => {
         departure: '09:30'
     })
 
+    console.log(itinerary);
     return itinerary
 }
 

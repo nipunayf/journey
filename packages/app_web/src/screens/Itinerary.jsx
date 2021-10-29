@@ -29,7 +29,6 @@ function Itinerary({displayName, onAddItinerary}) {
         },
 
         onSubmit: async values => {
-            console.log(itinerary);
             //send the data to the firestore
             const result = await createItinerary({
                 location: itinerary.location,
