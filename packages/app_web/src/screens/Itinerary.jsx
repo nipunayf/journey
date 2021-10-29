@@ -51,7 +51,7 @@ function Itinerary({displayName}) {
             <HStack w={'100wh'} alignItems={'flex-start'} spacing={2} p={4}>
                 <VStack alignItems={'left'} overflowY={'scroll'} h={'80vh'} w={'80%'}>
                     <HStack spacing={3} px={4}>
-                        <NewDestination/>
+                        {/*<NewDestination/>*/}
                         <Members/>
                         <Button
                             leftIcon={<MdSave/>}

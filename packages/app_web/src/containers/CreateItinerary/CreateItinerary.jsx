@@ -43,6 +43,7 @@ function CreateItinerary({preferences, info}) {
             size={'sm'}
             color={'white'}
             onClick={onOpen}
+            maxW={120}
             ml={155}
             _hover={{bg: 'blue.500'}}>
             Create Itinerary

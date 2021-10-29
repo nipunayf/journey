@@ -24,6 +24,7 @@ export default function Search() {
     async function getDetails(id) {
         const placeDetails = await getPlaceDetails(id);
         if (placeDetails.data) {
+            console.log(placeDetails);
             setDetails(placeDetails.data);
             const data = {
                 location: {
