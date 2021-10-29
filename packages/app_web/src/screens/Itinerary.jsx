@@ -13,6 +13,7 @@ import {connect} from "react-redux";
 import MapContainer from "../containers/Maps/GoogleMaps";
 import {useState} from "react";
 import * as actions from "../store/actions";
+import {StateEnum} from "../utils/constants";
 
 
 function Itinerary({displayName, onAddItinerary}) {
@@ -39,10 +40,16 @@ function Itinerary({displayName, onAddItinerary}) {
 
             if (result.data) {
                 generateSuccessMessage(toast, 'Itinerary saved', 'We have successfully saved your itinerary')
-                // onAddItinerary(result.data, {
-                //     location: itinerary.name,
-                //     image: itinerary.image,
-                // })
+
+                const dates = Object.keys(itinerary.destinations);
+                // Update the dashboard
+                onAddItinerary(result.data, {
+                    location: itinerary.location,
+                    image: itinerary.image,
+                    state: StateEnum.INACTIVE,
+                    startDate: new Date(dates[0]),
+                    endDate: new Date(dates.at(-1))
+                })
             } else {
                 generateErrorMessage(toast, 'Failed to save the itinerary', result?.message)
             }
