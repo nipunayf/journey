@@ -34,10 +34,10 @@ def createPersonKeyword(dic):
         type_not_key = enums.Types[NOT_KEY].value
         keyword_key = enums.Keywords[key].value
         keyword_not_key = enums.Keywords[NOT_KEY].value
-        if dic[key] == -1:
+        if dic[key] <= -1:  # nature,relax,entertainment
             person_type += type_key
             person_keyword += keyword_key
-        elif dic[key] == 1:
+        elif dic[key] >= 1:  # indoor,adventure,traditional
             person_type += type_not_key
             person_keyword += keyword_not_key
         elif dic[key] == 0:
@@ -106,6 +106,7 @@ def filterPlacesbyType(results):
 
 def getDistance(lat1, lon1, lat2, lon2):
     input = (lat1, lon1, lat2, lon2)
+
     # with open("getdistance_input.txt", 'w', encoding='utf-8') as f:
     #     f.write(str(input))
 
