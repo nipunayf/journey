@@ -14,7 +14,7 @@ services:
 
   proxy:
     build:
-      context: ./proxy
+      context: ./search_services/proxy
     restart: always
     depends_on:
       - search
