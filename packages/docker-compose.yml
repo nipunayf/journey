@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  search:
+    build:
+      context: ./search_services
+    restart: always
+    volumes:
+      - static-data:/vol/web
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+    
+
+  proxy:
+    build:
+      context: ./proxy
+    restart: always
+    depends_on:
+      - search
+    ports:
+      - 80:8000
+    volumes:
+      - static-data:/vol/static
+
+volumes:
+  static-data:
