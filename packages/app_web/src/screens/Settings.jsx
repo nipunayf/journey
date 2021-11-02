@@ -55,7 +55,6 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
                 preferences: outputPreferences
             });
 
-            console.log(result)
             if (result.data) {
                 generateSuccessMessage(toast, 'Account updated successfully',
                     'We have successfully updated your profile');
