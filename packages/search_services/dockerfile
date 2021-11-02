@@ -14,7 +14,7 @@ RUN mkdir /app
 COPY . /app
 WORKDIR /app
 
-RUN useradd user
+RUN useradd user && \
     mkdir -p /vol/web/static && \
     mkdir -p /vol/web/media && \
     chown -R user:user /vol && \
