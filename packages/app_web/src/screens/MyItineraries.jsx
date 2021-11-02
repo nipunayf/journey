@@ -47,6 +47,9 @@ function SearchBar({cached, setResult}) {
                 const info = cached[id];
                 if (values.state == StateEnum.REVIEWED) break;
                 if (values.state != StateEnum.ANY && values.state != info.state) continue;
+                if (values.startDate && (values.startDate > new Date(info.startDate))) continue;
+                if (values.endDate && (values.endDate < new Date(info.startDate))) continue;
+
                 arr.push({...cached[id], id})
             }
 
