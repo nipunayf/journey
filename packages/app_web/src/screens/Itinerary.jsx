@@ -11,7 +11,7 @@ import {createItinerary} from "../api/itineraries-api";
 import {generateErrorMessage, generateSuccessMessage} from "../utils/toast";
 import {connect} from "react-redux";
 import MapContainer from "../containers/Maps/GoogleMaps";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as actions from "../store/actions";
 import {StateEnum} from "../utils/constants";
 
@@ -21,8 +21,10 @@ function Itinerary({displayName, onAddItinerary}) {
     const itinerary = location.state.itinerary;
     const [defaultMarker, setDefaultMarker] = useState(Object.values(itinerary.destinations)[0][0]);
     const toast = useToast();
+    console.log(itinerary);
     const [buttonState, setButtonState] = useState(itinerary.state);
-    const [id, setID] = useState(itinerary.state.id ? itinerary.state.id : '');
+    const [id, setID] = useState(itinerary.id ? itinerary.id : '');
+
 
     const formik = useFormik({
         initialValues: {
