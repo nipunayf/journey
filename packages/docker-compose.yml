@@ -4,6 +4,8 @@ services:
   search:
     build:
       context: ./search_services
+    ports:
+      - 8000:8000
     restart: always
     volumes:
       - static-data:/vol/web
@@ -19,7 +21,7 @@ services:
     depends_on:
       - search
     ports:
-      - 80:8000
+      - 80:80
     volumes:
       - static-data:/vol/static
 
