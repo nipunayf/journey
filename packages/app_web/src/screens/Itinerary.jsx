@@ -33,6 +33,7 @@ function Itinerary({displayName, onAddItinerary}) {
         },
 
         onSubmit: async values => {
+            formik.setSubmitting(true);
             //send the data to the firestore
             const result = await createItinerary({
                 location: itinerary.location,
@@ -57,6 +58,7 @@ function Itinerary({displayName, onAddItinerary}) {
             } else {
                 generateErrorMessage(toast, 'Failed to save the itinerary', result?.message)
             }
+            formik.setSubmitting(false);
         }
     });
 
@@ -76,6 +78,7 @@ function Itinerary({displayName, onAddItinerary}) {
                             color={'white'}
                             size={'sm'}
                             isDisabled={id !== ''}
+                            isLoading={formik.isSubmitting}
                             onClick={formik.handleSubmit}
                             _hover={{bg: 'blue.500'}}>
                             Save
