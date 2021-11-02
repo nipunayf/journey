@@ -1,3 +1,5 @@
+// noinspection EqualityComparisonWithCoercionJS
+
 import {
     Heading,
     HStack,
@@ -16,8 +18,7 @@ import DatePicker from "react-datepicker";
 
 import 'react-datepicker/dist/react-datepicker.css';
 import '../components/Destination/datepicker.css';
-import React, {useState} from "react";
-import Navbar from "../containers/Navbar/Navbar";
+import React, {useState} from "react";import Navbar from "../containers/Navbar/Navbar";
 import NoResultsSplash from "../components/Alert/NoResultsSplash";
 import {StateEnum} from "../utils/constants";
 import {useFormik} from "formik";
@@ -42,18 +43,17 @@ function SearchBar({cached, setResult}) {
             const arr = [];
 
             // Need to to query the database to search the reviewed itineraries
-            // noinspection EqualityComparisonWithCoercionJS
             for (let id in cached) {
                 const info = cached[id];
-                // if (info.state )
+                if (values.state == StateEnum.REVIEWED) break;
+                if (values.state != StateEnum.ANY && values.state != info.state) continue;
                 arr.push({...cached[id], id})
+            }
+
+            if (values.state == StateEnum.REVIEWED || values.state == StateEnum.ANY) {
                 console.log(values);
             }
-            // if (values.state == StateEnum.REVIEWED || values.state == StateEnum.ANY) {
-            //     console.log(values);
-            // } else {
-            //
-            // }
+
             setResult(arr);
             formik.setSubmitting(false);
         }
