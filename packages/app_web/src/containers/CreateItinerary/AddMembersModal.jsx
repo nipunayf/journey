@@ -100,6 +100,7 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, emai
                 onClick={() => {
                     setScreen(1)
                 }}
+                isDisabled={members.length === 0}
                 _hover={{bg: 'green.500'}}>
                 Next
             </Button>
