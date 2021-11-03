@@ -152,7 +152,6 @@ const updateItinerary = async (req, res) => {
             else
                 body = {
                     [`itineraries.${req.params.itineraryID}.state`]: req.body.state
-                    // [`${req.params.itineraryID}`]: {state: req.body.state}
                 }
 
             //If location of the itinerary being change
