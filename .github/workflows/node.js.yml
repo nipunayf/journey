@@ -26,12 +26,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: packages/database_services/yarn.lock
-    - uses: borales/actions-yarn@v2.3.0
-      with:
-        cmd: install # will run `yarn install` command
-    - uses: borales/actions-yarn@v2.3.0
-      with:
-        cmd: build # will run `yarn build` command
-    - uses: borales/actions-yarn@v2.3.0
-      with:
-        cmd: test # will run `yarn test` command
+    - name: install package
+      run: yarn install
+    - name: run testing
+      run: yarn test
