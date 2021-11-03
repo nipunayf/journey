@@ -7,7 +7,8 @@ const StateEnum = {
     INCOMPATIBLE: 2,
     ACTIVE: 3,
     TO_BE_REVIEWED: 4,
-    REVIEWED: 5
+    REVIEWED: 5,
+    ANY: 0
 }
 Object.freeze(StateEnum);
 

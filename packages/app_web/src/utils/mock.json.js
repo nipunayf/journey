@@ -991,7 +991,6 @@ const generateItinerary = (values) => {
 
     const itinerary = {}
     const pickedDestination = pickRandomDestination(availableIndices)
-    itinerary.id = makeID(10);
     itinerary.location = pickedDestination.name
     itinerary.state = 1;
     itinerary.image = pickedDestination.image;

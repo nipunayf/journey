@@ -39,7 +39,6 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 _hover={{bg: 'green.500'}}>
                 Activate
             </Button>
-            break;
         case(StateEnum.INCOMPATIBLE):
             return <Button
                 leftIcon={<MdPlayArrow />}
@@ -52,7 +51,6 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 _hover={{bg: 'green.500'}}>
                 Activate
             </Button>
-            break;
         case(StateEnum.ACTIVE):
             // setMessage('You have successfully deactivated your itinerary');
             console.log('repeating')
@@ -66,7 +64,6 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 _hover={{bg: 'red.500'}}>
                 Deactivate
             </Button>
-            break;
         case(StateEnum.TO_BE_REVIEWED):
             // setMessage('You have successfully posted a review');
             return <Button
@@ -79,7 +76,6 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 _hover={{bg: 'blue.500'}}>
                 Review
             </Button>
-            break;
         default:
             return <></>;
     }

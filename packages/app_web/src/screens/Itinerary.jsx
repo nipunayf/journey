@@ -11,7 +11,7 @@ import {createItinerary} from "../api/itineraries-api";
 import {generateErrorMessage, generateSuccessMessage} from "../utils/toast";
 import {connect} from "react-redux";
 import MapContainer from "../containers/Maps/GoogleMaps";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as actions from "../store/actions";
 import {StateEnum} from "../utils/constants";
 
@@ -21,7 +21,10 @@ function Itinerary({displayName, onAddItinerary}) {
     const itinerary = location.state.itinerary;
     const [defaultMarker, setDefaultMarker] = useState(Object.values(itinerary.destinations)[0][0]);
     const toast = useToast();
+    console.log(itinerary);
     const [buttonState, setButtonState] = useState(itinerary.state);
+    const [id, setID] = useState(itinerary.id ? itinerary.id : '');
+
 
     const formik = useFormik({
         initialValues: {
@@ -30,6 +33,7 @@ function Itinerary({displayName, onAddItinerary}) {
         },
 
         onSubmit: async values => {
+            formik.setSubmitting(true);
             //send the data to the firestore
             const result = await createItinerary({
                 location: itinerary.location,
@@ -50,9 +54,11 @@ function Itinerary({displayName, onAddItinerary}) {
                     startDate: new Date(dates[0]),
                     endDate: new Date(dates.at(-1))
                 })
+                setID(result.data);
             } else {
                 generateErrorMessage(toast, 'Failed to save the itinerary', result?.message)
             }
+            formik.setSubmitting(false);
         }
     });
 
@@ -71,11 +77,13 @@ function Itinerary({displayName, onAddItinerary}) {
                             bg={'secondary.light'}
                             color={'white'}
                             size={'sm'}
+                            isDisabled={id !== ''}
+                            isLoading={formik.isSubmitting}
                             onClick={formik.handleSubmit}
                             _hover={{bg: 'blue.500'}}>
                             Save
                         </Button>
-                        <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>
+                        {id !== '' && <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>}
                     </HStack>
                     <Accordion defaultIndex={[0]} allowMultiple minW={'45%'} pt={5} pl={4}>
                     {Object.keys(itinerary.destinations).map(date => {
@@ -94,6 +102,7 @@ function Itinerary({displayName, onAddItinerary}) {
 
 const mapStateToProps = state => {
     return {
+        itineraries: state.itineraries,
         displayName: `${state.profile.firstName} ${state.profile.lastName}`
     };
 };
