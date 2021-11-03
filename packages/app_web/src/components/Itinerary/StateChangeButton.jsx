@@ -1,5 +1,5 @@
 import {StateEnum} from "../../utils/constants";
-import {Badge, Button, useToast} from "@chakra-ui/react";
+import {Badge, Button, useDisclosure, useToast} from "@chakra-ui/react";
 import {MdGroup, MdHighlightOff, MdPlayArrow, MdRateReview} from "react-icons/all";
 import {updateItinerary} from "../../api/itineraries-api";
 import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
@@ -7,10 +7,12 @@ import {useState} from "react";
 import * as actions from "../../store/actions";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
+import ReviewPopup from "./ReviewPopup";
 
 function StateChangeButton({id, state, onStateUpdate, setState}) {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
     const onClick = (state, message) => async () => {
         //Updates the back-end firestore
@@ -28,7 +30,6 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
 
     switch (state) {
         case(StateEnum.INACTIVE):
-            // setMessage('You have successfully activated your itinerary');
             return <Button
                 leftIcon={<MdPlayArrow />}
                 bg={'green.400'}
@@ -52,7 +53,6 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 Activate
             </Button>
         case(StateEnum.ACTIVE):
-            // setMessage('You have successfully deactivated your itinerary');
             console.log('repeating')
             return <Button
                 leftIcon={<MdHighlightOff />}
@@ -65,17 +65,19 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
                 Deactivate
             </Button>
         case(StateEnum.TO_BE_REVIEWED):
-            // setMessage('You have successfully posted a review');
-            return <Button
-                leftIcon={<MdRateReview />}
+            return <>
+                <ReviewPopup onClose={onClose} isOpen={isOpen}/>
+                <Button
+                leftIcon={<MdRateReview/>}
                 bg={'secondary.light'}
                 size={'sm'}
                 color={'white'}
                 isLoading={loading}
-                onClick={onClick(5, 'Thank you for your review')}
+                // onClick={onClick(5, 'Thank you for your review')}
+                onClick={onOpen}
                 _hover={{bg: 'blue.500'}}>
                 Review
-            </Button>
+            </Button></>
         default:
             return <></>;
     }

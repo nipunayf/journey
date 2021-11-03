@@ -21,7 +21,6 @@ function Itinerary({displayName, onAddItinerary}) {
     const itinerary = location.state.itinerary;
     const [defaultMarker, setDefaultMarker] = useState(Object.values(itinerary.destinations)[0][0]);
     const toast = useToast();
-    console.log(itinerary);
     const [buttonState, setButtonState] = useState(itinerary.state);
     const [id, setID] = useState(itinerary.id ? itinerary.id : '');
 
