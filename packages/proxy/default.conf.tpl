@@ -11,7 +11,7 @@ server {
         client_max_body_size    10M;
     }
     location /database {
-        proxy_pass              http://${DB_HOST}:${DB_PORT};
+        proxy_pass              http://localhost:${DB_PORT};
     }
 
 }
