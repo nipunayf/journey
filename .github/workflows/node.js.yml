@@ -29,4 +29,4 @@ jobs:
     - name: install package
       run: yarn install
     - name: run testing
-      run: yarn test
+      run: yarn jest
