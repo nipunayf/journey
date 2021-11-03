@@ -10,7 +10,7 @@ server {
         include                 /etc/nginx/uwsgi_params;
         client_max_body_size    10M;
     }
-    location /database {
+    location / {
         proxy_pass              http://${DB_HOST}:${DB_PORT};
     }
 
