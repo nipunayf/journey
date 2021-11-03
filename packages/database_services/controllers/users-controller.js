@@ -142,7 +142,7 @@ const updateUser = async (req, res) => {
     const result = await userStore.where('userID', '==', req.params.userID).where('isDeleted', '==', 0).get();
 
     //Document not found in firestore
-    if (result.size == 0)
+    if (result.size === 0)
         return errorMessage(res, 'User not found', 404);
 
     //Updating the firestore

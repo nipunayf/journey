@@ -4,7 +4,8 @@ const {getItineraries,
     getItinerary,
     createItinerary,
     updateItinerary,
-    deleteItinerary} = require('../controllers/itineraries-controller');
+    deleteItinerary, addReview
+} = require('../controllers/itineraries-controller');
 
 router.get('/:itineraryID',
     auth,
@@ -21,5 +22,9 @@ router.post('/',
 router.put('/:itineraryID',
     auth,
     updateItinerary)
+
+router.post('/:itineraryID',
+    auth,
+    addReview)
 
 module.exports = router;

@@ -221,10 +221,50 @@ const deleteItinerary = async (req, res) => {
         return errorMessage(res, 'Itinerary not found', 404);
 }
 
+/**
+ * Post a new review for the itinerary
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
+const addReview = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    let result = await itineraryStore.doc(req.params.itineraryID).get();
+
+    if (result._fieldsProto) { //Document found in fire store
+
+        //Check if the user is a member of the itinerary
+        if (!result.data().members.includes(req.user))
+            return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+        const batch = transaction();
+        const itDocRef = itineraryStore.doc(req.params.itineraryID);
+
+        // Updates the firebase
+        batch.update(itDocRef, {
+            [`memberInfo.${req.user}.review`]: req.body.review,
+            state: StateEnum.REVIEWED
+        })
+
+        const userDocRef = await userStore.where('userID', '==', req.user).get();
+        batch.update(userDocRef.docs[0]._ref, {
+            [`itineraries.${req.params.itineraryID}`]: FieldValue.delete()
+        })
+
+        await batch.commit();
+        return successMessage(res, true);
+    } else
+        return errorMessage(res, 'Itinerary not found', 404);
+}
+
 module.exports = {
     getItineraries,
     getItinerary,
     createItinerary,
     updateItinerary,
-    deleteItinerary
+    deleteItinerary,
+    addReview
 }

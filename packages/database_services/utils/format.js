@@ -6,7 +6,13 @@
  */
 const formatDestinationDates = (id, object) => {
     const destinations = object.destinations;
-    const dates = Object.keys(destinations);
+    let dates;
+    if (object.destinations)
+        dates = Object.keys(destinations);
+    else return {
+        ...object,
+        id
+    }
 
     dates.sort((a, b) => {
         return new Date(a) - new Date(b);

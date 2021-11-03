@@ -1,7 +1,7 @@
 import {StateEnum} from "../../utils/constants";
 import {Badge, Button, useDisclosure, useToast} from "@chakra-ui/react";
 import {MdGroup, MdHighlightOff, MdPlayArrow, MdRateReview} from "react-icons/all";
-import {updateItinerary} from "../../api/itineraries-api";
+import {addReview, updateItinerary} from "../../api/itineraries-api";
 import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 import {useState} from "react";
 import * as actions from "../../store/actions";
@@ -25,6 +25,18 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
             onStateUpdate(id, state);
         } else {
             generateErrorMessage(toast, 'Unable to update the itinerary', result.message);
+        }
+    }
+
+    const onReviewInput = review => async () => {
+        // Updates the back-end firestore
+        const result = await addReview(id, review);
+        if (result.data) {
+            generateSuccessMessage(toast, 'Posted your review successfully', 'Thank you for your feedback');
+            setState(StateEnum.REVIEWED);
+            onStateUpdate(id, StateEnum.REVIEWED);
+        } else {
+            generateErrorMessage(toast, 'Unable to post your review', result.message);
         }
     }
 
@@ -66,14 +78,13 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
             </Button>
         case(StateEnum.TO_BE_REVIEWED):
             return <>
-                <ReviewPopup onClose={onClose} isOpen={isOpen}/>
+                <ReviewPopup onClose={onClose} isOpen={isOpen} onClick={onReviewInput}/>
                 <Button
                 leftIcon={<MdRateReview/>}
                 bg={'secondary.light'}
                 size={'sm'}
                 color={'white'}
                 isLoading={loading}
-                // onClick={onClick(5, 'Thank you for your review')}
                 onClick={onOpen}
                 _hover={{bg: 'blue.500'}}>
                 Review
