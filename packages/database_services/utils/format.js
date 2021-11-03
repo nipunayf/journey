@@ -6,7 +6,13 @@
  */
 const formatDestinationDates = (id, object) => {
     const destinations = object.destinations;
-    const dates = Object.keys(destinations);
+    let dates;
+    if (object.destinations)
+        dates = Object.keys(destinations);
+    else return {
+        ...object,
+        id
+    }
 
     dates.sort((a, b) => {
         return new Date(a) - new Date(b);
@@ -28,27 +34,6 @@ const formatDestinationDates = (id, object) => {
     }
 }
 
-const formatUserDates = (object) => {
-    const itineraries = object.itineraries;
-    const ids = Object.keys(itineraries);
-
-    //Skips if there is no itineraries under the user document
-    if (Object.keys(itineraries).length === 0)
-        return object;
-
-    //Format the date for each itinerary
-    ids.forEach(id => {
-        const itinerary = itineraries[id]
-        itinerary.startDate = formatFirestoreTimestamp(itinerary.startDate);
-        itinerary.endDate = formatFirestoreTimestamp(itinerary.endDate);
-    })
-
-    return {
-        ...object,
-        itineraries
-    }
-}
-
 /**
  * Formats the given firestore timestamp into a Date object
  * @param timestamp - firestore timestamp
@@ -58,5 +43,5 @@ const formatFirestoreTimestamp = timestamp => new Date(timestamp.seconds * 1000 
 
 module.exports = {
     formatDestinationDates,
-    formatUserDates
+    formatFirestoreTimestamp
 }

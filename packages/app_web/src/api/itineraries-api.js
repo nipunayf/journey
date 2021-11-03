@@ -35,5 +35,12 @@ export const updateItinerary = (id, data) => {
  */
 export const getItineraries = (state) => databaseServices.getRequest(`${URL}?${state !== null ? `state=${state}` : ''}`, true);
 
+/**
+ * Post a review for the itinerary
+ * @param review
+ * @returns {Promise<{data: *, message: string}|{code: *, error: *, title: *, message: *}|{code: number, error: *, title: *, message: string}|undefined>}
+ */
+export const addReview = (id, review) => databaseServices.postRequest(`${URL}/${id}`, {review} , true);
+
 
 
