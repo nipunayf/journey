@@ -11,3 +11,10 @@ export {
     getPlaceDescription,
     getPlacePhoto
 } from './maps-api'
+
+export {
+    getItinerary,
+    getItineraries,
+    updateItinerary,
+    createItinerary
+} from './itineraries-api'

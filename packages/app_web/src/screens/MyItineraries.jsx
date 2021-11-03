@@ -25,6 +25,8 @@ import {useFormik} from "formik";
 import PlaceCard from "../containers/Search/PlaceCard";
 import ItineraryCard from "../components/Itinerary/ItineraryCard";
 import {connect} from "react-redux";
+import {getItineraries} from "../api";
+import {generateErrorMessage} from "../utils/toast";
 
 function SearchBar({cached, setResult}) {
     const [dateRange, setDateRange] = useState([null, null]);
@@ -40,23 +42,44 @@ function SearchBar({cached, setResult}) {
 
         onSubmit: async values => {
             formik.setSubmitting(true);
+            const source = cached;
             const arr = [];
 
+            if (values.state == StateEnum.REVIEWED || values.state == StateEnum.ANY) {
+                const result = await getItineraries(StateEnum.REVIEWED);
+                if (result.data) {
+                    result.data.map(itinerary => {
+                        const dates = Object.keys(itinerary.destinations);
+                        source[itinerary.id] = {
+                            location: itinerary.location,
+                            state: itinerary.state,
+                            startDate: dates[0],
+                            endDate: dates.at(-1),
+                            image: itinerary.image,
+                        }
+                    })
+                }
+            }
+
             // Need to to query the database to search the reviewed itineraries
-            for (let id in cached) {
-                const info = cached[id];
-                if (values.state == StateEnum.REVIEWED) break;
+            for (let id in source) {
+                const info = source[id];
                 if (values.state != StateEnum.ANY && values.state != info.state) continue;
                 if (values.startDate && (values.startDate > new Date(info.startDate))) continue;
                 if (values.endDate && (values.endDate < new Date(info.endDate))) continue;
                 if (values.keyword && !info.location.toLowerCase().includes(values.keyword.toLowerCase())) continue;
-                arr.push({...cached[id], id})
+                arr.push({...source[id], id})
             }
 
-            if (values.state == StateEnum.REVIEWED || values.state == StateEnum.ANY) {
-                console.log(values);
-            }
-
+            arr.sort((a, b) => {
+                if (new Date(a.startDate) < new Date(b.startDate)) {
+                    return -1;
+                } else if (new Date(a.startDate) > new Date(b.startDate)) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
             setResult(arr);
             formik.setSubmitting(false);
         }

@@ -21,8 +21,9 @@ const getItineraries = async (req, res) => {
     //If there are any filters
     if (req.query) {
         //If only single state is given
-        if (Number.isInteger(req.query.state))
-            result = result.where('state', '==', req.query.state);
+        if (Number.isInteger(parseInt(req.query.state))) {
+            result = result.where('state', '==', parseInt(req.query.state));
+        }
 
         //If an array of states are given
         else if (Array.isArray(req.query.state))
