@@ -17,15 +17,16 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
     const onClick = (state, message) => async () => {
         //Updates the back-end firestore
         setLoading(true);
+        console.log(id)
         const result = await updateItinerary(id, {state});
         if (result.data) {
             generateSuccessMessage(toast, 'Updated itinerary successfully', message);
-            setLoading(false);
             setState(state);
             onStateUpdate(id, state);
         } else {
             generateErrorMessage(toast, 'Unable to update the itinerary', result.message);
         }
+        setLoading(false);
     }
 
     const onReviewInput = review => async () => {
