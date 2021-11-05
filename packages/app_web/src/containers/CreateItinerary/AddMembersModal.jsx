@@ -18,7 +18,7 @@ import {EmailIcon} from "@chakra-ui/icons";
 import {getUserByEmail} from "../../api";
 import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 import {useState} from 'react';
-import {addItemToArray} from "../../utils/state-array";
+import {addItemToArray, removeItemFromArray} from "../../utils/state-array";
 
 function AddMembersModal({parentFormik, setScreen, displayName, profilePic, authEmail}) {
     const toast = useToast();
@@ -72,6 +72,13 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, auth
         setLoading(false);
     }
 
+    const removeMember = email => () => {
+        const memberIndex = members.findIndex((stateMember) => {
+            return stateMember.email === email;
+        });
+        removeItemFromArray(memberIndex, members, setMembers);
+    }
+
     return (<>
         <ModalHeader>Invite Your Friends</ModalHeader>
         <ModalCloseButton/>
@@ -92,7 +99,7 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, auth
             <Heading size={'sm'} pb={2}>Members:</Heading>
             <VStack w={"80%"} spacing={4} align={'left'} overflowY={'auto'} maxH={180}>
                 <Member email={authEmail} name={displayName} profilePic={profilePic} isOwner={true}/>
-                {members.length > 0 && members.map(member => <Member email={member.email} name={member.displayName} profilePic={member.profilePic}/>)}
+                {members.length > 0 && members.map(member => <Member email={member.email} name={member.displayName} profilePic={member.profilePic} onRemove={removeMember(member.email)}/>)}
             </VStack>
         </ModalBody>
         <ModalFooter>
