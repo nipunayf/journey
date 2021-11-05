@@ -49,5 +49,4 @@ export default function PlaceCard(props) {
             </Box>
         </Box>
     )
-
 }

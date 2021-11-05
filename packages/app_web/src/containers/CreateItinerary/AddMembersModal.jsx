@@ -20,9 +20,10 @@ import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 import {useState} from 'react';
 import {addItemToArray} from "../../utils/state-array";
 
-function AddMembersModal({parentFormik, setScreen, displayName, profilePic, email}) {
+function AddMembersModal({parentFormik, setScreen, displayName, profilePic, authEmail}) {
     const toast = useToast();
     const [members, setMembers] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -31,34 +32,45 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, emai
         validationSchema: Yup.object({
             email: Yup.string().email('Invalid email address').required('Required'),
         }),
+
         onSubmit: async values => {
-            const user = await getUserByEmail(values.email);
+            formik.setSubmitting(true);
 
-            //Check if the member is the owner
-            if (values.email === email) {
-                generateErrorMessage(toast, 'Unable to send the invitation', 'You cannot send an invitation to yourself!')
-                return
-            }
 
-            //Check if the member is already added
-            if (members.filter(e => e.email === values.email).length > 0) {
-                generateErrorMessage(toast, 'Unable to send the invitation', 'Invitation already sent to the user')
-                return
-            }
+            formik.setSubmitting(false);
+        }
+    });
 
-            //Check if there is a user for the given email
+    const addMember = async () => {
+        setLoading(true);
+
+        //Check if the member is the owner
+        if (formik.values.email === authEmail) {
+            generateErrorMessage(toast, 'Unable to send the invitation', 'You cannot send an invitation to yourself!')
+        }
+
+        //Check if the member is already added
+        else if (members.filter(e => e.email === formik.values.email).length > 0) {
+            generateErrorMessage(toast, 'Unable to send the invitation', 'Invitation already sent to the user')
+        }
+
+        //Check if there is a user for the given email
+        else {
+            const user = await getUserByEmail(formik.values.email);
             if (user.data) {
                 addItemToArray({
                     email: user.data.email,
                     displayName: `${user.data.firstName} ${user.data.lastName}`,
                     profilePic: user.data.profilePic
                 }, members, setMembers);
-                generateSuccessMessage(toast, 'Invite sent successfully', `Itinerary invitation is sent to ${user.data.firstName} ${user.data.lastName}` )
+                generateSuccessMessage(toast, 'Invite sent successfully', `Itinerary invitation is sent to ${user.data.firstName} ${user.data.lastName}`)
+                formik.values.email = '';
             } else {
                 generateErrorMessage(toast, 'Unable to send the invitation', user.message)
             }
         }
-    });
+        setLoading(false);
+    }
 
     return (<>
         <ModalHeader>Invite Your Friends</ModalHeader>
@@ -70,16 +82,16 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, emai
                 color={'white'}
                 leftIcon={<EmailIcon />}
                 size={'sm'}
-                onClick={formik.handleSubmit}
+                onClick={addMember}
                 isDisabled={!formik.isValid}
-                isLoading={formik.isSubmitting}
+                isLoading={loading}
                 my={4}
                 _hover={{bg: 'blue.500'}}>
                 Invite
             </Button>
             <Heading size={'sm'} pb={2}>Members:</Heading>
             <VStack w={"80%"} spacing={4} align={'left'} overflowY={'auto'} maxH={180}>
-                <Member email={email} name={displayName} profilePic={profilePic} isOwner={true}/>
+                <Member email={authEmail} name={displayName} profilePic={profilePic} isOwner={true}/>
                 {members.length > 0 && members.map(member => <Member email={member.email} name={member.displayName} profilePic={member.profilePic}/>)}
             </VStack>
         </ModalBody>
@@ -112,7 +124,7 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, emai
 const mapStateToProps = state => {
     return {
         displayName: `${state.profile.firstName} ${state.profile.lastName}`,
-        email: state.auth.email,
+        authEmail: state.auth.email,
         profilePic: state.profile.profilePic,
     };
 };

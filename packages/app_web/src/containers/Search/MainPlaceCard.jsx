@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {Badge, Box, Button, Heading, HStack, Image, Stack, Text, VStack} from "@chakra-ui/react";
-import {StarIcon} from "@chakra-ui/icons";
+import {connect} from "react-redux";
 import {getPlaceDescription} from '../../api'
 import Rating from "../../components/Destination/Rating";
 import CreateItinerary from "../CreateItinerary/CreateItinerary";
 
-export default function MainPlaceCard(props) {
+function MainPlaceCard(props) {
     const [description, setDescription] = useState('');
     const img = props.image ? props.image : 'https://www.couponraja.in/theroyale/wp-content/uploads/2017/12/cover-10-most-beautiful-places-in-sri-lanka-explore-the-emerald-island-632x480.jpg'
 
@@ -79,10 +79,18 @@ export default function MainPlaceCard(props) {
                             {user_ratings_total} Reviews
                         </Text>}
                     </HStack>
-                    {rating > 0 && <CreateItinerary info={props.placeDetails}/>}
+                    {/*{rating > 0 && <CreateItinerary info={props.placeDetails}/>}*/}
+                    {props.isAuthenticated && <CreateItinerary info={props.placeDetails}/>}
                 </VStack>
             </HStack>
         </Stack>
-
     );
 }
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.isAuthenticated
+    };
+};
+
+export default connect(mapStateToProps, null)(MainPlaceCard)
