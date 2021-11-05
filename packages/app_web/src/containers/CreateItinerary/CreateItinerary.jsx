@@ -29,10 +29,12 @@ function CreateItinerary({preferences, info}) {
             members: []
         },
         onSubmit: values => {
-            // const itinerary = generateItinerary(values);
-            // console.log(itinerary);
-            console.log(values);
-            // history.push('/itinerary/', { itinerary: itinerary });
+            if (values.isGroup) {
+                history.push('/')
+            } else {
+                const itinerary = generateItinerary(values);
+                history.push('/itinerary/', { itinerary: itinerary });
+            }
         }
 
     });
