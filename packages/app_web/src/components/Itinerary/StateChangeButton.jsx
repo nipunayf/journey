@@ -1,11 +1,10 @@
 import {StateEnum} from "../../utils/constants";
-import {Badge, Button, useDisclosure, useToast} from "@chakra-ui/react";
-import {MdGroup, MdHighlightOff, MdPlayArrow, MdRateReview} from "react-icons/all";
+import {Button, useDisclosure, useToast} from "@chakra-ui/react";
+import {MdHighlightOff, MdPlayArrow, MdRateReview} from "react-icons/all";
 import {addReview, updateItinerary} from "../../api/itineraries-api";
 import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 import {useState} from "react";
 import * as actions from "../../store/actions";
-import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import ReviewPopup from "./ReviewPopup";
 
@@ -44,7 +43,7 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
     switch (state) {
         case(StateEnum.INACTIVE):
             return <Button
-                leftIcon={<MdPlayArrow />}
+                leftIcon={<MdPlayArrow/>}
                 bg={'green.400'}
                 size={'sm'}
                 color={'white'}
@@ -55,12 +54,13 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
             </Button>
         case(StateEnum.INCOMPATIBLE):
             return <Button
-                leftIcon={<MdPlayArrow />}
+                leftIcon={<MdPlayArrow/>}
                 bg={'green.400'}
                 size={'sm'}
                 color={'white'}
                 isLoading={loading}
-                onClick={() => {}}
+                onClick={() => {
+                }}
                 isDisabled
                 _hover={{bg: 'green.500'}}>
                 Activate
@@ -68,7 +68,7 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
         case(StateEnum.ACTIVE):
             console.log('repeating')
             return <Button
-                leftIcon={<MdHighlightOff />}
+                leftIcon={<MdHighlightOff/>}
                 bg={'red.400'}
                 size={'sm'}
                 color={'white'}
@@ -81,15 +81,26 @@ function StateChangeButton({id, state, onStateUpdate, setState}) {
             return <>
                 <ReviewPopup onClose={onClose} isOpen={isOpen} onClick={onReviewInput}/>
                 <Button
-                leftIcon={<MdRateReview/>}
-                bg={'secondary.light'}
-                size={'sm'}
-                color={'white'}
-                isLoading={loading}
-                onClick={onOpen}
-                _hover={{bg: 'blue.500'}}>
-                Review
-            </Button></>
+                    leftIcon={<MdRateReview/>}
+                    bg={'secondary.light'}
+                    size={'sm'}
+                    color={'white'}
+                    isLoading={loading}
+                    onClick={onOpen}
+                    _hover={{bg: 'blue.500'}}>
+                    Review
+                </Button>
+                <Button
+                    leftIcon={<MdHighlightOff/>}
+                    bg={'red.400'}
+                    size={'sm'}
+                    color={'white'}
+                    isLoading={loading}
+                    onClick={onClick(StateEnum.INACTIVE, 'The itinerary is successfully deactivated')}
+                    _hover={{bg: 'red.500'}}>
+                    Deactivate
+                </Button>
+            </>
         default:
             return <></>;
     }
@@ -101,4 +112,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default  connect( null, mapDispatchToProps )( StateChangeButton );
+export default connect(null, mapDispatchToProps)(StateChangeButton);

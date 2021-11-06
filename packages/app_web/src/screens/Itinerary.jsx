@@ -84,25 +84,28 @@ function Itinerary({displayName, onAddItinerary}) {
                     <HStack spacing={3} px={4}>
                         {/*<NewDestination/>*/}
                         <Members/>
-                        <Button
-                            leftIcon={<MdSave/>}
-                            bg={'secondary.light'}
-                            color={'white'}
-                            size={'sm'}
-                            isDisabled={itinerary.id !== undefined}
-                            isLoading={formik.isSubmitting}
-                            onClick={formik.handleSubmit}
-                            _hover={{bg: 'blue.500'}}>
-                            Save
-                        </Button>
-                        <Button
-                            leftIcon={<CalendarIcon/>}
-                            bg={'secondary.light'}
-                            color={'white'}
-                            size={'sm'}
-                            _hover={{bg: 'blue.500'}}>
-                            Start
-                        </Button>
+                        {[StateEnum.INACTIVE, StateEnum.INCOMPATIBLE].indexOf(buttonState) > -1 &&
+                        <>
+                            <Button
+                                leftIcon={<MdSave/>}
+                                bg={'secondary.light'}
+                                color={'white'}
+                                size={'sm'}
+                                isDisabled={itinerary.id !== undefined}
+                                isLoading={formik.isSubmitting}
+                                onClick={formik.handleSubmit}
+                                _hover={{bg: 'blue.500'}}>
+                                Save
+                            </Button>
+                            <Button
+                                leftIcon={<CalendarIcon/>}
+                                bg={'secondary.light'}
+                                color={'white'}
+                                size={'sm'}
+                                _hover={{bg: 'blue.500'}}>
+                                Start
+                            </Button>
+                        </>}
                         {itinerary.id !== undefined &&
                         <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>}
                         {itinerary.id !== undefined && <DeleteItinerary id={itinerary.id} name={itinerary.location}/>}
