@@ -13,6 +13,8 @@ import MapContainer from "../containers/Maps/GoogleMaps";
 import {useState} from "react";
 import * as actions from "../store/actions";
 import {StateEnum} from "../utils/constants";
+import DeleteItinerary from "../containers/Itinerary/DeleteItinerary";
+import {CalendarIcon} from "@chakra-ui/icons";
 
 
 function Itinerary({displayName, onAddItinerary}) {
@@ -93,8 +95,17 @@ function Itinerary({displayName, onAddItinerary}) {
                             _hover={{bg: 'blue.500'}}>
                             Save
                         </Button>
+                        <Button
+                            leftIcon={<CalendarIcon/>}
+                            bg={'secondary.light'}
+                            color={'white'}
+                            size={'sm'}
+                            _hover={{bg: 'blue.500'}}>
+                            Start
+                        </Button>
                         {itinerary.id !== undefined &&
                         <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>}
+                        {itinerary.id !== undefined && <DeleteItinerary id={itinerary.id} name={itinerary.location}/>}
                     </HStack>
                     <Accordion defaultIndex={[0]} allowMultiple minW={'45%'} pt={5} pl={4}>
                         {Object.keys(itinerary.destinations).map(date => {

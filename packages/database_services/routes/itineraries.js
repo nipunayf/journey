@@ -27,4 +27,8 @@ router.post('/:itineraryID',
     auth,
     addReview)
 
+router.delete('/:itineraryID',
+    auth,
+    deleteItinerary)
+
 module.exports = router;

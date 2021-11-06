@@ -23,7 +23,6 @@ export const getItinerary = (id) => databaseServices.getRequest(`${URL}/${id}`, 
  * @return {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
  */
 export const updateItinerary = (id, data) => {
-    data = Object.assign({ state: null, destinations: null }, data);
     return databaseServices.putRequest(`${URL}/${id}`, data, true);
 }
 
@@ -34,6 +33,13 @@ export const updateItinerary = (id, data) => {
  * @return {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
  */
 export const getItineraries = (state) => databaseServices.getRequest(`${URL}?${state !== null ? `state=${state}` : ''}`, true);
+
+/**
+ * Removes the itinerary from the database
+ * @param id
+ * @return {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
+ */
+export const deleteItinerary = id => databaseServices.deleteRequest(`${URL}/${id}`, true);
 
 /**
  * Post a review for the itinerary
