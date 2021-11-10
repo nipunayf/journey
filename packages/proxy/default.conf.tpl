@@ -5,9 +5,13 @@ server {
         alias /vol/static;
     }
 
-    location / {
-        uwsgi_pass              ${APP_HOST}:${APP_PORT};
+    location /search {
+        uwsgi_pass              ${SEARCH_HOST}:${SEARCH_PORT};
         include                 /etc/nginx/uwsgi_params;
         client_max_body_size    10M;
     }
+    location / {
+        proxy_pass              http://${DB_HOST}:${DB_PORT};
+    }
+
 }

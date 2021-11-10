@@ -12,14 +12,21 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-    
+
+  database:
+    build:
+      context: ./database_services
+    ports:
+      - 5000:5000
+    restart: always
 
   proxy:
     build:
-      context: ./search_services/proxy
+      context: ./proxy
     restart: always
     depends_on:
       - search
+      - database
     ports:
       - 80:80
       - 443:443
