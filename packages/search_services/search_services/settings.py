@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'createItinerary.apps.CreateitineraryConfig',
+    'searchNearby.apps.SearchnearbyConfig',
     'rest_framework',
     'corsheaders',
 ]
