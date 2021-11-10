@@ -14,7 +14,7 @@ import {useState} from "react";
 import * as actions from "../store/actions";
 import {StateEnum} from "../utils/constants";
 import DeleteItinerary from "../containers/Itinerary/DeleteItinerary";
-import {CalendarIcon} from "@chakra-ui/icons";
+import FixDates from "../containers/Itinerary/FixDates";
 
 
 function Itinerary({displayName, onAddItinerary}) {
@@ -82,30 +82,20 @@ function Itinerary({displayName, onAddItinerary}) {
             <HStack w={'100wh'} alignItems={'flex-start'} spacing={2} p={4}>
                 <VStack alignItems={'left'} overflowY={'scroll'} h={'80vh'} w={'80%'}>
                     <HStack spacing={3} px={4}>
-                        {/*<NewDestination/>*/}
                         <Members/>
+                        {itinerary.id === undefined && <Button
+                            leftIcon={<MdSave/>}
+                            bg={'secondary.light'}
+                            color={'white'}
+                            size={'sm'}
+                            isLoading={formik.isSubmitting}
+                            onClick={formik.handleSubmit}
+                            _hover={{bg: 'blue.500'}}>
+                            Save
+                        </Button>}
                         {[StateEnum.INACTIVE, StateEnum.INCOMPATIBLE].indexOf(buttonState) > -1 &&
-                        <>
-                            <Button
-                                leftIcon={<MdSave/>}
-                                bg={'secondary.light'}
-                                color={'white'}
-                                size={'sm'}
-                                isDisabled={itinerary.id !== undefined}
-                                isLoading={formik.isSubmitting}
-                                onClick={formik.handleSubmit}
-                                _hover={{bg: 'blue.500'}}>
-                                Save
-                            </Button>
-                            <Button
-                                leftIcon={<CalendarIcon/>}
-                                bg={'secondary.light'}
-                                color={'white'}
-                                size={'sm'}
-                                _hover={{bg: 'blue.500'}}>
-                                Start
-                            </Button>
-                        </>}
+                        <FixDates currentStartDate={new Date(Object.keys(itinerary.destinations)[0])}/>
+                        }
                         {itinerary.id !== undefined &&
                         <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>}
                         {itinerary.id !== undefined && <DeleteItinerary id={itinerary.id} name={itinerary.location}/>}

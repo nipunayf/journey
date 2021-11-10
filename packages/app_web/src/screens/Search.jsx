@@ -23,7 +23,6 @@ export default function Search() {
     async function getDetails(id) {
         const placeDetails = await getPlaceDetails(id);
         if (placeDetails.data) {
-            console.log(placeDetails);
             setDetails(placeDetails.data);
             const data = {
                 location: {
@@ -32,11 +31,9 @@ export default function Search() {
                 }
             }
             const nearby = await getNearbyPlaces(data);
-            console.log(nearby)
             if (nearby.data) {
                 setNearby(nearby.data);
             }
-
         }
     }
 

@@ -55,6 +55,7 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, auth
                         displayName: `${user.data.firstName} ${user.data.lastName}`,
                         profilePic: user.data.profilePic
                     }, members, setMembers);
+                    formik.values.email = '';
                     generateSuccessMessage(toast, 'Invite sent successfully', `Itinerary invitation is sent to ${user.data.firstName} ${user.data.lastName}`)
                 } else {
                     generateErrorMessage(toast, 'Unable to send the invitation', user.message)
