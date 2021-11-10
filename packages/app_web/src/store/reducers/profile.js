@@ -55,6 +55,15 @@ const addItinerary = (state, action) => {
     })
 }
 
+const removeItinerary = (state, action) => {
+    const itineraries = state.itineraries;
+    delete itineraries[action.id];
+
+    return updateObject(state, {
+        itineraries
+    })
+}
+
 
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) {
@@ -63,6 +72,7 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.CLEAR_PROFILE: return clearProfile(state, action);
         case actionTypes.UPDATE_STATE: return updateState(state, action);
         case actionTypes.ADD_ITINERARY: return addItinerary(state, action);
+        case actionTypes.REMOVE_ITINERARY: return removeItinerary(state, action);
         default:
             return state;
     }

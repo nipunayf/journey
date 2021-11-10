@@ -1,8 +1,8 @@
-import {Avatar, Box, Button, HStack, Spacer, Text, VStack} from "@chakra-ui/react";
-import {EmailIcon} from "@chakra-ui/icons";
+import {Avatar, Box, Button, HStack, IconButton, Spacer, Text, VStack} from "@chakra-ui/react";
+import {DeleteIcon, EmailIcon} from "@chakra-ui/icons";
 
 
-export default function Member({email, name, profilePic, isOwner = false}) {
+export default function Member({email, name, profilePic, onRemove, isOwner = false}) {
     const height = 200
     const width = 412
 
@@ -15,7 +15,7 @@ export default function Member({email, name, profilePic, isOwner = false}) {
                 <Text fontSize={14} as={'em'} color={'gray.600'}>{email}</Text>
             </HStack>
             <Spacer />
-            {!isOwner? <Button bg={'red.400'} color={'white'} size={'xs'}>X</Button>
+            {!isOwner? <IconButton icon={<DeleteIcon />} bg={'red.400'} color={'white'} size={'xs'} onClick={onRemove} aria-label={'Delete member'}/>
             : <Text as={'em'} fontSize={14} color={'gray.500'}>owner</Text>}
             <Box px={2} />
         </HStack>

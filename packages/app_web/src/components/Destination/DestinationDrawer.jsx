@@ -38,7 +38,6 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
         const result = await getPlaceDescription(info.name);
         if (result.data) {
             setDescription(result.data);
-            console.log(info)
         } else {
             setDescription('Cannot find a description');
         }
@@ -65,12 +64,6 @@ export default function DestinationDrawer({info, isRemove, select, date}) {
                             <Rating number={info.rating}/>
                         </VStack>
                         <Spacer/>
-                        {isRemove ? <Button colorScheme="red" size="sm">
-                                Remove
-                            </Button> :
-                            <Button colorScheme="green" size="sm">
-                                Add
-                            </Button>}
                     </HStack>
                 </DrawerHeader>
                 <DrawerBody align={'center'}>

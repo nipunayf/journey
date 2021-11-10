@@ -26,13 +26,15 @@ function CreateItinerary({preferences, info}) {
             energy: preferences.energy,
             knowledge: preferences.knowledge,
             introversion: preferences.introversion,
-            email: ''
+            members: []
         },
         onSubmit: values => {
-            const itinerary = generateItinerary(values);
-            console.log(itinerary);
-
-            history.push('/itinerary/', { itinerary: itinerary });
+            if (values.isGroup) {
+                history.push('/')
+            } else {
+                const itinerary = generateItinerary(values);
+                history.push('/itinerary/', { itinerary: itinerary });
+            }
         }
 
     });

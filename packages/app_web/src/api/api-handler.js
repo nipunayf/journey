@@ -88,6 +88,7 @@ export default class APIHandler {
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
     async deleteRequest (url, setUser=false, output = 'results') {
+        if (setUser) url = setUserID(url);
         try {
             let response = await this.instance.delete(url);
             return generateSuccessOutput(response, output);

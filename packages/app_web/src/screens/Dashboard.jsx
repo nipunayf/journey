@@ -29,6 +29,7 @@ function Dashboard({itineraries}) {
 
     useEffect(() => {
         const cache = [[], [], [], [], []]
+        console.log(itineraries);
 
         for (let id in itineraries) {
             switch (itineraries[id].state) {

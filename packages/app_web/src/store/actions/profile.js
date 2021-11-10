@@ -44,13 +44,24 @@ export const updateState = (id, state) => {
 }
 
 export const addItinerary = (id, object) => {
-    const itinerary = getObject('itineraries');
-    itinerary[id] = object;
-    storeObject('itineraries', itinerary);
+    const itineraries = getObject('itineraries');
+    itineraries[id] = object;
+    storeObject('itineraries', itineraries);
 
     return {
         type: actionTypes.ADD_ITINERARY,
         object,
+        id
+    }
+}
+
+export const removeItinerary = (id) => {
+    const itineraries = getObject('itineraries');
+    delete itineraries[id];
+    storeObject('itineraries', itineraries);
+
+    return {
+        type: actionTypes.REMOVE_ITINERARY,
         id
     }
 }

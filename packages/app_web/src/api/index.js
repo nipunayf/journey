@@ -17,5 +17,6 @@ export {
     getItineraries,
     updateItinerary,
     createItinerary,
-    addReview
+    addReview,
+    deleteItinerary
 } from './itineraries-api'
