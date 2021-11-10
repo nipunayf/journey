@@ -1,4 +1,16 @@
-import {Avatar, Box, Button, Flex, Heading, HStack, Stack, useColorModeValue, useToast, VStack} from "@chakra-ui/react";
+import {
+    Avatar,
+    Box,
+    Button,
+    Flex,
+    Heading,
+    HStack,
+    Spacer,
+    Stack,
+    useColorModeValue,
+    useToast,
+    VStack
+} from "@chakra-ui/react";
 import Navbar from "../containers/Navbar/Navbar";
 import Preferences from '../containers/InputCollection/Preferences';
 import InputBox from "../components/Form/InputBox";
@@ -8,6 +20,8 @@ import {connect} from "react-redux";
 import {updateUser} from '../api';
 import {generateErrorMessage, generateSuccessMessage} from "../utils/toast";
 import * as actions from "../store/actions";
+import DatePicker from "react-datepicker";
+import '../components/Destination/datepicker.css';
 
 function ProfileInfo({formik, profilePic, displayName}) {
     return <>
@@ -22,6 +36,31 @@ function ProfileInfo({formik, profilePic, displayName}) {
     </>;
 }
 
+function TimePreferences() {
+    return <HStack pt={3} maxW={500}>
+        <Heading size={'sm'}>Start: </Heading>
+        <DatePicker
+            selected={new Date('2020-11-07 08:00')}
+            // onChange={}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+        />
+        <Spacer/>
+        <Heading size={'sm'}>End: </Heading>
+        <DatePicker
+            selected={new Date('2020-11-07 22:00')}
+            // onChange={}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            timeCaption="Time"
+            dateFormat="h:mm aa"
+        />
+    </HStack>;
+}
 
 function Settings({profilePic, firstName, lastName, preferences, userID, onProfileUpdate}) {
     const toast = useToast();
@@ -79,10 +118,12 @@ function Settings({profilePic, firstName, lastName, preferences, userID, onProfi
                 <Box
                     rounded={'lg'}
                     bg={useColorModeValue('white', 'gray.700')}
+                    w={560}
                     boxShadow={'lg'}
-                    minW={'90vh'}
                     p={8}>
                     <ProfileInfo formik={formik} profilePic={profilePic} displayName={`${firstName} ${lastName}`}/>
+                    <Heading size={"lg"} py={5}>Time Preferences</Heading>
+                    <TimePreferences />
                     <Heading size={"lg"} py={5}>Preferences</Heading>
                     <Preferences formik={formik}/>
                     <Box py={3}/>
