@@ -3,7 +3,7 @@ import Preferences from "../InputCollection/Preferences";
 import {useFormik} from "formik";
 import generateItinerary from '../../utils/mock.json';
 
-export default function ({parentFormik, setScreen, onClose}) {
+export default function ({parentFormik, setScreen}) {
     const formik = useFormik({
         initialValues: {
             budget: parentFormik.values.budget,
@@ -42,11 +42,10 @@ export default function ({parentFormik, setScreen, onClose}) {
                 bg={'green.400'}
                 color={'white'}
                 onClick={() => {
-                    onClose();
-                    setScreen(0);
                     formik.handleSubmit();
                     parentFormik.handleSubmit();
                 }}
+                loading={parentFormik.isSubmitting}
                 _hover={{bg: 'green.500'}}>
                 Create
             </Button>

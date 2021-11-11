@@ -21,3 +21,7 @@ export {
     shiftDates,
     deleteItinerary
 } from './itineraries-api'
+
+export {
+    generateItinerary
+} from './search-api'

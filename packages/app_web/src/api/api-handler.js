@@ -146,10 +146,12 @@ const setUserID = url => {
 const databaseServices = new APIHandler(BaseURLEnum.DATABASE_SERVICE)
 const mapsServices = new APIHandler(BaseURLEnum.GOOGLE_MAPS)
 const wikiServices = new APIHandler(BaseURLEnum.WIKIPEDIA)
+const searchServices = new APIHandler(BaseURLEnum.SEARCH_SERVICE)
 
 export {
     databaseServices,
     mapsServices,
-    wikiServices
+    wikiServices,
+    searchServices
 }
 
