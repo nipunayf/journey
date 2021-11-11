@@ -9,4 +9,4 @@ class ItineraryCreator(APIView):
     def post(self, parameters):
         rulebased = ItineraryStrategy.ItineraryStrategy(main.RuleBasedMain)
         route = rulebased.execute(parameters)
-        return Response(route)
+        return Response({"results": route})

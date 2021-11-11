@@ -175,7 +175,7 @@ def ranking(results):
 
 def itinerary(parameters, results):
     leg_day1, leg_day2, leg_day3, leg_day4 = 0, 0, 0, 0
-    number_dates = parameters['numDays']
+    number_dates = parameters['number_dates']
     dates = parameters['Dates']
     results_copy = dict(results)
     direction_results = MapApis.direction(parameters, results_copy)

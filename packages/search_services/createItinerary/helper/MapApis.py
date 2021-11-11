@@ -15,7 +15,7 @@ def nearbySearch(data, keyword):
     elif data['number_dates'] > 2:
         radius = 50000
 
-    budget = data['budget']
+    budget = data['preferences']['budget']
 
     if budget == -1:
         price = 1
