@@ -8,8 +8,10 @@ import ReserveDatesModal from './ReserveDatesModal'
 import AddMembersModal from './AddMembersModal'
 import ConfirmPreferencesModal from './ConfirmPreferencesModal'
 import {connect} from "react-redux";
-import generateItinerary from "../../utils/mock.json";
 import {useHistory} from "react-router-dom";
+// import generateItinerary from "../../utils/mock.json";
+import {generateItinerary} from "../../api";
+import {StateEnum} from "../../utils/constants";
 
 function CreateItinerary({preferences, info}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -28,11 +30,10 @@ function CreateItinerary({preferences, info}) {
             introversion: preferences.introversion,
             members: []
         },
-        onSubmit: values => {
+        onSubmit: async values => {
             if (values.isGroup) {
                 history.push('/')
             } else {
-
                 const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
                 const dates = [];
                 let loop = new Date(values.startDate)
@@ -44,8 +45,8 @@ function CreateItinerary({preferences, info}) {
                 }
 
                 const data = {
-                    dates,
-                    numDays: Math.ceil(Math.abs(values.endDate - values.startDate) / (1000 * 60 * 60 * 24)) + 1,
+                    Dates: dates,
+                    number_dates: Math.ceil(Math.abs(values.endDate - values.startDate) / (1000 * 60 * 60 * 24)) + 1,
                     preferences: {
                         budget: values.budget,
                         popularity: values.popularity,
@@ -53,11 +54,24 @@ function CreateItinerary({preferences, info}) {
                         knowledge: values.knowledge,
                         introversion: values.introversion
                     },
-                    placeID: info.place_id,
+                    place_id: info.place_id,
                     location: info.geometry.location
                 }
-                const itinerary = generateItinerary(values);
-                history.push('/itinerary/', { itinerary: itinerary });
+                // const itinerary = generateItinerary(values);
+                const result = await generateItinerary(data);
+                if (result.data) {
+                    const itinerary = {
+                        destinations : result.data,
+                        location: info.name,
+                        image: info.photos[0].photo_reference,
+                        state: StateEnum.INACTIVE,
+                    }
+                    // console.log(itinerary)
+                    history.push('/itinerary/', { itinerary });
+                } else {
+
+                }
+
             }
         }
 
@@ -80,7 +94,7 @@ function CreateItinerary({preferences, info}) {
                 {screen === 0 ?
                     <ReserveDatesModal destinationName={info.name} setScreen={setScreen} parentFormik={formik}/> :
                     screen === 1 ?
-                        <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen} onClose={onClose}/> :
+                        <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen}/> :
                         <AddMembersModal setScreen={setScreen} parentFormik={formik}/>}
             </ModalContent>
         </Modal>
