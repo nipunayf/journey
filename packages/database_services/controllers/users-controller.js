@@ -89,9 +89,8 @@ const getUserByEmail = async (req, res) => {
     //fetching from firestore
     const result = await userStore.where('email', '==', req.query.email).where('isDeleted', '==', 0).get();
 
-
     if (result.size > 0) //document found in firestore
-        return successMessage(res,  (({firstName, lastName, email, profilePic}) => ({firstName, lastName, email, profilePic}))(result.docs[0].data(0)))
+        return successMessage(res,  (({firstName, lastName, email, profilePic, preferences, userID}) => ({firstName, lastName, email, profilePic, preferences, userID}))(result.docs[0].data(0)))
     else //document not found
         return errorMessage(res, 'User not found')
 }

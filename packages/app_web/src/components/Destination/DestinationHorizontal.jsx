@@ -13,7 +13,7 @@ export default function DestinationHorizontal({isRemove, info, date, onHover}) {
     return (
         <HStack borderWidth={isSelected ? "3px" : "1px"} borderRadius="lg" minW={width} maxW={width} minH={height} maxH={height} boxShadow="xl" onMouseEnter={() => {onHover(info)}}
                 justifyItems={'left'} overflow={'hidden'} pr={4} borderColor={isSelected ? 'secondary.main' : 'grey.700'} overflow={'hidden'} _hover={{bg: 'gray.100'}}>>
-            <Image src={getPlacePhoto(info.image)} alt={info.name} maxW={180} minH={height} />
+            <Image src={getPlacePhoto(info.image)} alt={info.name} maxW={180} minH={height} fallbackSrc='placeholder.jpg'/>
             <VStack alignItems={'left'} spacing={1}>
                 <Heading pb={1.5} size={'sm'}>
                     {info.name}

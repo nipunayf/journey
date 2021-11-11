@@ -23,7 +23,6 @@ import {addItemToArray, removeItemFromArray} from "../../utils/state-array";
 function AddMembersModal({parentFormik, setScreen, displayName, profilePic, authEmail}) {
     const toast = useToast();
     const [members, setMembers] = useState(parentFormik.values.members);
-    const [loading, setLoading] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -53,7 +52,9 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, auth
                     addItemToArray({
                         email: user.data.email,
                         displayName: `${user.data.firstName} ${user.data.lastName}`,
-                        profilePic: user.data.profilePic
+                        profilePic: user.data.profilePic,
+                        userID: user.data.userID,
+                        preferences: user.data.preferences
                     }, members, setMembers);
                     formik.values.email = '';
                     generateSuccessMessage(toast, 'Invite sent successfully', `Itinerary invitation is sent to ${user.data.firstName} ${user.data.lastName}`)
@@ -70,6 +71,7 @@ function AddMembersModal({parentFormik, setScreen, displayName, profilePic, auth
             return stateMember.email === email;
         });
         removeItemFromArray(memberIndex, members, setMembers);
+        generateSuccessMessage(toast,'Invitation cancelled successfully', `Itinerary invitation cancelled that is sent to ${email}`)
     }
 
     return (<>
