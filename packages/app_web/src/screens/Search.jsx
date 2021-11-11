@@ -2,13 +2,15 @@ import PlaceCard from "../containers/Search/PlaceCard";
 import MainPlaceCard from "../containers/Search/MainPlaceCard";
 import Navbar from "../containers/Navbar/Navbar";
 import {useLocation} from "react-router-dom";
-import {Flex, Heading, SimpleGrid, Stack} from "@chakra-ui/react";
-import {getNearbyPlaces, getPlaceDetails} from "../api";
+import {Flex, Heading, SimpleGrid, Stack, useToast} from "@chakra-ui/react";
+import {getNearbyPlaces, getPlaceDetails, getPlaceInfo} from "../api";
 import React, {useEffect, useState} from "react";
+import {generateErrorMessage} from "../utils/toast";
 
 export default function Search() {
     const [nearby, setNearby] = useState([]);
     const [placeDetails, setDetails] = useState('');
+    const toast = useToast();
 
     const location = useLocation();
 
@@ -21,21 +23,15 @@ export default function Search() {
     }, [placeId])
 
     async function getDetails(id) {
-        const placeDetails = await getPlaceDetails(id);
-        if (placeDetails.data) {
-            setDetails(placeDetails.data);
-            const data = {
-                location: {
-                    lat: placeDetails.data.geometry.location.lat,
-                    lng: placeDetails.data.geometry.location.lng
-                }
-            }
-            console.log(placeDetails.data);
-            const nearby = await getNearbyPlaces(data);
-            if (nearby.data) {
-                setNearby(nearby.data);
-            }
+        const result = await getPlaceInfo(id);
+        if (result.data) {
+            console.log(result.data)
+            setDetails(result.data.place_details);
+            setNearby(result.data.nearby);
+        } else {
+            generateErrorMessage(toast, 'Unable to fetch destinations', 'We were unable to find the destinations at the moment. Please try again later')
         }
+
     }
 
     return (

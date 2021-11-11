@@ -1,4 +1,4 @@
-import {Button, Modal, ModalContent, ModalOverlay, useDisclosure} from "@chakra-ui/react";
+import {Button, Modal, ModalContent, ModalOverlay, toast, useDisclosure, useToast} from "@chakra-ui/react";
 import {useState} from "react";
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -12,11 +12,14 @@ import {useHistory} from "react-router-dom";
 // import generateItinerary from "../../utils/mock.json";
 import {generateItinerary} from "../../api";
 import {StateEnum} from "../../utils/constants";
+import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 
 function CreateItinerary({preferences, info}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const [screen, setScreen] = useState(0);
+    const [loading, setLoading] = useState(false);
     const history = useHistory();
+    const toast = useToast();
 
     const formik = useFormik({
         initialValues: {
@@ -31,6 +34,7 @@ function CreateItinerary({preferences, info}) {
             members: []
         },
         onSubmit: async values => {
+            setLoading(true);
             if (values.isGroup) {
                 history.push('/')
             } else {
@@ -66,12 +70,12 @@ function CreateItinerary({preferences, info}) {
                         image: info.photos[0].photo_reference,
                         state: StateEnum.INACTIVE,
                     }
-                    // console.log(itinerary)
                     history.push('/itinerary/', { itinerary });
+                    generateSuccessMessage(toast, 'Itinerary creation successful', 'We have created an itinerary for you!');
                 } else {
-
+                    generateErrorMessage(toast, 'Unable to create an itinerary', 'We are unable to create an itinerary at the moment. Please try again later.')
                 }
-
+                setLoading(false)
             }
         }
 
@@ -94,7 +98,7 @@ function CreateItinerary({preferences, info}) {
                 {screen === 0 ?
                     <ReserveDatesModal destinationName={info.name} setScreen={setScreen} parentFormik={formik}/> :
                     screen === 1 ?
-                        <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen}/> :
+                        <ConfirmPreferencesModal parentFormik={formik} setScreen={setScreen} isLoading={loading}/> :
                         <AddMembersModal setScreen={setScreen} parentFormik={formik}/>}
             </ModalContent>
         </Modal>
