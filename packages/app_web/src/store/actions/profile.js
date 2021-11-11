@@ -1,5 +1,6 @@
 import * as actionTypes from "./action-types";
 import {getObject, storeObject} from "../../utils/local-storage";
+import {StateEnum} from "../../utils/constants";
 
 export const initializeProfile = (firstName, lastName, profilePic, preferences, itineraries) => {
     localStorage.setItem('firstName', firstName);
@@ -64,6 +65,28 @@ export const removeItinerary = (id) => {
         type: actionTypes.REMOVE_ITINERARY,
         id
     }
+}
+
+export const updateDates = (id, diff) => {
+    const itinerary = getObject('itineraries');
+    itinerary[id].startDate = shiftDate(itinerary[id].startDate, diff)
+    itinerary[id].endDate = shiftDate(itinerary[id].endDate, diff)
+    storeObject('itineraries', itinerary);
+
+    console.log(itinerary[id].startDate);
+
+    return {
+        type: actionTypes.UPDATE_DATES  ,
+        startDate: itinerary[id].startDate,
+        endDate: itinerary[id].endDate,
+        id
+    }
+}
+
+const shiftDate = (date, diff) => {
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + diff);
+    return currentDate
 }
 
 export const clearProfile = () => {

@@ -18,5 +18,6 @@ export {
     updateItinerary,
     createItinerary,
     addReview,
+    shiftDates,
     deleteItinerary
 } from './itineraries-api'

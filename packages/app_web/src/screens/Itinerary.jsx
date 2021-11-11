@@ -34,7 +34,6 @@ function Itinerary({displayName, onAddItinerary}) {
 
         onSubmit: async values => {
             formik.setSubmitting(true);
-            console.log(itinerary.id);
 
             // Send the data to the firestore
             const result = await createItinerary({
@@ -93,8 +92,8 @@ function Itinerary({displayName, onAddItinerary}) {
                             _hover={{bg: 'blue.500'}}>
                             Save
                         </Button>}
-                        {[StateEnum.INACTIVE, StateEnum.INCOMPATIBLE].indexOf(buttonState) > -1 &&
-                        <FixDates currentStartDate={new Date(Object.keys(itinerary.destinations)[0])}/>
+                        {[StateEnum.INACTIVE, StateEnum.INCOMPATIBLE].indexOf(buttonState) > -1 && itinerary.id !== undefined &&
+                        <FixDates id={itinerary.id} currentStartDate={new Date(Object.keys(itinerary.destinations)[0])} setState={setButtonState} currentState={buttonState}/>
                         }
                         {itinerary.id !== undefined &&
                         <StateChangeButton state={buttonState} id={itinerary.id} setState={setButtonState}/>}

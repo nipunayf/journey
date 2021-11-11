@@ -32,6 +32,30 @@ function CreateItinerary({preferences, info}) {
             if (values.isGroup) {
                 history.push('/')
             } else {
+
+                const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
+                const dates = [];
+                let loop = new Date(values.startDate)
+                let endDate = new Date(values.endDate)
+                while (loop <= endDate) {
+                    dates.push(loop.toLocaleDateString("en-US", options));
+                    const newDate = loop.setDate(loop.getDate() + 1);
+                    loop = new Date(newDate);
+                }
+
+                const data = {
+                    dates,
+                    numDays: Math.ceil(Math.abs(values.endDate - values.startDate) / (1000 * 60 * 60 * 24)) + 1,
+                    preferences: {
+                        budget: values.budget,
+                        popularity: values.popularity,
+                        energy: values.energy,
+                        knowledge: values.knowledge,
+                        introversion: values.introversion
+                    },
+                    placeID: info.place_id,
+                    location: info.geometry.location
+                }
                 const itinerary = generateItinerary(values);
                 history.push('/itinerary/', { itinerary: itinerary });
             }

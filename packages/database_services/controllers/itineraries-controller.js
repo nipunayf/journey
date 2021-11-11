@@ -1,7 +1,7 @@
 const {userStore, itineraryStore, transaction} = require('../config/firebase');
 const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
-const {formatDestinationDates} = require('../utils/format');
+const {formatDestinationDates, shiftDate} = require('../utils/format');
 const {StateEnum} = require('../utils/constants');
 
 
@@ -260,11 +260,57 @@ const addReview = async (req, res) => {
         return errorMessage(res, 'Itinerary not found', 404);
 }
 
+const shiftDates = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    const itDocRef = itineraryStore.doc(req.params.itineraryID);
+    let result = await itDocRef.get();
+
+    if (result._fieldsProto) { //Document found in fire store
+        const itData = result.data();
+
+        //Check if the user is a member of the itinerary
+        if (!itData.members.includes(req.user))
+            return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+        const batch = transaction();
+
+        // Shift every date of the itinerary in the firebase
+        const dates = Object.keys(itData.destinations);
+        for (const date of dates) {
+            batch.update(itDocRef, {
+                state: StateEnum.INACTIVE,
+                [`destinations.${date}`]: FieldValue.delete(),
+                [`destinations.${shiftDate(date, req.body.diff)}`]: itData.destinations[date],
+            })
+        }
+
+        //Update the all the user documents
+        for (const member of itData.members) {
+            const userResult = await userStore.where('userID', '==', member).get();
+            const userData = userResult.docs[0].data();
+
+            batch.update(userResult.docs[0]._ref, {
+                [`itineraries.${req.params.itineraryID}.startDate`]: new Date(shiftDate(userData.itineraries[req.params.itineraryID].startDate, req.body.diff)),
+                [`itineraries.${req.params.itineraryID}.endDate`]: new Date(shiftDate(userData.itineraries[req.params.itineraryID].endDate, req.body.diff)),
+                [`itineraries.${req.params.itineraryID}.state`]: StateEnum.INACTIVE
+            })
+        }
+
+        await batch.commit();
+        return successMessage(res, true);
+    } else
+        return errorMessage(res, 'Itinerary not found', 404);
+}
+
 module.exports = {
     getItineraries,
     getItinerary,
     createItinerary,
     updateItinerary,
     deleteItinerary,
-    addReview
+    addReview,
+    shiftDates
 }

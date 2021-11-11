@@ -30,6 +30,7 @@ export default function Search() {
                     lng: placeDetails.data.geometry.location.lng
                 }
             }
+            console.log(placeDetails.data);
             const nearby = await getNearbyPlaces(data);
             if (nearby.data) {
                 setNearby(nearby.data);
