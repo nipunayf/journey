@@ -1,4 +1,4 @@
-import {Button, Modal, ModalContent, ModalOverlay, toast, useDisclosure, useToast} from "@chakra-ui/react";
+import {Button, Modal, ModalContent, ModalOverlay, useDisclosure, useToast} from "@chakra-ui/react";
 import {useState} from "react";
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -35,50 +35,58 @@ function CreateItinerary({preferences, info}) {
         },
         onSubmit: async values => {
             setLoading(true);
-            if (values.isGroup) {
-                history.push('/')
-            } else {
-                const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
-                const dates = [];
-                let loop = new Date(values.startDate)
-                let endDate = new Date(values.endDate)
-                while (loop <= endDate) {
-                    dates.push(loop.toLocaleDateString("en-US", options));
-                    const newDate = loop.setDate(loop.getDate() + 1);
-                    loop = new Date(newDate);
-                }
 
-                const data = {
-                    Dates: dates,
-                    number_dates: Math.ceil(Math.abs(values.endDate - values.startDate) / (1000 * 60 * 60 * 24)) + 1,
-                    preferences: {
-                        budget: values.budget,
-                        popularity: values.popularity,
-                        energy: values.energy,
-                        knowledge: values.knowledge,
-                        introversion: values.introversion
-                    },
-                    place_id: info.place_id,
-                    location: info.geometry.location
-                }
-                // const itinerary = generateItinerary(values);
-                const result = await generateItinerary(data);
-                if (result.data) {
-                    const itinerary = {
-                        destinations : result.data,
-                        location: info.name,
-                        image: info.photos[0].photo_reference,
-                        state: StateEnum.INACTIVE,
-                    }
-                    history.push('/itinerary/', { itinerary });
-                    generateSuccessMessage(toast, 'Itinerary creation successful', 'We have created an itinerary for you!');
-                } else {
-                    generateErrorMessage(toast, 'Unable to create an itinerary', 'We are unable to create an itinerary at the moment. Please try again later.')
-                }
-                setLoading(false)
+            const preferences = {
+                budget: values.budget,
+                popularity: values.popularity,
+                energy: values.energy,
+                knowledge: values.knowledge,
+                introversion: values.introversion
             }
-        }
+            const preferencesKeys = Object.keys(preferences);
 
+            if (values.isGroup) {
+                values.members.forEach(member => {
+                    preferencesKeys.forEach(key => {
+                        preferences[key] += member.preferences[key]
+                    })
+                })
+            }
+            const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'}
+            const dates = [];
+            let loop = new Date(values.startDate)
+            let endDate = new Date(values.endDate)
+            while (loop <= endDate) {
+                dates.push(loop.toLocaleDateString("en-US", options));
+                const newDate = loop.setDate(loop.getDate() + 1);
+                loop = new Date(newDate);
+            }
+
+            const data = {
+                Dates: dates,
+                number_dates: Math.ceil(Math.abs(values.endDate - values.startDate) / (1000 * 60 * 60 * 24)) + 1,
+                preferences,
+                place_id: info.place_id,
+                location: info.geometry.location
+            }
+
+            const result = await generateItinerary(data);
+            if (result.data) {
+                const itinerary = {
+                    destinations: result.data,
+                    location: info.name,
+                    image: info.photos[0].photo_reference,
+                    state: StateEnum.INACTIVE,
+                    memberInfo: values.members,
+                    isGroup: values.isGroup
+                }
+                history.push('/itinerary/', {itinerary});
+                generateSuccessMessage(toast, 'Itinerary creation successful', 'We have created an itinerary for you!');
+            } else {
+                generateErrorMessage(toast, 'Unable to create an itinerary', 'We are unable to create an itinerary at the moment. Please try again later.')
+            }
+            setLoading(false);
+        }
     });
 
     return <>

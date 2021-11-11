@@ -71,25 +71,41 @@ const getItinerary = async (req, res) => {
  * @returns {Promise<void>}
  */
 const createItinerary = async (req, res) => {
-    console.log(req.user);
-
     //User attempting to access another user profile
     if (req.params.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
     const dates = Object.keys(req.body.destinations);
 
-    //Creates the itinerary document
+    // Construct the member IDs
     const userID = req.user
+    const members = [userID]
+    if (req.body.isGroup === true) {
+        req.body.members.forEach(member => {
+            members.push(member.userID);
+        })
+    }
+
+    //Creates the itinerary document
     const data = {
         location: req.body.location,
         destinations: req.body.destinations,
         state: StateEnum.INACTIVE,
-        members: [userID],
+        members,
         memberInfo: {},
         image: req.body.image
     }
-    data.memberInfo[userID] = {displayName: req.body.displayName, review: 0};
+
+    // Add member information for the itinerary document
+    data.memberInfo[userID] = {displayName: req.body.displayName, review: 0, email: req.body.email};
+
+    // Add group members for group itineraries
+    if (req.body.isGroup === true) {
+        for (const member of req.body.members) {
+            data.memberInfo[member.userID] = {displayName: member.displayName, review: 0, email: member.email}
+        }
+    }
+
     const batch = transaction();
     const itDocRef = itineraryStore.doc();
     batch.create(itDocRef, data);
@@ -106,6 +122,22 @@ const createItinerary = async (req, res) => {
             image: req.body.image,
         }
     });
+
+    // Update the itineraries of the group members
+    if (req.body.isGroup === true) {
+        for (const member of req.body.members) {
+            const memberDocRef = await userStore.where('userID', '==', member.userID).get();
+            batch.update(memberDocRef.docs[0]._ref, {
+                [`itineraries.${itDocRef.id}`]: {
+                    location: req.body.location,
+                    state: StateEnum.INACTIVE,
+                    startDate: new Date(dates[0]),
+                    endDate: new Date(dates.at(-1)),
+                    image: req.body.image,
+                }
+            });
+        }
+    }
 
     //Writing the commits to the firestore
     await batch.commit();

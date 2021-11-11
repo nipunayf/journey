@@ -15,8 +15,10 @@ export default function Member({email, name, profilePic, onRemove, isOwner = fal
                 <Text fontSize={14} as={'em'} color={'gray.600'}>{email}</Text>
             </HStack>
             <Spacer />
-            {!isOwner? <IconButton icon={<DeleteIcon />} bg={'red.400'} color={'white'} size={'xs'} onClick={onRemove} aria-label={'Delete member'}/>
-            : <Text as={'em'} fontSize={14} color={'gray.500'}>owner</Text>}
+            {isOwner ? <Text as={'em'} fontSize={14} color={'gray.500'}>owner</Text>
+                : onRemove ? <IconButton icon={<DeleteIcon />} bg={'red.400'} color={'white'} size={'xs'} onClick={onRemove} aria-label={'Delete member'}/>
+                : <Text as={'em'} fontSize={14} color={'gray.500'}>member</Text>
+            }
             <Box px={2} />
         </HStack>
     );

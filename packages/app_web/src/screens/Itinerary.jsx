@@ -17,7 +17,7 @@ import DeleteItinerary from "../containers/Itinerary/DeleteItinerary";
 import FixDates from "../containers/Itinerary/FixDates";
 
 
-function Itinerary({displayName, onAddItinerary}) {
+function Itinerary({displayName, onAddItinerary, email}) {
     const location = useLocation();
     const itinerary = location.state.itinerary;
     const [defaultMarker, setDefaultMarker] = useState(Object.values(itinerary.destinations)[0][0]);
@@ -35,12 +35,16 @@ function Itinerary({displayName, onAddItinerary}) {
         onSubmit: async values => {
             formik.setSubmitting(true);
 
+            console.log(itinerary);
             // Send the data to the firestore
             const result = await createItinerary({
                 location: itinerary.location,
                 image: itinerary.image,
                 destinations: values.destinations,
-                displayName
+                displayName,
+                email,
+                isGroup: itinerary.isGroup,
+                members: itinerary.memberInfo
             })
 
             if (result.data) {
@@ -81,7 +85,7 @@ function Itinerary({displayName, onAddItinerary}) {
             <HStack w={'100wh'} alignItems={'flex-start'} spacing={2} p={4}>
                 <VStack alignItems={'left'} overflowY={'scroll'} h={'80vh'} w={'80%'}>
                     <HStack spacing={3} px={4}>
-                        <Members/>
+                        <Members members={itinerary.memberInfo}/>
                         {itinerary.id === undefined && <Button
                             leftIcon={<MdSave/>}
                             bg={'secondary.light'}
@@ -116,7 +120,7 @@ function Itinerary({displayName, onAddItinerary}) {
 
 const mapStateToProps = state => {
     return {
-        itineraries: state.itineraries,
+        email: state.auth.email,
         displayName: `${state.profile.firstName} ${state.profile.lastName}`
     };
 };
