@@ -23,5 +23,6 @@ export {
 } from './itineraries-api'
 
 export {
-    generateItinerary
+    generateItinerary,
+    getPlaceInfo
 } from './search-api'

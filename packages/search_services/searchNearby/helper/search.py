@@ -2,6 +2,7 @@ from . import map
 
 
 def search(id):
+    id = id['id']
     place_details = map.placeDetails(id)
     data = {'location': {
         'lat': place_details['geometry']['location']['lat'],

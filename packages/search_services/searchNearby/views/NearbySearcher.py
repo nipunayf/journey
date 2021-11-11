@@ -7,7 +7,7 @@ import requests
 
 
 class NearbySearcher(APIView):
-    def get(self, parameters):
+    def post(self, parameters):
         parameters = json.loads(parameters.body.decode("utf-8"))
         result = search.search(parameters)
         return Response({"results": result})
