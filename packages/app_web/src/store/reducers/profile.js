@@ -64,6 +64,15 @@ const removeItinerary = (state, action) => {
     })
 }
 
+const updateDates = (state, action) => {
+    const itineraries = state.itineraries;
+    itineraries[action.id].startDate = action.startDate
+    itineraries[action.id].endDate = action.endDate
+
+    return updateObject(state, {
+        itineraries
+    })
+}
 
 const reducer = ( state = initialState, action ) => {
     switch ( action.type ) {
@@ -73,6 +82,7 @@ const reducer = ( state = initialState, action ) => {
         case actionTypes.UPDATE_STATE: return updateState(state, action);
         case actionTypes.ADD_ITINERARY: return addItinerary(state, action);
         case actionTypes.REMOVE_ITINERARY: return removeItinerary(state, action);
+        case actionTypes.UPDATE_DATES: return updateDates(state, action);
         default:
             return state;
     }

@@ -13,23 +13,43 @@ import DatePicker from "react-datepicker";
 import {useFormik} from "formik";
 import {CalendarIcon} from "@chakra-ui/icons";
 import {MdSave} from "react-icons/all";
-import {shiftDates} from "../../api";
+import {getItinerary, shiftDates} from "../../api";
 import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
+import * as actions from "../../store/actions";
+import {connect} from "react-redux";
+import {StateEnum} from "../../utils/constants";
+import {useState} from "react";
+import {useHistory} from "react-router-dom";
 
-export default function FixDates({id, currentStartDate}) {
+function FixDates({id, currentStartDate, setState, onStateUpdate, currentState, onDateUpdate}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
     const toast = useToast();
+    const [date, setDate] = useState(currentStartDate);
+    const history = useHistory()
 
     const formik = useFormik({
         initialValues: {
-            startDate: currentStartDate,
+            startDate: date,
         },
         onSubmit: async values => {
-            const diff = Math.ceil((values.startDate - currentStartDate) / (1000 * 60 * 60 * 24));
+            const diff = Math.ceil((values.startDate - date) / (1000 * 60 * 60 * 24));
 
             const result = await shiftDates(id, diff);
             if (result.data) {
-                generateSuccessMessage(toast,'Updated the itinerary successfully', 'We have successfully shifted the dates of the itinerary')
+                onDateUpdate(id, diff);
+                setDate(values.startDate)
+                if (currentState === StateEnum.INCOMPATIBLE){
+                    setState(StateEnum.INACTIVE);
+                    onStateUpdate(id, StateEnum.INACTIVE);
+                }
+                const itResult = await getItinerary(id);
+                if (itResult.data) {
+                    history.push(`/itinerary/${id}`, { itinerary: itResult.data });
+                    generateSuccessMessage(toast,'Updated the itinerary successfully', 'We have successfully shifted the dates of the itinerary')
+                } else {
+                    generateErrorMessage(toast, 'Unable to fetch the itinerary', result.message)
+                    history.push('/')
+                }
             } else {
                 generateErrorMessage(toast, 'Unable to update the dates', result.message)
             }
@@ -70,7 +90,8 @@ export default function FixDates({id, currentStartDate}) {
                         leftIcon={<MdSave/>}
                         bg={'secondary.light'}
                         color={'white'}
-                        isDisabled={currentStartDate.getTime() === formik.values.startDate.getTime()}
+                        isDisabled={date.getTime() === formik.values.startDate.getTime()}
+                        isLoading={formik.isSubmitting}
                         onClick={formik.handleSubmit}
                         _hover={{bg: 'blue.500'}}>
                         Save
@@ -80,3 +101,12 @@ export default function FixDates({id, currentStartDate}) {
         </Modal>
     </>);
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onStateUpdate: (id, state) => dispatch(actions.updateState(id, state)),
+        onDateUpdate: (id, diff) => dispatch(actions.updateDates(id, diff))
+    };
+};
+
+export default connect(null, mapDispatchToProps)(FixDates);

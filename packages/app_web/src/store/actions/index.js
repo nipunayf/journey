@@ -11,5 +11,6 @@ export  {
     clearProfile,
     updateState,
     addItinerary,
-    removeItinerary
+    removeItinerary,
+    updateDates
 } from './profile';
