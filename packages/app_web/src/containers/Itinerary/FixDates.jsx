@@ -7,22 +7,33 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    useDisclosure
+    useDisclosure, useToast
 } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import {useFormik} from "formik";
 import {CalendarIcon} from "@chakra-ui/icons";
 import {MdSave} from "react-icons/all";
+import {shiftDates} from "../../api";
+import {generateErrorMessage, generateSuccessMessage} from "../../utils/toast";
 
-export default function FixDates({currentStartDate}) {
+export default function FixDates({id, currentStartDate}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const toast = useToast();
 
     const formik = useFormik({
         initialValues: {
             startDate: currentStartDate,
         },
-        onSubmit: values => {
-            console.log(values.startDate);
+        onSubmit: async values => {
+            const diff = Math.ceil((values.startDate - currentStartDate) / (1000 * 60 * 60 * 24));
+
+            const result = await shiftDates(id, diff);
+            if (result.data) {
+                generateSuccessMessage(toast,'Updated the itinerary successfully', 'We have successfully shifted the dates of the itinerary')
+            } else {
+                generateErrorMessage(toast, 'Unable to update the dates', result.message)
+            }
+
         }
     });
 
@@ -59,7 +70,7 @@ export default function FixDates({currentStartDate}) {
                         leftIcon={<MdSave/>}
                         bg={'secondary.light'}
                         color={'white'}
-                        isDisabled={formik.values.startDate.getDay() === currentStartDate.getDay()}
+                        isDisabled={currentStartDate.getTime() === formik.values.startDate.getTime()}
                         onClick={formik.handleSubmit}
                         _hover={{bg: 'blue.500'}}>
                         Save

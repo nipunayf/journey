@@ -22,9 +22,7 @@ export const getItinerary = (id) => databaseServices.getRequest(`${URL}/${id}`, 
  * @param data
  * @return {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
  */
-export const updateItinerary = (id, data) => {
-    return databaseServices.putRequest(`${URL}/${id}`, data, true);
-}
+export const updateItinerary = (id, data) => databaseServices.putRequest(`${URL}/${id}`, data, true);
 
 /**
  * Returns an array of itineraries
@@ -47,6 +45,8 @@ export const deleteItinerary = id => databaseServices.deleteRequest(`${URL}/${id
  * @returns {Promise<{data: *, message: string}|{code: *, error: *, title: *, message: *}|{code: number, error: *, title: *, message: string}|undefined>}
  */
 export const addReview = (id, review) => databaseServices.postRequest(`${URL}/${id}`, {review} , true);
+
+export const shiftDates = (id, diff) => databaseServices.putRequest(`${URL}/${id}/dates`, {diff}, true);
 
 
 
