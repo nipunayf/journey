@@ -408,14 +408,14 @@ def itinerary(parameters, results):
         if day == dates[0]:
             for id in range(1, len(routes[day])):
                 r = results_copy[routes[day][id]['placeID']]
-                routes[day][id]['geometry'] = r['geometry']
+                routes[day][id]['geometry'] = r['geometry']['location']
                 routes[day][id]['name'] = r['name']
                 routes[day][id]['image'] = r['photos'][0]["photo_reference"]
                 routes[day][id]['rating'] = r['rating']
         else:
             for id in range(len(routes[day])):
                 r = results_copy[routes[day][id]['placeID']]
-                routes[day][id]['geometry'] = r['geometry']
+                routes[day][id]['geometry'] = r['geometry']['location']
                 routes[day][id]['name'] = r['name']
                 routes[day][id]['image'] = r['photos'][0]["photo_reference"]
                 routes[day][id]['rating'] = r['rating']
