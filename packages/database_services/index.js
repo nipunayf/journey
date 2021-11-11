@@ -22,6 +22,6 @@ app.use(require('./middleware/error-handler'));
 
 const server = http.createServer(app);
 
-server.listen(port, hostname, () => {
+server.listen(port, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });

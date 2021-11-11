@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'createItinerary.apps.CreateitineraryConfig',
+    'searchNearby.apps.SearchnearbyConfig',
     'rest_framework',
     'corsheaders',
 ]
@@ -67,7 +68,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = [
-    'http://localhost:8000',
+    'http://localhost:3000',
 ]
 
 ROOT_URLCONF = 'search_services.urls'

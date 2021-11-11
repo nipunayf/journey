@@ -41,7 +41,21 @@ const formatDestinationDates = (id, object) => {
  */
 const formatFirestoreTimestamp = timestamp => new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
 
+/**
+ * Moves the date by the given diff number
+ * @param date date string
+ * @param diff different in number of days
+ * @return {string}
+ */
+const shiftDate = (date, diff) => {
+    date = date.seconds ? formatFirestoreTimestamp(date) : date;
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + diff);
+    return currentDate.toLocaleString("en-US", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+}
+
 module.exports = {
     formatDestinationDates,
-    formatFirestoreTimestamp
+    formatFirestoreTimestamp,
+    shiftDate
 }

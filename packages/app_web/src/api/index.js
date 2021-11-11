@@ -18,5 +18,11 @@ export {
     updateItinerary,
     createItinerary,
     addReview,
+    shiftDates,
     deleteItinerary
 } from './itineraries-api'
+
+export {
+    generateItinerary,
+    getPlaceInfo
+} from './search-api'
