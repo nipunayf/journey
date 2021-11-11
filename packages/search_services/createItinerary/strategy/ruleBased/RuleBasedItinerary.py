@@ -176,42 +176,43 @@ def ranking(results):
 def itinerary(parameters, results):
     leg_day1, leg_day2, leg_day3, leg_day4 = 0, 0, 0, 0
     number_dates = parameters['number_dates']
+    dates = parameters['Dates']
     results_copy = dict(results)
     direction_results = MapApis.direction(parameters, results_copy)
     legs = direction_results['routes'][0]['legs']
     geocode_waypoints = direction_results['geocoded_waypoints']
     place_ids = []
     routes = {}
-    for day in range(1, number_dates + 1):
-        routes[f"day_{day}"] = {}
+    for day in dates:
+        routes[day] = {}
 
     for code in geocode_waypoints:
         place_ids.append(code['place_id'])
 
     times = ['arrival_time', 'departure_time']
     if number_dates == 1:
-        routes['day_1'] = []
+        routes[dates[0]] = []
         for id in range(5):
-            routes['day_1'][id] = {'placeID': place_ids[id],
-                                   'arrival_time': None,
-                                   'departure_time': None
-                                   }
+            routes[dates[0]][id] = {'placeID': place_ids[id],
+                                    'arrival_time': None,
+                                    'departure_time': None
+                                    }
         id_list1 = place_ids[:5]
         leg_day1 = legs[:5]
 
     if number_dates == 2:
-        routes['day_1'] = []
+        routes[dates[0]] = []
         for id in range(4):
-            routes['day_1'][id] = {'placeID': place_ids[id],
-                                   'arrival_time': None,
-                                   'departure_time': None
-                                   }
+            routes[dates[0]][id] = {'placeID': place_ids[id],
+                                    'arrival_time': None,
+                                    'departure_time': None
+                                    }
         id_list1 = place_ids[:4]
         leg_day1 = legs[:4]
 
-        routes['day_2'] = []
+        routes[dates[1]] = []
         for id in range(4, 8):
-            routes['day_2'][id] = {'placeID': place_ids[id],
+            routes[dates[1]][id] = {'placeID': place_ids[id],
                                    'arrival_time': None,
                                    'departure_time': None
                                    }
@@ -219,27 +220,27 @@ def itinerary(parameters, results):
         leg_day2 = legs[4:8]
 
     if number_dates == 3:
-        routes['day_1'] = []
+        routes[dates[0]] = []
         for id in range(4):
-            routes['day_1'].append({'placeID': place_ids[id],
+            routes[dates[0]].append({'placeID': place_ids[id],
                                     'arrival_time': None,
                                     'departure_time': None
                                     })
         leg_day1 = legs[:4]
         id_list1 = place_ids[:4]
 
-        routes['day_2'] = []
+        routes[dates[1]] = []
         for id in range(4, 8):
-            routes['day_2'].append({'placeID': place_ids[id],
+            routes[dates[1]].append({'placeID': place_ids[id],
                                     'arrival_time': None,
                                     'departure_time': None
                                     })
         leg_day2 = legs[4:8]
         id_list2 = place_ids[4:8]
 
-        routes['day_3'] = []
+        routes[dates[2]] = []
         for id in range(8, 11):
-            routes['day_3'].append({'placeID': place_ids[id],
+            routes[dates[2]].append({'placeID': place_ids[id],
                                     'arrival_time': None,
                                     'departure_time': None
                                     })
@@ -247,36 +248,36 @@ def itinerary(parameters, results):
         leg_day3 = legs[8:11]
 
     if number_dates >= 4:
-        routes['day_1'] = []
+        routes[dates[0]] = []
         for id in range(4):
-            routes['day_1'][id] = {'placeID': place_ids[id],
+            routes[dates[0]][id] = {'placeID': place_ids[id],
                                    'arrival_time': None,
                                    'departure_time': None
                                    }
         leg_day1 = legs[:4]
         id_list1 = place_ids[:4]
 
-        routes['day_2'] = []
+        routes[dates[1]] = []
         for id in range(4, 8):
-            routes['day_2'][id] = {'placeID': place_ids[id],
+            routes[dates[1]][id] = {'placeID': place_ids[id],
                                    'arrival_time': None,
                                    'departure_time': None
                                    }
         leg_day2 = legs[4:8]
         id_list2 = place_ids[4:8]
 
-        routes['day_3'] = []
+        routes[dates[2]] = []
         for id in range(8, 11):
-            routes['day_3'][id] = {'placeID': place_ids[id],
+            routes[dates[2]][id] = {'placeID': place_ids[id],
                                    'arrival_time': None,
                                    'departure_time': None
                                    }
         id_list3 = place_ids[8:11]
         leg_day3 = legs[8:11]
 
-        routes['day_4'] = []
+        routes[dates[3]] = []
         for id in range(11):
-            routes['day_4'][id] = {'placeID': place_ids[id],
+            routes[dates[3]][id] = {'placeID': place_ids[id],
                                    'arrival_time': None,
                                    'departure_time': None
                                    }
@@ -289,8 +290,8 @@ def itinerary(parameters, results):
         spend_time = datetime.timedelta(hours=0, minutes=00, seconds=7200)
         for val in range(len(leg_day1)):
             if val == 0:
-                routes['day_1'][val]['arrival_time'] = str(arrival_time)
-                routes['day_1'][val]['departure_time'] = str(departure_time)
+                routes[dates[0]][val]['arrival_time'] = str(arrival_time)
+                routes[dates[0]][val]['departure_time'] = str(departure_time)
 
             elif val == 3:
                 travel_time = datetime.timedelta(seconds=leg_day1[val - 1]['duration']['value'])
@@ -299,11 +300,11 @@ def itinerary(parameters, results):
 
                 arrival_time = departure_time + travel_time + lunch_time
                 # print(arrival_time)
-                routes['day_1'][val]['arrival_time'] = str(arrival_time)
+                routes[dates[0]][val]['arrival_time'] = str(arrival_time)
 
                 departure_time = arrival_time + spend_time
                 # print(departure_time)
-                routes['day_1'][val]['departure_time'] = str(departure_time)
+                routes[dates[0]][val]['departure_time'] = str(departure_time)
             else:
                 second = leg_day1[val - 1]['duration']['value']
                 travel_time = datetime.timedelta(seconds=second)
@@ -311,11 +312,11 @@ def itinerary(parameters, results):
 
                 arrival_time = departure_time + travel_time
                 # print(arrival_time)
-                routes['day_1'][val]['arrival_time'] = str(arrival_time)
+                routes[dates[0]][val]['arrival_time'] = str(arrival_time)
 
                 departure_time = arrival_time + spend_time
                 # print(departure_time)
-                routes['day_1'][val]['departure_time'] = str(departure_time)
+                routes[dates[0]][val]['departure_time'] = str(departure_time)
 
     if leg_day2 != 0:
         arrival_time = datetime.timedelta(hours=8, minutes=00, seconds=00)
@@ -323,8 +324,8 @@ def itinerary(parameters, results):
         spend_time = datetime.timedelta(hours=0, minutes=00, seconds=7200)
         for val in range(len(leg_day2)):
             if val == 0:
-                routes['day_2'][val]['arrival_time'] = str(arrival_time)
-                routes['day_2'][val]['departure_time'] = str(departure_time)
+                routes[dates[1]][val]['arrival_time'] = str(arrival_time)
+                routes[dates[1]][val]['departure_time'] = str(departure_time)
             elif val == 2:
                 second = leg_day2[val - 1]['duration']['value']
                 travel_time = datetime.timedelta(seconds=second)
@@ -333,16 +334,16 @@ def itinerary(parameters, results):
 
                 arrival_time = departure_time + travel_time + lunch_time
                 # print(arrival_time)
-                routes['day_2'][val]['arrival_time'] = str(arrival_time)
+                routes[dates[1]][val]['arrival_time'] = str(arrival_time)
 
                 departure_time = arrival_time + spend_time
                 # print(departure_time)
-                routes['day_2'][val]['departure_time'] = str(departure_time)
+                routes[dates[1]][val]['departure_time'] = str(departure_time)
             else:
                 travel_time = datetime.timedelta(hours=0, minutes=00, seconds=leg_day2[val - 1]['duration']['value'])
-                routes['day_2'][val]['arrival_time'] = str(departure_time + travel_time)
+                routes[dates[1]][val]['arrival_time'] = str(departure_time + travel_time)
                 arrival_time = departure_time + travel_time
-                routes['day_2'][val]['departure_time'] = str(arrival_time + spend_time)
+                routes[dates[1]][val]['departure_time'] = str(arrival_time + spend_time)
                 departure_time = arrival_time + spend_time
 
     if leg_day3 != 0:
@@ -351,8 +352,8 @@ def itinerary(parameters, results):
         spend_time = datetime.timedelta(hours=0, minutes=00, seconds=7200)
         for val in range(len(leg_day3)):
             if val == 0:
-                routes['day_3'][val]['arrival_time'] = str(arrival_time)
-                routes['day_3'][val]['departure_time'] = str(departure_time)
+                routes[dates[2]][val]['arrival_time'] = str(arrival_time)
+                routes[dates[2]][val]['departure_time'] = str(departure_time)
             elif val == 2:
                 second = leg_day3[val - 1]['duration']['value']
                 travel_time = datetime.timedelta(seconds=second)
@@ -361,16 +362,16 @@ def itinerary(parameters, results):
 
                 arrival_time = departure_time + travel_time + lunch_time
                 # print(arrival_time)
-                routes['day_3'][val]['arrival_time'] = str(arrival_time)
+                routes[dates[2]][val]['arrival_time'] = str(arrival_time)
 
                 departure_time = arrival_time + spend_time
                 # print(departure_time)
-                routes['day_3'][val]['departure_time'] = str(departure_time)
+                routes[dates[2]][val]['departure_time'] = str(departure_time)
             else:
                 travel_time = datetime.timedelta(hours=0, minutes=00, seconds=leg_day3[val - 1]['duration']['value'])
-                routes['day_3'][val]['arrival_time'] = str(departure_time + travel_time)
+                routes[dates[2]][val]['arrival_time'] = str(departure_time + travel_time)
                 arrival_time = departure_time + travel_time
-                routes['day_3'][val]['departure_time'] = str(arrival_time + spend_time)
+                routes[dates[2]][val]['departure_time'] = str(arrival_time + spend_time)
                 departure_time = arrival_time + spend_time
 
     if leg_day4 != 0:
@@ -379,8 +380,8 @@ def itinerary(parameters, results):
         spend_time = datetime.timedelta(hours=0, minutes=00, seconds=7200)
         for val in range(len(leg_day4)):
             if val == 0:
-                routes['day_4'][val]['arrival_time'] = str(arrival_time)
-                routes['day_4'][val]['departure_time'] = str(departure_time)
+                routes[dates[3]][val]['arrival_time'] = str(arrival_time)
+                routes[dates[3]][val]['departure_time'] = str(departure_time)
             elif val == 2:
                 second = leg_day4[val - 1]['duration']['value']
                 travel_time = datetime.timedelta(seconds=second)
@@ -389,23 +390,23 @@ def itinerary(parameters, results):
 
                 arrival_time = departure_time + travel_time + lunch_time
                 # print(arrival_time)
-                routes['day_4'][val]['arrival_time'] = str(arrival_time)
+                routes[dates[3]][val]['arrival_time'] = str(arrival_time)
 
                 departure_time = arrival_time + spend_time
                 # print(departure_time)
-                routes['day_4'][val]['departure_time'] = str(departure_time)
+                routes[dates[3]][val]['departure_time'] = str(departure_time)
             else:
                 travel_time = datetime.timedelta(hours=0, minutes=00, seconds=leg_day4[val - 1]['duration']['value'])
-                routes['day_4'][val]['arrival_time'] = str(departure_time + travel_time)
+                routes[dates[3]][val]['arrival_time'] = str(departure_time + travel_time)
                 arrival_time = departure_time + travel_time
-                routes['day_4'][val]['departure_time'] = str(arrival_time + spend_time)
+                routes[dates[3]][val]['departure_time'] = str(arrival_time + spend_time)
                 departure_time = arrival_time + spend_time
 
     # print('ROUTE', routes)
     # print(results_copy)
     for day in routes:
-        if day == 'day_1':
-            for id in range(1,len(routes[day])):
+        if day == dates[0]:
+            for id in range(1, len(routes[day])):
                 r = results_copy[routes[day][id]['placeID']]
                 routes[day][id]['result'] = r
         else:
