@@ -193,7 +193,7 @@ def itinerary(parameters, results):
     if number_dates == 1:
         routes[dates[0]] = []
         for id in range(5):
-            routes[dates[0]].append({'placeID': place_ids[id],
+            routes[dates[0]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -203,7 +203,7 @@ def itinerary(parameters, results):
     if number_dates == 2:
         routes[dates[0]] = []
         for id in range(4):
-            routes[dates[0]].append({'placeID': place_ids[id],
+            routes[dates[0]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -212,7 +212,7 @@ def itinerary(parameters, results):
 
         routes[dates[1]] = []
         for id in range(4, 8):
-            routes[dates[1]].append({'placeID': place_ids[id],
+            routes[dates[1]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -222,7 +222,7 @@ def itinerary(parameters, results):
     if number_dates == 3:
         routes[dates[0]] = []
         for id in range(4):
-            routes[dates[0]].append({'placeID': place_ids[id],
+            routes[dates[0]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -231,7 +231,7 @@ def itinerary(parameters, results):
 
         routes[dates[1]] = []
         for id in range(4, 8):
-            routes[dates[1]].append({'placeID': place_ids[id],
+            routes[dates[1]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -240,7 +240,7 @@ def itinerary(parameters, results):
 
         routes[dates[2]] = []
         for id in range(8, 11):
-            routes[dates[2]].append({'placeID': place_ids[id],
+            routes[dates[2]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -250,7 +250,7 @@ def itinerary(parameters, results):
     if number_dates >= 4:
         routes[dates[0]] = []
         for id in range(4):
-            routes[dates[0]].append({'placeID': place_ids[id],
+            routes[dates[0]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -259,7 +259,7 @@ def itinerary(parameters, results):
 
         routes[dates[1]] = []
         for id in range(4, 8):
-            routes[dates[1]].append({'placeID': place_ids[id],
+            routes[dates[1]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -268,7 +268,7 @@ def itinerary(parameters, results):
 
         routes[dates[2]] = []
         for id in range(8, 11):
-            routes[dates[2]].append({'placeID': place_ids[id],
+            routes[dates[2]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -277,7 +277,7 @@ def itinerary(parameters, results):
 
         routes[dates[3]] = []
         for id in range(11):
-            routes[dates[3]].append({'placeID': place_ids[id],
+            routes[dates[3]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
                                      })
@@ -407,18 +407,28 @@ def itinerary(parameters, results):
     for day in routes:
         if day == dates[0]:
             for id in range(1, len(routes[day])):
-                r = results_copy[routes[day][id]['placeID']]
+                r = results_copy[routes[day][id]['place_id']]
                 routes[day][id]['geometry'] = r['geometry']['location']
                 routes[day][id]['name'] = r['name']
-                routes[day][id]['image'] = r['photos'][0]["photo_reference"]
                 routes[day][id]['rating'] = r['rating']
+                key = 'photos'
+                if key in r:
+                    routes[day][id]['image'] = r['photos'][0]["photo_reference"]
+                else:
+                    routes[day][id]['image'] = 'no image'
+
+
         else:
             for id in range(len(routes[day])):
-                r = results_copy[routes[day][id]['placeID']]
+                r = results_copy[routes[day][id]['place_id']]
                 routes[day][id]['geometry'] = r['geometry']['location']
                 routes[day][id]['name'] = r['name']
-                routes[day][id]['image'] = r['photos'][0]["photo_reference"]
                 routes[day][id]['rating'] = r['rating']
+                key = 'photos'
+                if key in r:
+                    routes[day][id]['image'] = r['photos'][0]["photo_reference"]
+                else:
+                    routes[day][id]['image'] = 'no image'
 
     # print(routes)
     del routes[dates[0]][0]
