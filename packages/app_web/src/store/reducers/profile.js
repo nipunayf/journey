@@ -9,6 +9,12 @@ const initialState = {
     itineraries: null
 };
 
+/**
+ * Update profile information that can be updated by settings
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const updateProfile = (state, action) => {
     return updateObject( state, {
         firstName: action.firstName,
@@ -17,6 +23,12 @@ const updateProfile = (state, action) => {
     })
 }
 
+/**
+ * Set the user information upon sign in
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const initializeProfile = (state, action) => {
     return updateObject(state, {
         firstName: action.firstName,
@@ -27,6 +39,12 @@ const initializeProfile = (state, action) => {
     })
 }
 
+/**
+ * Clear all the user information
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const clearProfile = (state, action) => {
     return updateObject(state, {
         firstName: null,
@@ -37,6 +55,12 @@ const clearProfile = (state, action) => {
     })
 }
 
+/**
+ * Update the state of a given itinerary
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const updateState = (state, action) => {
     const itineraries = state.itineraries;
     itineraries[action.id].state = action.state
@@ -46,6 +70,12 @@ const updateState = (state, action) => {
     })
 }
 
+/**
+ * Add a new itinerary to the list
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const addItinerary = (state, action) => {
     const itineraries = state.itineraries;
     itineraries[action.id] = action.object;
@@ -55,6 +85,12 @@ const addItinerary = (state, action) => {
     })
 }
 
+/**
+ * Remove an existing itinerary from the list
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const removeItinerary = (state, action) => {
     const itineraries = state.itineraries;
     delete itineraries[action.id];
@@ -64,6 +100,12 @@ const removeItinerary = (state, action) => {
     })
 }
 
+/**
+ * Updates the dates of the given itinerary
+ * @param state
+ * @param action
+ * @return {*}
+ */
 const updateDates = (state, action) => {
     const itineraries = state.itineraries;
     itineraries[action.id].startDate = action.startDate

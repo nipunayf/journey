@@ -3,7 +3,13 @@ import {databaseServices} from '../../api/api-handler'
 import {clearProfile, initializeProfile} from "./profile";
 import {getObject, storeObject} from "../../utils/local-storage";
 
-
+/**
+ * Updates the local information upon authentication
+ * @param token
+ * @param userID
+ * @param email
+ * @return {{type: string, user, email, token}}
+ */
 export const authLogin = (token, userID, email) => {
     databaseServices.setToken(token);
 
@@ -24,6 +30,10 @@ export const authLogin = (token, userID, email) => {
     };
 };
 
+/**
+ * Set the local authentication status
+ * @return {{type: string}}
+ */
 export const authSuccess = () => {
     storeObject('isAuthenticated', true)
 
@@ -32,6 +42,10 @@ export const authSuccess = () => {
     }
 }
 
+/**
+ * Removes all the local authentication information
+ * @return {{type: string}}
+ */
 export const clearAuth = () => {
     localStorage.clear();
     databaseServices.deleteToken();
@@ -41,6 +55,10 @@ export const clearAuth = () => {
     };
 };
 
+/**
+ * Remove all the local information upon sign out
+ * @return {(function(*): void)|*}
+ */
 export const logout = () => {
     return dispatch => {
         dispatch(clearAuth())
@@ -48,6 +66,11 @@ export const logout = () => {
     }
 }
 
+/**
+ * Log out when the expiration date is reached
+ * @param expirationTime
+ * @return {(function(*): void)|*}
+ */
 export const checkAuthTimeout = (expirationTime) => {
     return dispatch => {
         setTimeout(() => {
@@ -56,7 +79,10 @@ export const checkAuthTimeout = (expirationTime) => {
     };
 };
 
-
+/**
+ * Log back to the system if the expiration date is not reached
+ * @return {(function(*): void)|*}
+ */
 export const authCheckState = () => {
     return dispatch => {
         const token = localStorage.getItem('token');
