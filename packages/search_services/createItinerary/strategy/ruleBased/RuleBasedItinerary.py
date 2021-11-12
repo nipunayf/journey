@@ -407,28 +407,32 @@ def itinerary(parameters, results):
     for day in routes:
         if day == dates[0]:
             for id in range(1, len(routes[day])):
-                r = results_copy[routes[day][id]['place_id']]
-                routes[day][id]['geometry'] = r['geometry']['location']
-                routes[day][id]['name'] = r['name']
-                routes[day][id]['rating'] = r['rating']
-                key = 'photos'
-                if key in r:
-                    routes[day][id]['image'] = r['photos'][0]["photo_reference"]
-                else:
-                    routes[day][id]['image'] = 'no image'
+                i = routes[day][id]['place_id']
+                if i in results_copy:
+                    r = results_copy[routes[day][id]['place_id']]
+                    routes[day][id]['geometry'] = r['geometry']['location']
+                    routes[day][id]['name'] = r['name']
+                    routes[day][id]['rating'] = r['rating']
+                    key = 'photos'
+                    if key in r:
+                        routes[day][id]['image'] = r['photos'][0]["photo_reference"]
+                    else:
+                        routes[day][id]['image'] = 'no image'
 
 
         else:
             for id in range(len(routes[day])):
-                r = results_copy[routes[day][id]['place_id']]
-                routes[day][id]['geometry'] = r['geometry']['location']
-                routes[day][id]['name'] = r['name']
-                routes[day][id]['rating'] = r['rating']
-                key = 'photos'
-                if key in r:
-                    routes[day][id]['image'] = r['photos'][0]["photo_reference"]
-                else:
-                    routes[day][id]['image'] = 'no image'
+                i = routes[day][id]['place_id']
+                if i in results_copy:
+                    r = results_copy[routes[day][id]['place_id']]
+                    routes[day][id]['geometry'] = r['geometry']['location']
+                    routes[day][id]['name'] = r['name']
+                    routes[day][id]['rating'] = r['rating']
+                    key = 'photos'
+                    if key in r:
+                        routes[day][id]['image'] = r['photos'][0]["photo_reference"]
+                    else:
+                        routes[day][id]['image'] = 'no image'
 
     # print(routes)
     del routes[dates[0]][0]
