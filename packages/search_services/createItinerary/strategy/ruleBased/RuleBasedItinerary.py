@@ -34,10 +34,10 @@ def createPersonKeyword(dic):
         type_not_key = enums.Types[NOT_KEY].value
         keyword_key = enums.Keywords[key].value
         keyword_not_key = enums.Keywords[NOT_KEY].value
-        if dic[key] <= -1:  # nature,relax,entertainment
+        if dic[key] >= 1:  # nature,informational,adventurous
             person_type += type_key
             person_keyword += keyword_key
-        elif dic[key] >= 1:  # indoor,adventure,traditional
+        elif dic[key] <= -1:  # indoor,entertaining,relaxing
             person_type += type_not_key
             person_keyword += keyword_not_key
         elif dic[key] == 0:
