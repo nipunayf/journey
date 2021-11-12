@@ -69,6 +69,7 @@ MIDDLEWARE = [
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
+    'https://journey-travel-planner.netlify.app'
 ]
 
 ROOT_URLCONF = 'search_services.urls'
