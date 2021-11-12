@@ -434,6 +434,8 @@ def itinerary(parameters, results):
                     else:
                         routes[day][id]['image'] = 'no image'
 
-    # print(routes)
+
     del routes[dates[0]][0]
+
+    print(routes)
     return routes
