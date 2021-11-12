@@ -7,6 +7,11 @@ from ..strategy.ruleBased import main
 
 class ItineraryCreator(APIView):
     def post(self, parameters):
-        rulebased = ItineraryStrategy.ItineraryStrategy(main.RuleBasedMain)
-        route = rulebased.execute(parameters)
-        return Response({"results": route})
+        try:
+            rulebased = ItineraryStrategy.ItineraryStrategy(main.RuleBasedMain)
+            route = rulebased.execute(parameters)
+            return Response({"results": route,
+                             "message": 'success'})
+        except:
+            return Response({"results": None,
+                             "message": "Sorry couldn't Create an Itinerary"})
