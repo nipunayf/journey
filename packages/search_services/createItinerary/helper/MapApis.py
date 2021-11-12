@@ -72,8 +72,9 @@ def direction(parameters, results):
     # print(response.json()['routes'][0]['legs'])
     directions_result = response.json()
 
-    print(directions_result['routes'][0]["waypoint_order"])
     print(directions_result['routes'][0])
+    print(directions_result['routes'][0]["waypoint_order"])
+
 
     waypoint_order = directions_result['routes'][0]["waypoint_order"]
 
