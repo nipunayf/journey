@@ -54,8 +54,30 @@ const shiftDate = (date, diff) => {
     return currentDate.toLocaleString("en-US", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
 }
 
+const formatUserDates = (object) => {
+    const itineraries = object.itineraries;
+    const ids = Object.keys(itineraries);
+
+    //Skips if there is no itineraries under the user document
+    if (Object.keys(itineraries).length === 0)
+        return object;
+
+    //Format the date for each itinerary
+    ids.forEach(id => {
+        const itinerary = itineraries[id]
+        itinerary.startDate = formatFirestoreTimestamp(itinerary.startDate);
+        itinerary.endDate = formatFirestoreTimestamp(itinerary.endDate);
+    })
+
+    return {
+        ...object,
+        itineraries
+    }
+}
+
 module.exports = {
     formatDestinationDates,
     formatFirestoreTimestamp,
-    shiftDate
+    shiftDate,
+    formatUserDates
 }

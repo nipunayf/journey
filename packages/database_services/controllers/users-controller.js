@@ -29,7 +29,7 @@ const getUser = async (req, res) => {
 
     //Skips if there is no itineraries under the user document
     if (Object.keys(itineraries).length === 0)
-        return object;
+        return successMessage(res, object);
 
     //Format the date for each itinerary
     ids.forEach(id => {
