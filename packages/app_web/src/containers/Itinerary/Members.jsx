@@ -11,11 +11,11 @@ import {
 } from "@chakra-ui/react";
 import Member from "../../components/Member/Member";
 import {connect} from "react-redux";
-import AddMembersModal from "../CreateItinerary/AddMembersModal";
 import {MdGroup} from "react-icons/all";
 
-function Members({displayName, profilePic, email}) {
+function Members({displayName, profilePic, email, members}) {
     const {isOpen, onOpen, onClose} = useDisclosure();
+    const memberIDs = Object.keys(members);
 
     return (<>
         <Button
@@ -34,7 +34,7 @@ function Members({displayName, profilePic, email}) {
                 <ModalCloseButton/>
                 <ModalBody alignItems={'center'}>
                     <VStack w={"100%"} spacing={4} align={'left'} overflowY={'auto'} maxH={180}>
-                        <Member email={email} name={displayName} profilePic={profilePic} isOwner={true}/>
+                        {memberIDs.length > 0 && memberIDs.map(memberID => <Member email={members[memberID].email} name={members[memberID].displayName} profilePic={members[memberID].profilePic} isOwner={members[memberID].email === email}/>)}
                     </VStack>
                 </ModalBody>
             </ModalContent>

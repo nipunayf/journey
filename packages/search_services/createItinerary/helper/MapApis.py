@@ -15,7 +15,7 @@ def nearbySearch(data, keyword):
     elif data['number_dates'] > 2:
         radius = 50000
 
-    budget = data['budget']
+    budget = data['preferences']['budget']
 
     if budget == -1:
         price = 1
@@ -57,7 +57,6 @@ def direction(parameters, results):
             break
         i += 1
 
-
     string = ''
     for val in waypoints[:-1]:
         string += f"place_id:{val}|"
@@ -67,7 +66,6 @@ def direction(parameters, results):
     url = f"https://maps.googleapis.com/maps/api/directions/json?origin=place_id:{destination_id}&destination=place_id:{destination_id}&waypoints={string}&optimize_waypoint=True&key={settings.GOOGLE_API_KEY}"
     payload = {}
     headers = {}
-
 
     response = requests.request("GET", url, headers=headers, data=payload)
 

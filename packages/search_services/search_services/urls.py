@@ -21,4 +21,5 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     path('search/admin/', admin.site.urls),
     path('search/create/', include('createItinerary.urls')),
+    path('search/search/', include('searchNearby.urls'))
 ]

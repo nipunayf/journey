@@ -1,7 +1,8 @@
 const {userStore, itineraryStore, transaction} = require('../config/firebase');
 const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
-const {formatUserDates} = require("../utils/format");
+const {formatFirestoreTimestamp} = require("../utils/format");
+const {StateEnum} = require("../utils/constants");
 
 /**
  * Returns a user for given ID
@@ -17,8 +18,63 @@ const getUser = async (req, res) => {
     //fetching from firestore
     const result = await userStore.where('userID', '==', req.user).where('isDeleted', '==', 0).get();
 
+    const object = result.docs[0].data(0);
+    const itineraries = object.itineraries;
+    const ids = Object.keys(itineraries);
+    const batch = transaction();
+    let changesAvailable = false;
+
+    //Skips if there is no itineraries under the user document
+    if (Object.keys(itineraries).length === 0)
+        return object;
+
+    //Format the date for each itinerary
+    ids.forEach(id => {
+        const itinerary = itineraries[id]
+        itinerary.startDate = formatFirestoreTimestamp(itinerary.startDate);
+        itinerary.endDate = formatFirestoreTimestamp(itinerary.endDate);
+
+        // Itinerary must be transitioned to to be reviewed state if the end date is reached
+        if (itinerary.endDate < new Date() && itinerary.state === StateEnum.ACTIVE) {
+            // Updates the user document
+            const userDocRef = result.docs[0]._ref;
+            const userBody = {
+                [`itineraries.${id}.state`]: StateEnum.TO_BE_REVIEWED
+            }
+            batch.update(userDocRef, userBody);
+
+            // Update the itinerary document
+            const itDocRef = itineraryStore.doc(id);
+            const itBody = {
+                state: StateEnum.TO_BE_REVIEWED
+            }
+            batch.update(itDocRef, itBody);
+            itinerary.state = StateEnum.TO_BE_REVIEWED;
+            changesAvailable = true;
+        }
+        // Itinerary must be transitioned incompatible state if the end date is reached
+        else if (itinerary.endDate < new Date() && itinerary.state === StateEnum.INACTIVE) {
+            // Updates the user document
+            const userDocRef = result.docs[0]._ref;
+            const userBody = {
+                [`itineraries.${id}.state`]: StateEnum.INCOMPATIBLE
+            }
+            batch.update(userDocRef, userBody);
+
+            // Update the itinerary document
+            const itDocRef = itineraryStore.doc(id);
+            const itBody = {
+                state: StateEnum.INCOMPATIBLE
+            }
+            batch.update(itDocRef, itBody);
+            itinerary.state = StateEnum.INCOMPATIBLE
+            changesAvailable = true;
+        }
+    })
+    if (changesAvailable) await batch.commit();
+
     if (result.size > 0) //document found in firestore
-        return successMessage(res, formatUserDates(result.docs[0].data(0)))
+        return successMessage(res, {...object, itineraries})
     else //document not found
         return errorMessage(res, 'User not found', 404)
 }
@@ -33,9 +89,8 @@ const getUserByEmail = async (req, res) => {
     //fetching from firestore
     const result = await userStore.where('email', '==', req.query.email).where('isDeleted', '==', 0).get();
 
-
     if (result.size > 0) //document found in firestore
-        return successMessage(res,  (({firstName, lastName, email, profilePic}) => ({firstName, lastName, email, profilePic}))(result.docs[0].data(0)))
+        return successMessage(res,  (({firstName, lastName, email, profilePic, preferences, userID}) => ({firstName, lastName, email, profilePic, preferences, userID}))(result.docs[0].data(0)))
     else //document not found
         return errorMessage(res, 'User not found')
 }
@@ -86,7 +141,7 @@ const updateUser = async (req, res) => {
     const result = await userStore.where('userID', '==', req.params.userID).where('isDeleted', '==', 0).get();
 
     //Document not found in firestore
-    if (result.size == 0)
+    if (result.size === 0)
         return errorMessage(res, 'User not found', 404);
 
     //Updating the firestore

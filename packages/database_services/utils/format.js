@@ -6,7 +6,13 @@
  */
 const formatDestinationDates = (id, object) => {
     const destinations = object.destinations;
-    const dates = Object.keys(destinations);
+    let dates;
+    if (object.destinations)
+        dates = Object.keys(destinations);
+    else return {
+        ...object,
+        id
+    }
 
     dates.sort((a, b) => {
         return new Date(a) - new Date(b);
@@ -28,27 +34,6 @@ const formatDestinationDates = (id, object) => {
     }
 }
 
-const formatUserDates = (object) => {
-    const itineraries = object.itineraries;
-    const ids = Object.keys(itineraries);
-
-    //Skips if there is no itineraries under the user document
-    if (Object.keys(itineraries).length === 0)
-        return object;
-
-    //Format the date for each itinerary
-    ids.forEach(id => {
-        const itinerary = itineraries[id]
-        itinerary.startDate = formatFirestoreTimestamp(itinerary.startDate);
-        itinerary.endDate = formatFirestoreTimestamp(itinerary.endDate);
-    })
-
-    return {
-        ...object,
-        itineraries
-    }
-}
-
 /**
  * Formats the given firestore timestamp into a Date object
  * @param timestamp - firestore timestamp
@@ -56,7 +41,21 @@ const formatUserDates = (object) => {
  */
 const formatFirestoreTimestamp = timestamp => new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000);
 
+/**
+ * Moves the date by the given diff number
+ * @param date date string
+ * @param diff different in number of days
+ * @return {string}
+ */
+const shiftDate = (date, diff) => {
+    date = date.seconds ? formatFirestoreTimestamp(date) : date;
+    const currentDate = new Date(date);
+    currentDate.setDate(currentDate.getDate() + diff);
+    return currentDate.toLocaleString("en-US", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+}
+
 module.exports = {
     formatDestinationDates,
-    formatUserDates
+    formatFirestoreTimestamp,
+    shiftDate
 }

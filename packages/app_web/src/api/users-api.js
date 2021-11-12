@@ -34,7 +34,4 @@ export const updateUser = (id, data) => {
     return databaseServices.putRequest(`${URL}/${id}`, data);
 }
 
-//
-// export const deleteUser = (id) => deleteRequest(`${URL}/${id}`);
-
 

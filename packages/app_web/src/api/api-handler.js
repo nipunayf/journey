@@ -88,6 +88,7 @@ export default class APIHandler {
      * @returns {Promise<{code: *, error: *, title: *, message: *}|{code: *, error: *, title: *, message: string}|{data, message}>}
      */
     async deleteRequest (url, setUser=false, output = 'results') {
+        if (setUser) url = setUserID(url);
         try {
             let response = await this.instance.delete(url);
             return generateSuccessOutput(response, output);
@@ -145,10 +146,12 @@ const setUserID = url => {
 const databaseServices = new APIHandler(BaseURLEnum.DATABASE_SERVICE)
 const mapsServices = new APIHandler(BaseURLEnum.GOOGLE_MAPS)
 const wikiServices = new APIHandler(BaseURLEnum.WIKIPEDIA)
+const searchServices = new APIHandler(BaseURLEnum.SEARCH_SERVICE)
 
 export {
     databaseServices,
     mapsServices,
-    wikiServices
+    wikiServices,
+    searchServices
 }
 

@@ -3,7 +3,7 @@ import Preferences from "../InputCollection/Preferences";
 import {useFormik} from "formik";
 import generateItinerary from '../../utils/mock.json';
 
-export default function ({parentFormik, setScreen, onClose}) {
+export default function ({parentFormik, setScreen, isLoading}) {
     const formik = useFormik({
         initialValues: {
             budget: parentFormik.values.budget,
@@ -13,11 +13,11 @@ export default function ({parentFormik, setScreen, onClose}) {
             introversion: parentFormik.values.introversion,
         },
         onSubmit: values => {
-            parentFormik.setFieldValue('budget', formik.values.budget);
-            parentFormik.setFieldValue('popularity', formik.values.popularity);
-            parentFormik.setFieldValue('energy', formik.values.energy);
-            parentFormik.setFieldValue('knowledge', formik.values.knowledge);
-            parentFormik.setFieldValue('introversion', formik.values.introversion);
+            parentFormik.setFieldValue('budget', values.budget);
+            parentFormik.setFieldValue('popularity', values.popularity);
+            parentFormik.setFieldValue('energy', values.energy);
+            parentFormik.setFieldValue('knowledge', values.knowledge);
+            parentFormik.setFieldValue('introversion', values.introversion);
         }
     });
 
@@ -42,11 +42,10 @@ export default function ({parentFormik, setScreen, onClose}) {
                 bg={'green.400'}
                 color={'white'}
                 onClick={() => {
-                    onClose();
-                    setScreen(0);
                     formik.handleSubmit();
                     parentFormik.handleSubmit();
                 }}
+                isLoading={isLoading}
                 _hover={{bg: 'green.500'}}>
                 Create
             </Button>

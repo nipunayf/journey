@@ -1,7 +1,7 @@
 const {userStore, itineraryStore, transaction} = require('../config/firebase');
 const FieldValue = require('firebase-admin').firestore.FieldValue
 const {successMessage, errorMessage} = require("../utils/message-template");
-const {formatDestinationDates} = require('../utils/format');
+const {formatDestinationDates, shiftDate} = require('../utils/format');
 const {StateEnum} = require('../utils/constants');
 
 
@@ -21,8 +21,9 @@ const getItineraries = async (req, res) => {
     //If there are any filters
     if (req.query) {
         //If only single state is given
-        if (Number.isInteger(req.query.state))
-            result = result.where('state', '==', req.query.state);
+        if (Number.isInteger(parseInt(req.query.state))) {
+            result = result.where('state', '==', parseInt(req.query.state));
+        }
 
         //If an array of states are given
         else if (Array.isArray(req.query.state))
@@ -70,25 +71,41 @@ const getItinerary = async (req, res) => {
  * @returns {Promise<void>}
  */
 const createItinerary = async (req, res) => {
-    console.log(req.user);
-
     //User attempting to access another user profile
     if (req.params.userID !== req.user)
         return errorMessage(res, 'You are not authorized to access other users\' itineraries');
 
     const dates = Object.keys(req.body.destinations);
 
-    //Creates the itinerary document
+    // Construct the member IDs
     const userID = req.user
+    const members = [userID]
+    if (req.body.isGroup === true) {
+        req.body.members.forEach(member => {
+            members.push(member.userID);
+        })
+    }
+
+    //Creates the itinerary document
     const data = {
         location: req.body.location,
         destinations: req.body.destinations,
         state: StateEnum.INACTIVE,
-        members: [userID],
+        members,
         memberInfo: {},
         image: req.body.image
     }
-    data.memberInfo[userID] = {displayName: req.body.displayName, review: 0};
+
+    // Add member information for the itinerary document
+    data.memberInfo[userID] = {displayName: req.body.displayName, review: 0, email: req.body.email};
+
+    // Add group members for group itineraries
+    if (req.body.isGroup === true) {
+        for (const member of req.body.members) {
+            data.memberInfo[member.userID] = {displayName: member.displayName, review: 0, email: member.email}
+        }
+    }
+
     const batch = transaction();
     const itDocRef = itineraryStore.doc();
     batch.create(itDocRef, data);
@@ -105,6 +122,22 @@ const createItinerary = async (req, res) => {
             image: req.body.image,
         }
     });
+
+    // Update the itineraries of the group members
+    if (req.body.isGroup === true) {
+        for (const member of req.body.members) {
+            const memberDocRef = await userStore.where('userID', '==', member.userID).get();
+            batch.update(memberDocRef.docs[0]._ref, {
+                [`itineraries.${itDocRef.id}`]: {
+                    location: req.body.location,
+                    state: StateEnum.INACTIVE,
+                    startDate: new Date(dates[0]),
+                    endDate: new Date(dates.at(-1)),
+                    image: req.body.image,
+                }
+            });
+        }
+    }
 
     //Writing the commits to the firestore
     await batch.commit();
@@ -151,7 +184,6 @@ const updateItinerary = async (req, res) => {
             else
                 body = {
                     [`itineraries.${req.params.itineraryID}.state`]: req.body.state
-                    // [`${req.params.itineraryID}`]: {state: req.body.state}
                 }
 
             //If location of the itinerary being change
@@ -221,10 +253,96 @@ const deleteItinerary = async (req, res) => {
         return errorMessage(res, 'Itinerary not found', 404);
 }
 
+/**
+ * Post a new review for the itinerary
+ * @param req
+ * @param res
+ * @return {Promise<void>}
+ */
+const addReview = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    let result = await itineraryStore.doc(req.params.itineraryID).get();
+
+    if (result._fieldsProto) { //Document found in fire store
+
+        //Check if the user is a member of the itinerary
+        if (!result.data().members.includes(req.user))
+            return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+        const batch = transaction();
+        const itDocRef = itineraryStore.doc(req.params.itineraryID);
+
+        // Updates the firebase
+        batch.update(itDocRef, {
+            [`memberInfo.${req.user}.review`]: req.body.review,
+            state: StateEnum.REVIEWED
+        })
+
+        const userDocRef = await userStore.where('userID', '==', req.user).get();
+        batch.update(userDocRef.docs[0]._ref, {
+            [`itineraries.${req.params.itineraryID}`]: FieldValue.delete()
+        })
+
+        await batch.commit();
+        return successMessage(res, true);
+    } else
+        return errorMessage(res, 'Itinerary not found', 404);
+}
+
+const shiftDates = async (req, res) => {
+    //User attempting to access another user profile
+    if (req.params.userID !== req.user)
+        return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+    const itDocRef = itineraryStore.doc(req.params.itineraryID);
+    let result = await itDocRef.get();
+
+    if (result._fieldsProto) { //Document found in fire store
+        const itData = result.data();
+
+        //Check if the user is a member of the itinerary
+        if (!itData.members.includes(req.user))
+            return errorMessage(res, 'You are not authorized to access other users\' itineraries');
+
+        const batch = transaction();
+
+        // Shift every date of the itinerary in the firebase
+        const dates = Object.keys(itData.destinations);
+        for (const date of dates) {
+            batch.update(itDocRef, {
+                state: StateEnum.INACTIVE,
+                [`destinations.${date}`]: FieldValue.delete(),
+                [`destinations.${shiftDate(date, req.body.diff)}`]: itData.destinations[date],
+            })
+        }
+
+        //Update the all the user documents
+        for (const member of itData.members) {
+            const userResult = await userStore.where('userID', '==', member).get();
+            const userData = userResult.docs[0].data();
+
+            batch.update(userResult.docs[0]._ref, {
+                [`itineraries.${req.params.itineraryID}.startDate`]: new Date(shiftDate(userData.itineraries[req.params.itineraryID].startDate, req.body.diff)),
+                [`itineraries.${req.params.itineraryID}.endDate`]: new Date(shiftDate(userData.itineraries[req.params.itineraryID].endDate, req.body.diff)),
+                [`itineraries.${req.params.itineraryID}.state`]: StateEnum.INACTIVE
+            })
+        }
+
+        await batch.commit();
+        return successMessage(res, true);
+    } else
+        return errorMessage(res, 'Itinerary not found', 404);
+}
+
 module.exports = {
     getItineraries,
     getItinerary,
     createItinerary,
     updateItinerary,
-    deleteItinerary
+    deleteItinerary,
+    addReview,
+    shiftDates
 }

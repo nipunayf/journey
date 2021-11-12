@@ -10,10 +10,12 @@ import * as actions from '../../store/actions';
 import {connect} from 'react-redux';
 import {handleErrors} from "./firebase-utils";
 import {createUser, getUser} from "../../api";
+import {useState} from "react";
 
 const GAuthButton = (props) => {
     const history = useHistory();
     const toast = useToast();
+    const [loading, setLoading] = useState(false);
 
     const GooglePopup = () => {
         const app = initializeApp(firebaseConfig);
@@ -21,6 +23,7 @@ const GAuthButton = (props) => {
         const auth = getAuth();
         signInWithPopup(auth, provider)
             .then(async (result) => {
+                setLoading(true);
                 props.onAuth(
                     result.user.accessToken,
                     result.user.uid,
@@ -75,13 +78,15 @@ const GAuthButton = (props) => {
                 else {
                     generateErrorMessage(toast, 'Something went wrong', userResult.message);
                 }
+                setLoading(false);
             }).catch((error) => {
             handleErrors(toast, error.code);
+            setLoading(false);
         });
     }
 
     return (
-        <Button w={'full'} variant={'outline'} leftIcon={<FcGoogle/>} mt={2} onClick={GooglePopup}>
+        <Button w={'full'} variant={'outline'} leftIcon={<FcGoogle/>} mt={2} onClick={GooglePopup} isLoading={loading}>
             <Center>
                 <Text>Sign in with Google</Text>
             </Center>
