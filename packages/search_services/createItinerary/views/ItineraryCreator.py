@@ -12,7 +12,7 @@ class ItineraryCreator(APIView):
             route = rulebased.execute(parameters)
             return Response({"results": route,
                              "message": 'success'})
-        except:
-            print("exception occured at itinearry creator")
+        except Exception as e:
+            print("exception occured at itinearry creator",e)
             return Response({"results": None,
                              "message": "Sorry couldn't Create an Itinerary"})
