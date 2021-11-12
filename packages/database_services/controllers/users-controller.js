@@ -18,6 +18,9 @@ const getUser = async (req, res) => {
     //fetching from firestore
     const result = await userStore.where('userID', '==', req.user).where('isDeleted', '==', 0).get();
 
+    if (result.size <= 0)
+        return errorMessage(res, 'User not found')
+
     const object = result.docs[0].data(0);
     const itineraries = object.itineraries;
     const ids = Object.keys(itineraries);
