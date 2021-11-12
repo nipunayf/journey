@@ -13,5 +13,6 @@ class ItineraryCreator(APIView):
             return Response({"results": route,
                              "message": 'success'})
         except:
+            print("exception occured at itinearry creator")
             return Response({"results": None,
                              "message": "Sorry couldn't Create an Itinerary"})

@@ -16,6 +16,7 @@ class NearbySearcher(APIView):
                 "message": "success"
             })
         except:
+            print("exception occured at nearbysearch")
             return Response({
                 "results": None,
                 "message": "Sorry Couldn't Find Nearby Places"
