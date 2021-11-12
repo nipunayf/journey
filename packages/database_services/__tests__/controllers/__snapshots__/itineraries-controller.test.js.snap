@@ -15,10 +15,12 @@ Object {
       "place_id": "p",
     },
   },
+  "image": "some-image",
   "location": "Kandy",
   "memberInfo": Object {
     "a": Object {
       "displayName": "Kumar Sangakkara",
+      "email": "kumar@gmail.com",
       "review": 0,
     },
   },

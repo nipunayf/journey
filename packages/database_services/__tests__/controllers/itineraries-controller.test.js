@@ -160,7 +160,8 @@ describe('Create a new itinerary', function () {
                 }
             },
             image: 'some-image',
-            displayName: 'Kumar Sangakkara'
+            displayName: 'Kumar Sangakkara',
+            email: 'kumar@gmail.com'
         };
         await userStore.add({
             displayName: 'Kumar Sangakkara',
