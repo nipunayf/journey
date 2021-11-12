@@ -122,6 +122,7 @@ function Navbar({isAuthenticated, onLogout, firstName, lastName, profilePic}) {
                         onClick={() => {
                             history.push('/login')
                         }}
+                        data-cy={'signin'}
                         bg={'secondary.light'}
                         rounded={'full'}
                         color={'white'}

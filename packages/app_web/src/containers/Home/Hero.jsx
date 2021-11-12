@@ -49,6 +49,7 @@ export default function Hero() {
                         bg={'secondary.main'}
                         rounded={'full'}
                         color={'white'}
+                        data-cy={'register'}
                         onClick={() => {history.push('/register')}}
                         _hover={{bg: 'blue.500'}}>
                         Register Now
