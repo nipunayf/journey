@@ -276,7 +276,7 @@ def itinerary(parameters, results):
         leg_day3 = legs[8:11]
 
         routes[dates[3]] = []
-        for id in range(11):
+        for id in range(11,14):
             routes[dates[3]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
