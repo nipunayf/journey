@@ -96,6 +96,7 @@ function SignUpAuth(props) {
                 bg={'secondary.main'}
                 color={'white'}
                 onClick={formik.handleSubmit}
+                data-cy={'register'}
                 isDisabled={!formik.isValid}
                 isLoading={formik.isSubmitting}
                 _hover={{
