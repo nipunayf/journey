@@ -65,6 +65,7 @@ const UserAvatar = ({firstName, lastName, logout, profilePic}) => {
                     rounded={'full'}
                     variant={'link'}
                     cursor={'pointer'}
+                    data-cy={'avatar'}
                     minW={0}>
                     <HStack>
                         <Text fontSize={14} noOfLines={1} isTrucated w={16}>{firstName}</Text>
@@ -74,10 +75,10 @@ const UserAvatar = ({firstName, lastName, logout, profilePic}) => {
                 <MenuList>
                     <Text color={'black'} noOfLines={1} isTruncated w={'90%'}>{`${firstName} ${lastName}`}</Text>
                     <MenuDivider/>
-                    <MenuItem color={'black'} icon={<SettingsIcon/>} onClick={() => {
+                    <MenuItem color={'black'} icon={<SettingsIcon/>} data-cy={'settings'} onClick={() => {
                         history.push('/settings')
                     }}>Settings</MenuItem>
-                    <MenuItem color={'black'} icon={<RepeatClockIcon/>} onClick={() => {
+                    <MenuItem color={'black'} icon={<RepeatClockIcon/>} data-cy={'myItineraries'} onClick={() => {
                         history.push('/history')
                     }}>My Itineraries</MenuItem>
                     <MenuDivider/>
