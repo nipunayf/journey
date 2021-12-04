@@ -34,10 +34,10 @@ def createPersonKeyword(dic):
         type_not_key = enums.Types[NOT_KEY].value
         keyword_key = enums.Keywords[key].value
         keyword_not_key = enums.Keywords[NOT_KEY].value
-        if dic[key] <= -1:  # nature,relax,entertainment
+        if dic[key] >= 1:  # nature,informational,adventurous
             person_type += type_key
             person_keyword += keyword_key
-        elif dic[key] >= 1:  # indoor,adventure,traditional
+        elif dic[key] <= -1:  # indoor,entertaining,relaxing
             person_type += type_not_key
             person_keyword += keyword_not_key
         elif dic[key] == 0:
@@ -276,7 +276,7 @@ def itinerary(parameters, results):
         leg_day3 = legs[8:11]
 
         routes[dates[3]] = []
-        for id in range(11):
+        for id in range(11,len(place_ids)-1):
             routes[dates[3]].append({'place_id': place_ids[id],
                                      'arrival': None,
                                      'departure': None
@@ -407,29 +407,35 @@ def itinerary(parameters, results):
     for day in routes:
         if day == dates[0]:
             for id in range(1, len(routes[day])):
-                r = results_copy[routes[day][id]['place_id']]
-                routes[day][id]['geometry'] = r['geometry']['location']
-                routes[day][id]['name'] = r['name']
-                routes[day][id]['rating'] = r['rating']
-                key = 'photos'
-                if key in r:
-                    routes[day][id]['image'] = r['photos'][0]["photo_reference"]
-                else:
-                    routes[day][id]['image'] = 'no image'
+                i = routes[day][id]['place_id']
+                if i in results_copy:
+                    r = results_copy[routes[day][id]['place_id']]
+                    routes[day][id]['geometry'] = r['geometry']['location']
+                    routes[day][id]['name'] = r['name']
+                    routes[day][id]['rating'] = r['rating']
+                    key = 'photos'
+                    if key in r:
+                        routes[day][id]['image'] = r['photos'][0]["photo_reference"]
+                    else:
+                        routes[day][id]['image'] = 'no image'
 
 
         else:
             for id in range(len(routes[day])):
-                r = results_copy[routes[day][id]['place_id']]
-                routes[day][id]['geometry'] = r['geometry']['location']
-                routes[day][id]['name'] = r['name']
-                routes[day][id]['rating'] = r['rating']
-                key = 'photos'
-                if key in r:
-                    routes[day][id]['image'] = r['photos'][0]["photo_reference"]
-                else:
-                    routes[day][id]['image'] = 'no image'
+                i = routes[day][id]['place_id']
+                if i in results_copy:
+                    r = results_copy[routes[day][id]['place_id']]
+                    routes[day][id]['geometry'] = r['geometry']['location']
+                    routes[day][id]['name'] = r['name']
+                    routes[day][id]['rating'] = r['rating']
+                    key = 'photos'
+                    if key in r:
+                        routes[day][id]['image'] = r['photos'][0]["photo_reference"]
+                    else:
+                        routes[day][id]['image'] = 'no image'
 
-    # print(routes)
+
     del routes[dates[0]][0]
+
+    print(routes)
     return routes

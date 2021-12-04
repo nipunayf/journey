@@ -18,7 +18,7 @@ def placeDetails(id):
 
 def nearbySearch(parameters):
     location = parameters['location']
-    radius = 6000
+    radius = 15000
     url = f"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={location['lat']},{location['lng']}&radius={radius}&type=tourist_attraction&key={settings.GOOGLE_API_KEY}"
     print(url)
     payload = {}

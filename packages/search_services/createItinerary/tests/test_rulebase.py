@@ -12,11 +12,11 @@ class RuleBasedTest(TestCase):
         parameters = json.load(open("createItinerary/tests/fixtures/parameters.json"))
 
         preferences = parameters['preferences']
-        nature = preferences['nature']
-        entertainment = preferences['entertainment']
-        relax = preferences['relax']
+        introversion = preferences['introversion']
+        knowledge = preferences['knowledge']
+        energy = preferences['energy']
 
-        dic = {'NATURE': nature, 'ENTERTAINMENT': entertainment, 'RELAX': relax}
+        dic = {'INTROVERSION': introversion, 'KNOWLEDGE': knowledge, 'ENERGY': energy}
 
         self.assertEqual(RuleBasedItinerary.createPersonKeyword(dic), keyword)
 

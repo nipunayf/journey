@@ -1,10 +1,11 @@
 {"preferences":{
-    "nature":1,
-    "entertainment":0,
-    "relax":-1
+    "introversion":-1,
+    "knowledge":0,
+    "energy":-1,
+    "budget":0
 },
-"number_dates":3,
+"number_dates":2,
 "location":{"lat":7.291418,"lng":80.636696},
-"budget":0,
-"place_id":"ChIJjZGWMENc4zoRUQYqNLog9Y4"
+"place_id":"ChIJjZGWMENc4zoRUQYqNLog9Y4",
+"Dates" : ["Saturday, November 13, 2021","Sunday, November 14, 2021"]
 }
