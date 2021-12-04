@@ -60,7 +60,7 @@ export default function ItineraryCard({info}) {
                 <Box ml={2} fontSize={14} fontColor={'grey.700'}>
                     {`${formatDate(info.startDate)} ${String.fromCodePoint(parseInt('2192', 16))} ${formatDate(info.endDate)}`}
                 </Box>
-                <Button isLoading={loading} colorScheme="blue" size="sm" variant="outline" mt={3} ml={BOX_WIDTH / 2} onClick={onViewMore}>
+                <Button isLoading={loading} colorScheme="blue" size="sm" variant="outline" mt={3} ml={BOX_WIDTH / 2} onClick={onViewMore} data-cy={'viewItinerary'}>
                     View Itinerary
                 </Button>
             </Box>

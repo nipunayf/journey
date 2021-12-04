@@ -65,6 +65,7 @@ const UserAvatar = ({firstName, lastName, logout, profilePic}) => {
                     rounded={'full'}
                     variant={'link'}
                     cursor={'pointer'}
+                    data-cy={'avatar'}
                     minW={0}>
                     <HStack>
                         <Text fontSize={14} noOfLines={1} isTrucated w={16}>{firstName}</Text>
