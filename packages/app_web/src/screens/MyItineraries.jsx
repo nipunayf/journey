@@ -121,7 +121,7 @@ function SearchBar({cached, setResult}) {
             </HStack>
             <Spacer/>
             <HStack><Heading size={14}>State:</Heading>
-                <Select id="state" placeholder="Select state" w={36} onChange={formik.handleChange} isInvalid={formik.values['state'] === ""}>
+                <Select id="state" placeholder="Select state" w={36} onChange={formik.handleChange} isInvalid={formik.values['state'] === ""} data-cy={'state'}>
                     <option value={0}>Any</option>
                     <option value={StateEnum.INACTIVE}>Inactive</option>
                     <option value={StateEnum.INCOMPATIBLE}>Incompatible</option>
@@ -136,6 +136,7 @@ function SearchBar({cached, setResult}) {
                 isDisabled={formik.values['state'] === ""}
                 onClick={formik.handleSubmit}
                 isLoading={formik.isSubmitting}
+                data-cy={'search'}
                 bg="secondary.light"
                 color="white"/>
             <Link/>
